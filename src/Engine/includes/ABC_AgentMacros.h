@@ -13,8 +13,9 @@
         static void SuperInitClass() {                                                       \
             SuperClassName::InitClass();                                                     \
         }                                                                                    \
-        static void CleanClass() {                                                           \
-            if (categories) Delete_Z categories;                                             \
+        static void ShutClass() {                                                            \
+            ABC_Agent::ReleaseCategoryHolders(categories);                                   \
+            categories = NULL;                                                               \
         }                                                                                    \
         static void RegisterClass_Z() {                                                      \
             REGISTER_CLASS(#ClassName, #SuperClassName, &ClassName::NewObject);              \
@@ -46,7 +47,10 @@
 
 #define INIT_AGENT_CLASS(ClassName) \
     ClassName::InitClass();         \
-    ClassName::RegisterClass_Z();
+    ClassName::RegisterClass_Z()
+
+#define SHUT_AGENT_CLASS(ClassName) \
+    ClassName::ShutClass()
 
 #define BEGIN_INIT_AGENT_CLASS(ClassName, baseClassname) \
     ABC_CategoryHolder* ClassName::categories = NULL;    \

@@ -52,6 +52,11 @@ struct Sphere_Z {
     }
 } Aligned_Z(16);
 
+struct ClipSphere_Z {
+    Sphere_Z Sph;
+    U32 Flag;
+};
+
 struct FastBox_Z {
     Mat4x4 Mat;
     Mat4x4 RotMat;

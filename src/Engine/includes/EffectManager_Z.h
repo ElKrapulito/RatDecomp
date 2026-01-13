@@ -7,7 +7,7 @@ public:
     EffectManager_Z();
     ~EffectManager_Z();
 
-    void Update(Float i_Unk);
+    void Update(Float i_DeltaTime);
 };
 
 #endif // _EFFECTMANAGER_Z_H_

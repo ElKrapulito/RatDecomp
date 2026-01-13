@@ -28,13 +28,12 @@ void ResourceObjectLink_Z::UpdateLinkFromId(BaseObject_ZHdl& o_Hdl, S32 i_ID) co
 }
 
 void ResourceObjectLink_Z::MarkHandles() {
-    S32 i = m_LinkedResourceDA.GetSize();
-    while (i--) {
+    U32 i = m_LinkedResourceDA.GetSize();
+    while (((S32)i--) != 0) {
         gData.ClassMgr->MarkHandles(m_LinkedResourceDA[i]);
     }
 }
 
-// TODO: Finish matching (regswap)
 Bool ResourceObject_Z::MarkHandles() {
     if (!BaseObject_Z::MarkHandles()) {
         return FALSE;

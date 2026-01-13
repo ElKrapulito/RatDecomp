@@ -2,14 +2,16 @@
 #define _VIEWPORT_Z_H_
 #include "Handle_Z.h"
 #include "Assert_Z.h"
-#include "GCMain_Z.h"
 #include "ManipulatorDraw_ZHdl.h"
-#include "Camera_Z.h"
 #include "Node_ZHdl.h"
 class Renderer_Z;
 
 class Viewport_Z {
 public:
+    Viewport_Z();
+    ~Viewport_Z();
+    void Init();
+
     void SetPosAndSize(S32 i_StartX, S32 i_StartY, S32 i_SizeX, S32 i_SizeY) {
         m_StartX = i_StartX;
         m_StartY = i_StartY;
@@ -43,9 +45,10 @@ public:
         return m_CameraNodeHdl;
     }
 
-    Viewport_Z();
-    ~Viewport_Z();
-    void Init();
+    void RegisterManip(const ManipulatorDraw_ZHdl& i_ManipDrawHdl);
+    void UnregisterManip(const ManipulatorDraw_ZHdl& i_ManipDrawHdl);
+
+private:
     U32 m_StartX;
     U32 m_StartY;
     U32 m_SizeX;

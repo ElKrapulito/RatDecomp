@@ -16,6 +16,8 @@ Extern_Z "C" void memset(void* __s, S32 __c, U32 __n);
 class GCConsole_Z;
 class Renderer_Z;
 class GameManager_Z;
+class EffectManager_Z;
+class SystemDatas_Z;
 
 class Globals {
 public:
@@ -37,7 +39,9 @@ public:
     GameManager_Z* GameMgr;
     U8 m_Pad_0x34[0x4];
     AnimationManager_Z* AnimMgr;
-    U8 m_Pad_0x40[0x10];
+	EffectManager_Z* EffectMgr;
+	SystemDatas_Z* SystemDatas;
+    U8 m_Pad_0x40[0x8];
     SoundManager_Z* SoundMgr;
     U8 m_Pad_0x54[0x30];
     XRamManager_Z* XRamMgr;

@@ -4,36 +4,61 @@
 #include "ansi_files.h"
 #include "dvd.h"
 
+#define FILE_SEEK_START 0
+#define FILE_SEEK_CUR 1
+#define FILE_SEEK_END 2
+
+enum GCStreamError {
+    STR_ERROR_NO_DISK = 2,
+    STR_ERROR_WRONG_DISK = 3,
+    STR_ERROR_RETRY = 4,
+    STR_ERROR_COVER_OPEN = 5,
+    STR_ERROR_FATAL = 6,
+};
+
 enum Format {
-    READ_ONLY = 0x01,
-    WRITE_ONLY = 0x02,
-    READWRITE = 0x04,
-    ASCII = 0x08,
-    BINARY = 0x10
+    STR_READ_ONLY = 0x1,
+    STR_WRITE_ONLY = 0x2,
+    STR_READWRITE = 0x4,
+    STR_ASCII = 0x8,
+    STR_BINARY = 0x10
 };
 
 class FileHdl_Z {
 public:
-    FileHdl_Z();
-    ~FileHdl_Z();
+    FileHdl_Z() {
+        m_File = NULL;
+        m_EntryNum = -1;
+        m_CurrentPos = 0;
+    }
 
-    Bool Open(const Char* i_Filename, U32 i_Flags);
+    ~FileHdl_Z() {
+        Close();
+    }
+
+    Bool Open(const Char* i_FilePath, U32 i_Flags);
     void SetError(U32 i_Error);
     void WaitIO();
-    void* Read(void* i_Buffer, U32 i_Size);
-    void Write(const void* i_Buffer, U32 i_Size);
-    U32 GetSize() const;
-    U32 GetCurPos() const;
-    void Close();
-    Bool DoFileExists(const Char* i_Filename);
-    U32 GetFileDate(const Char* i_Filename);
-    void SetFileDate(const Char* i_Filename, U32 i_Date);
+    S32 Read(void* i_Buffer, S32 i_Size);
+    void Write(const void* i_Buffer, S32 i_Size);
+    U32 GetSize();
+    U32 GetCurPos();
+    Bool Close();
+    Bool DoFileExists(const Char* i_FilePath);
+    U32 GetFileDate(const Char* i_FilePath);
+    void SetFileDate(const Char* i_FilePath, U32 i_Date);
     U32 Seek(S32 i_Offset, S32 i_Origin);
-    Bool GetRealFileName(const Char* i_Filename, Char* o_RealName);
+    static Bool GetRealFileName(const Char* i_FilePath, Char* o_RealName);
     void CheckDisc(Bool i_Unk);
 
-    Bool IsOpened() {
-        return (m_EntryNum != -1) || (m_FilePtr != NULL);
+    void Flush() { }
+
+    Bool IsOpened() const {
+        return ((m_EntryNum != -1) || m_File);
+    }
+
+    U32 GetLastError() const {
+        return m_LastError;
     }
 
     const DVDFileInfo& GetDvdFileInfo() const { return m_DvdFileInfo; }
@@ -42,7 +67,7 @@ private:
     DVDFileInfo m_DvdFileInfo;
     S32 m_CurrentPos;
     S32 m_EntryNum;
-    FILE* m_FilePtr;
+    FILE* m_File;
     U32 m_LastError;
 };
 

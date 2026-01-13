@@ -10,6 +10,7 @@
 #include "Anim_Symbol_Engine.h"
 
 typedef DynArray_Z<abc_category, 4> CategoryArray;
+struct ABC_AgentList_Z;
 
 enum abc_agentState {
     agent_neverActivated = 0,
@@ -21,6 +22,8 @@ enum abc_agentState {
 
 /* sizeof(ABC_Agent) == 0x40 */
 class ABC_Agent : public BaseObject_Z {
+    friend class ABC_AgentList_Z;
+	friend class ABC_ScriptManager;
 public:
     // clang-format off
 
@@ -46,7 +49,7 @@ public:
 
     ABC_CategoryHolder* GetNewCategoryHolder();
     void AddBehaviorToCategory(behaviorMethodPtr i_BhvMethod, abc_category i_Category, Bool i_IsPublic, const Char* i_CategoryName);
-    void ReleaseCategoryHolders(ABC_CategoryHolder* i_CategoryHolder);
+    static void ReleaseCategoryHolders(ABC_CategoryHolder* i_CategoryHolder);
     virtual ABC_CategoryHolder* GetCategories() { return NULL; }
     virtual void SetCategories(ABC_CategoryHolder* i_CategoryHolder) = 0;
     virtual void ActivateCategory(abc_category i_Category) { }
@@ -67,7 +70,9 @@ public:
     Bool Message(abc_message i_Msg);
     Bool FlushMessage(abc_message i_Msg);
     Bool FlushEveryMessage(abc_message i_Msg, ABC_Agent* i_Sender = NULL);
-    Bool FlushAllMessages();
+    Bool FlushAllMessages(Bool i_FlushTimedMessages = TRUE);
+    void RemoveMessageFromList(ABC_Message* i_PrevMsg, ABC_Message* i_Msg);
+	void RemoveMessageFromBufferList(ABC_Message* i_PrevMsg, ABC_Message* i_Msg);
 
     // Flag methods
 
@@ -114,9 +119,53 @@ protected:
     U32 m_Flags;
 };
 
-class ABC_AgentList_Z {
+struct ABC_AgentList_Z {
     ABC_Agent* m_First;
     ABC_Agent* m_Last;
+
+    ABC_AgentList_Z() {
+        m_Last = NULL;
+        m_First = NULL;
+    }
+
+    inline void Add(ABC_Agent* i_Agent) {
+        i_Agent->m_Prev = m_Last;
+        if (!m_Last) {
+            m_First = i_Agent;
+        }
+        else {
+            m_Last->m_Next = i_Agent;
+        }
+        m_Last = i_Agent;
+    }
+
+    inline void Remove(ABC_Agent* i_Agent) {
+        if (i_Agent == m_First) {
+            m_First = i_Agent->m_Next;
+            if (m_First != NULL) {
+                m_First->m_Prev = NULL;
+            }
+            else {
+                m_Last = NULL;
+            }
+        }
+        else if (i_Agent == m_Last) {
+            if (i_Agent->m_Prev != NULL) {
+                i_Agent->m_Prev->m_Next = NULL;
+                m_Last = i_Agent->m_Prev;
+            }
+            else {
+                m_First = NULL;
+                m_Last = NULL;
+            }
+        }
+        else {
+            i_Agent->m_Prev->m_Next = i_Agent->m_Next;
+            i_Agent->m_Next->m_Prev = i_Agent->m_Prev;
+        }
+        i_Agent->m_Prev = NULL;
+        i_Agent->m_Next = NULL;
+    }
 };
 
 #endif

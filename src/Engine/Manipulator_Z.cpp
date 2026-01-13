@@ -1,6 +1,6 @@
 #include "Manipulator_Z.h"
-#include "ActivableGroups_Z.h"
-#include "GCMain_Z.h"
+#include "Program_Z.h"
+#include "Renderer_Z.h"
 
 Manipulator_Z::Manipulator_Z() {
     m_PreviousPtr = NULL;
@@ -24,7 +24,7 @@ void Manipulator_Z::Activate() {
     if (!m_IsActive) {
         gData.ManipMgr->Activate(this);
         m_IsActive = TRUE;
-        ActionOnActive();
+        ActionOnActivate();
     }
 }
 
@@ -46,3 +46,41 @@ void Manipulator_Z::Heartbeat(Float i_DeltaTime) {
     m_TimeSpentRunning += i_DeltaTime;
     Update(i_DeltaTime);
 }
+
+ManipulatorDraw_Z::ManipulatorDraw_Z() {
+    m_ViewportId = 6;
+    m_ManipGroup = ag_ui_draw;
+}
+
+void ManipulatorDraw_Z::Init() {
+    gData.ManipMgr->Add(this);
+}
+
+void ManipulatorDraw_Z::Draw(const DrawInfo_Z& i_DrawInfo) {
+    Draw(i_DrawInfo.m_Vp);
+}
+
+void ManipulatorDraw_Z::VpRegister() {
+    gData.MainRdr->GetViewport(m_ViewportId).RegisterManip(GetHandle());
+}
+
+void ManipulatorDraw_Z::VpUnRegister() {
+    gData.MainRdr->GetViewport(m_ViewportId).UnregisterManip(GetHandle());
+}
+
+void ManipulatorDraw_Z::VpRegister(S32 i_VpId) {
+    m_ViewportId = i_VpId;
+    gData.MainRdr->GetViewport(m_ViewportId).RegisterManip(GetHandle());
+}
+
+ManipulatorSceneDraw_Z::ManipulatorSceneDraw_Z() {
+    m_ManipGroup = ag_draw;
+}
+
+void ManipulatorSceneDraw_Z::Init() {
+    gData.ManipMgr->Add(this);
+}
+
+void ManipulatorSceneDraw_Z::Draw(const DrawInfo_Z& i_DrawInfo) { }
+
+void ManipulatorSceneDraw_Z::Update(Float i_DeltaTime) { }

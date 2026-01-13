@@ -21,13 +21,13 @@ public:
     virtual void Init();
     virtual ~Manipulator_Z();
     virtual void Reset();
-    virtual void ActionOnActive();
+    virtual void ActionOnActivate();
     virtual void ActionOnDeactivate();
     virtual void Update(Float i_DeltaTime) = 0;
 
     inline ActivableGroup_Z GetGroup() { return m_ManipGroup; }
 
-private:
+protected:
     Manipulator_Z* m_PreviousPtr;
     Manipulator_Z* m_NextPtr;
     ActivableGroup_Z m_ManipGroup; //TODO: Define enum for this
@@ -37,18 +37,24 @@ private:
 
 class ManipulatorDraw_Z : public Manipulator_Z {
 public:
+    ManipulatorDraw_Z();
     virtual void Init();                             /* 0x08 */
     virtual ~ManipulatorDraw_Z();                    /* 0x0C */
     virtual void Update(Float i_DeltaTime);          /* 0x10 */
     virtual void Draw(const Viewport_Z* i_Vp);       /* 0x14 */
     virtual void Draw(const DrawInfo_Z& i_DrawInfo); /* 0x18 */
 
-private:
+    void VpRegister();
+    void VpRegister(S32 i_VpId);
+    void VpUnRegister();
+
+protected:
     S32 m_ViewportId;
 };
 
 class ManipulatorSceneDraw_Z : public Manipulator_Z {
 public:
+    ManipulatorSceneDraw_Z();
     virtual void Init(); /* 0x08 */
 
     virtual ~ManipulatorSceneDraw_Z() { } /* 0x0C */

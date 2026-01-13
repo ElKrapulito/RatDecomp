@@ -1,7 +1,5 @@
 #ifndef _GAMEMANAGER_Z_H_
 #define _GAMEMANAGER_Z_H_
-#include "DynArray_Z.h"
-#include "Types_Z.h"
 #include "CameraUser_ZHdl.h"
 #include "CameraOccluder_ZHdl.h"
 #include "CameraStream_ZHdl.h"
@@ -14,7 +12,7 @@ class GameManager_Z {
 private:
     CameraUser_ZHdl m_CameraUserHdls[4];
     Bool m_CameraUserBools[4];
-    DynArray_Z<Game_ZHdl, 8> m_GamesDA;
+    Game_ZHdlDA m_GameHdls;
     CameraOccluder_ZHdl m_CameraOccluderHdls[4];
     CameraStream_ZHdl m_CameraStreamHdls[4];
     Bool m_IsPaused;

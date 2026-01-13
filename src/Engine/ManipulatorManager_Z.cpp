@@ -1,5 +1,5 @@
 #include "ManipulatorManager_Z.h"
-#include "GCMain_Z.h"
+#include "Program_Z.h"
 #include "Math_Z.h"
 
 void ManipulatorManager_Z::MarkHandles() { }
@@ -13,7 +13,7 @@ void ManipulatorManager_Z::Update(Float i_DeltaTime) {
     m_IsBeingUpdated = TRUE;
     gData.ClassMgr->ForbidCheckHandles(TRUE);
     if (m_IsPaused) {
-        for (m_ActiveManipGroup = 0; m_ActiveManipGroup < 4; m_ActiveManipGroup++) {
+        for (m_ActiveManipGroup = ag_notpaused_first; m_ActiveManipGroup < ag_notpaused_last + 1; m_ActiveManipGroup++) {
             m_ManipList[m_ActiveManipGroup].Update(i_DeltaTime);
         }
         m_ManipList[20].Update(i_DeltaTime);

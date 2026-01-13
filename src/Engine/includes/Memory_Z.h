@@ -168,4 +168,13 @@ void Z_FreeContiguous(void* i_Ptr);
 #define AllocContiguousAlignCL_Z(Size, Comment, Line, Align) Z_AllocContiguous(Size, Comment, __FILE__, Line, Align)
 //#define AllocContiguousAlignFL_Z(Size, Align, Line) Z_AllocContiguous(Size, __FUNCTION__, __FILE__, Line, Align)
 
+// $SABE: Don't know where to put this
+Extern_Z "C" void* memcpy(void* dest, const void* src, int n);
+
+#ifdef __MWERKS__
+#define builtin_memcpy(dest, src, n) __memcpy(dest, src, n);
+#else
+#define builtin_memcpy(dest, src, n) memcpy(dest, src, n);
+#endif
+
 #endif

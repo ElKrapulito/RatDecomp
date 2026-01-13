@@ -174,16 +174,16 @@ Bool Console_Z::InterpCommand(const Char* i_CommandStr, U32 i_Depth) {
             m_IsFloatParam[m_NbParam] = FALSE;
         }
 
-        if ((fstricmp(l_CommandStack[m_NbParam], "TRUE") == FALSE)
-            || (fstricmp(l_CommandStack[m_NbParam], "On") == FALSE)) {
+        if ((l_CommandStack[m_NbParam].FStrCmp("TRUE") == FALSE)
+            || (l_CommandStack[m_NbParam].FStrCmp("On") == FALSE)) {
 
             Float l_TrueValue = 1.0f;
             m_IsFloatParam[m_NbParam] = TRUE;
             m_FloatParam[m_NbParam] = l_TrueValue;
         }
 
-        if ((fstricmp(l_CommandStack[m_NbParam], "FALSE") == FALSE)
-            || (fstricmp(l_CommandStack[m_NbParam], "Off") == FALSE)) {
+        if ((l_CommandStack[m_NbParam].FStrCmp("FALSE") == FALSE)
+            || (l_CommandStack[m_NbParam].FStrCmp("Off") == FALSE)) {
 
             Float l_FalseValue = 0.0f;
             m_IsFloatParam[m_NbParam] = TRUE;
@@ -206,7 +206,7 @@ Bool Console_Z::InterpCommand(const Char* i_CommandStr, U32 i_Depth) {
         S32 l_NbParam = m_NbParam;
 
         if (l_NbParam == 3) {
-            if (fstricmp(l_CommandStack[0], "#define") == FALSE) {
+            if (l_CommandStack[0].FStrCmp("#define") == FALSE) {
                 m_NbParam--;
                 for (i = 0; i < m_NbParam; i++) {
                     l_CommandStack[i].StrCpy(l_CommandStack[i + 1]);
@@ -217,37 +217,37 @@ Bool Console_Z::InterpCommand(const Char* i_CommandStr, U32 i_Depth) {
         }
         else if (l_NbParam <= 2) {
             if (l_NbParam == 2) {
-                if (fstricmp(l_CommandStack[0], "#SET") == FALSE) {
+                if (l_CommandStack[0].FStrCmp("#SET") == FALSE) {
                     SetVar(l_CommandStack[1]);
                     return TRUE;
                 }
-                if (fstricmp(l_CommandStack[0], "#UNSET") == FALSE) {
+                if (l_CommandStack[0].FStrCmp("#UNSET") == FALSE) {
                     UnVar(l_CommandStack[1]);
                     return TRUE;
                 }
-                if ((fstricmp(l_CommandStack[0], "#IF") == FALSE)) {
+                if ((l_CommandStack[0].FStrCmp("#IF") == FALSE)) {
                     PushVar(IsVar(l_CommandStack[1]));
                     return TRUE;
                 }
-                if ((fstricmp(l_CommandStack[0], "#IFDEF") == FALSE)) {
+                if ((l_CommandStack[0].FStrCmp("#IFDEF") == FALSE)) {
                     PushVar(IsVar(l_CommandStack[1]));
                     return TRUE;
                 }
-                if ((fstricmp(l_CommandStack[0], "#IFNOT") == FALSE)) {
+                if ((l_CommandStack[0].FStrCmp("#IFNOT") == FALSE)) {
                     PushVar(!IsVar(l_CommandStack[1]));
                     return TRUE;
                 }
-                if ((fstricmp(l_CommandStack[0], "#IFNDEF") == FALSE)) {
+                if ((l_CommandStack[0].FStrCmp("#IFNDEF") == FALSE)) {
                     PushVar(!IsVar(l_CommandStack[1]));
                     return TRUE;
                 }
             }
 
-            if (fstricmp(l_CommandStack[0], "#ELSE") == FALSE) {
+            if (l_CommandStack[0].FStrCmp("#ELSE") == FALSE) {
                 ChangeVarState();
                 return TRUE;
             }
-            if (fstricmp(l_CommandStack[0], "#ENDIF") == FALSE) {
+            if (l_CommandStack[0].FStrCmp("#ENDIF") == FALSE) {
                 PopVar();
                 return TRUE;
             }

@@ -1,32 +1,11 @@
 #ifndef _STREAM_Z_H_
 #define _STREAM_Z_H_
 #include "Types_Z.h"
+#include "BaseStream_Z.h"
 
 struct StrBuffer {
     void* m_RealPtr;
     void* m_AlignedPtr;
-};
-
-class BaseStream_Z {
-public:
-    BaseStream_Z()
-        : m_OpenId(-1)
-        , m_ReadId(-1) {
-    }
-
-    virtual void StreamOpened(S32 i_FileSize, S32 i_UserDefined) { Opened(0, i_FileSize, i_UserDefined); }
-
-    virtual void StreamReaded(S32 i_NbBytesRead, S32 i_UserDefined) { Readed(0, i_NbBytesRead, i_UserDefined); }
-
-    virtual void Opened(S32 i_ErrorCode, S32 i_FileSize, S32 i_UserDefined) { }
-
-    virtual void Readed(S32 i_ErrorCode, S32 i_NbBytesRead, S32 i_UserDefined) { }
-
-    BaseStream_Z& operator=(const BaseStream_Z& i_Stream);
-
-private:
-    S16 m_OpenId;
-    S16 m_ReadId;
 };
 
 class Stream_Z : public BaseStream_Z {
@@ -46,7 +25,7 @@ public:
 private:
     S32 m_LoadStage;
     S32 m_ErrorCode;
-    S32 m_FileSize;
+    S32 m_Size;
 };
 
 #endif // _STREAM_Z_H_

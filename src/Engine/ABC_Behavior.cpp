@@ -2,7 +2,6 @@
 #include "Memory_Z.h"
 #include "Program_Z.h"
 #include "ABC_ScriptManager.h"
-Extern_Z "C" void memcpy(void* dst, const void* src, int n);
 
 ABC_Behavior::ABC_Behavior() {
     m_LocalDataSize = 0;

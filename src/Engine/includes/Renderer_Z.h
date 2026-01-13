@@ -3,14 +3,31 @@
 #include "SystemObject_Z.h"
 #include "Material_Z.h"
 #include "Types_Z.h"
-#include "PerlinArray3D_Z.h"
+#include "Perlin3D_Z.h"
 #include "Gaussian_Z.h"
-#include "RenderPrimitiveBuffers_Z.h"
+#include "PrimitiveBuffers_Z.h"
 #include "Assert_Z.h"
 #include "Viewport_Z.h"
 
 #define RATIO_SCREEN_STANDARD (4.f / 3.f)
 #define RATIO_SCREEN_WIDESCREEN (16.f / 9.f)
+
+#define FL_EFFECT_UNK_0x1 (U32)(1 << 0)      // 0x1
+#define FL_EFFECT_CLEAR_SCREEN (U32)(1 << 1) // 0x2
+#define FL_EFFECT_UNK_0x4 (U32)(1 << 2)      // 0x4
+#define FL_EFFECT_UNK_0x8 (U32)(1 << 3)      // 0x8
+#define FL_EFFECT_UNK_0x10 (U32)(1 << 4)     // 0x10
+#define FL_EFFECT_VSYNC (U32)(1 << 5)        // 0x20
+#define FL_EFFECT_UNK_0x40 (U32)(1 << 6)     // 0x40
+#define FL_EFFECT_UNK_0x80 (U32)(1 << 7)     // 0x80
+#define FL_EFFECT_UNK_0x100 (U32)(1 << 8)    // 0x100
+#define FL_EFFECT_UNK_0x200 (U32)(1 << 9)    // 0x200
+#define FL_EFFECT_UNK_0x400 (U32)(1 << 10)   // 0x400
+#define FL_EFFECT_BLOOM (U32)(1 << 11)       // 0x800
+#define FL_EFFECT_UNK_0x1000 (U32)(1 << 12)  // 0x1000
+#define FL_EFFECT_UNK_0x2000 (U32)(1 << 13)  // 0x2000
+#define FL_EFFECT_UNK_0x4000 (U32)(1 << 14)  // 0x4000
+#define FL_EFFECT_UNK_0x8000 (U32)(1 << 15)  // 0x8000
 
 enum ScreenType {
     screen_standard = 0,
@@ -20,14 +37,24 @@ enum ScreenType {
 struct DrawInfo_Z {
     Mat4x4 Local2Cam;
     Mat4x4 World2Cam;
-    Box_Z m_Box;
+    Box_Z m_BBoxCamSpace;
+    ClipSphere_Z m_ClipSph;
+    Viewport_Z* m_Vp;
 
-public:
     DrawInfo_Z() { }
 };
 
 struct CacheState_Z {
-public:
+    CacheState_Z() {
+        Reset();
+    }
+
+    void Reset() {
+        m_MaxInUseNb = 0;
+        m_InUseNb = 0;
+        m_TotalNb = 0;
+    }
+
     S32 m_TotalNb;
     S32 m_InUseNb;
     S32 m_MaxInUseNb;
@@ -60,7 +87,7 @@ private:
     CacheState_Z m_LightCacheState1;
     CacheState_Z m_LightCacheState2;
     CacheState_Z m_PatchCacheState;
-    Bool m_UnkBoolFalse0x704;
+    Bool m_UnkBoolFalse_0x704;
     Float m_DisplayCacheStateUpdateTimer;
     Float m_LightFactorX;
     Float m_LightFactorY;
@@ -167,7 +194,7 @@ public:
     virtual void GetGamma();                                                                                                                 /* 0x78 */
     virtual void GetClearColor();                                                                                                            /* 0x7C */
     virtual void MoveScreenOrigin(S32 a1, S32 a2);                                                                                           /* 0x80 */
-    virtual void SetDOF_Depth(Float a1);                                                                                                     /* 0x84 */
+    virtual void SetDOF_Depth(Float i_DofDepth);                                                                                                     /* 0x84 */
     virtual void PushOrder(Float a1);                                                                                                        /* 0x88 */
     virtual void PushSo(U8 a1);                                                                                                              /* 0x8C */
     virtual void PushDo(U8 a1);                                                                                                              /* 0x90 */
@@ -224,10 +251,74 @@ public:
     virtual void SetActiveViewport(S32 i_ViewportID);                                                                                        /* 0x15C */
     virtual void FlushActiveViewport();                                                                                                      /* 0x160 */
     // clang-format on
+
+    void EnableEffectFlag(U32 i_Flag) { m_EffectFlag |= i_Flag; }
+
+    void SetLightingType(U32 i_LightingType) {
+        m_LightingType = i_LightingType;
+    }
+
+    void SetLodDist(Float i_LodDist) {
+        m_LodDist = i_LodDist;
+    }
+
+    void SetLodFadeDist(Float i_LodFadeDist) {
+        m_LodfadeDist = i_LodFadeDist;
+    }
+
+    void SetLodPatchDist(Float i_LodPatchDist) {
+        m_LodPatchDist = i_LodPatchDist;
+    }
+
+    void SetLodPatchMin(S32 i_LodPatchMin) {
+        m_LodPatchMin = i_LodPatchMin;
+    }
+
+    void SetLodShadowFadeDist(Float i_LodShadowFadeDist) {
+        m_LodShadowFadeDist = i_LodShadowFadeDist;
+    }
+
+    void SetMaxAnisotropy(U32 i_MaxAnisotropy) {
+        m_MaxAnistropy = i_MaxAnisotropy;
+    }
+
+    void SetMultisampleType(U32 i_MultisampleType) {
+        m_MultisampleType = i_MultisampleType;
+    }
+
+    void SetParticlesFadeDist(Float i_ParticlesFadeDist) {
+        m_ParticlesFadeDist = i_ParticlesFadeDist;
+    }
+
+    void SetTextureFiltering(U32 i_TextureFiltering) {
+        m_TextureFiltering = i_TextureFiltering;
+    }
+
+    void SetTextureQuality(U32 i_TextureQuality) {
+        m_TextureQuality = i_TextureQuality;
+    }
+
+    void SetLodPatchMax(S32 i_LodPatchMax) {
+        m_LodPatchMax = i_LodPatchMax;
+    }
+
 private:
     DynArray_Z<VertexBuffer_Z*> m_VertexBufferPtrDA;
     DynArray_Z<IndexBuffer_Z*> m_IndexBufferPtrDA;
     PerlinArray3D_Z<8, 8, 8> m_PerlinArray3D;
 };
+
+Bool SetSplitType();
+Bool SetWorldToSplit();
+Bool SetLodRender();
+Bool SetLIghtingType();
+Bool SetLOdTexture();
+Bool SetMAxAnisotropy();
+Bool SetTExtureFiltering();
+Bool FitOnObject();
+Bool DisplayImage();
+Bool MakeAvi();
+Bool CloseAvi();
+Bool StartRenderBench();
 
 #endif

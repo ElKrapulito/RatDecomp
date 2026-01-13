@@ -7,7 +7,7 @@
 BEGIN_AGENT_CLASS(StreamAgent_Z, ABC_Agent, 8)
 public:
     StreamAgent_Z() {
-        EnableFlag(FL_AGENT_UNK_0x100000);
+        EnableFlag(FL_AGENT_PAUSED);
     }
 
     virtual ~StreamAgent_Z() { }                                          /* 0x08 */

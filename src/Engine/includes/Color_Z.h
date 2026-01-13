@@ -17,6 +17,13 @@ public:
         return *this;
     }
 
+    void Set(Float i_Red = 1.0f, Float i_Green = 1.0f, Float i_Blue = 1.0f, Float i_Alpha = 1.0f) {
+        r = i_Red;
+        g = i_Green;
+        b = i_Blue;
+        a = i_Alpha;
+    }
+
     Float r;
     Float g;
     Float b;

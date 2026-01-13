@@ -4,4 +4,7 @@
 class Agent_Z;
 class ABC_Agent;
 HANDLE_Z(Agent_Z, ABC_Agent);
+
+typedef DynArray_Z<Agent_ZHdl, 100> Agent_ZHdlDA;
+
 #endif

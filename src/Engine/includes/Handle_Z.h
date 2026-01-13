@@ -8,7 +8,7 @@
 //#include "Global_Z.h"
 
 #define HandleGranularity 16384
-#define HANDLE_NULL BaseObject_ZHdl(0);
+#define HANDLE_NULL BaseObject_ZHdl(0)
 
 #define HANDLE_MARKED_FALSE 0
 #define HANDLE_MARKED_TRUE 1
@@ -92,7 +92,6 @@ public:
 
     operator BaseObject_Z*() const;
 
-private:
 protected:
     HdlID m_RealID;
 };

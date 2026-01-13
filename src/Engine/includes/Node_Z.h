@@ -31,6 +31,7 @@ public:
     void GetLocal(const Capsule_Z& i_WorldCapsule, Capsule_Z& o_LocalCapsule);
     void Changed();
     void Changed(S32 i_Flag);
+	void AddSon(const Node_ZHdl& i_Son, Bool i_IsWorldRelative = FALSE, Bool i_Changed = TRUE);
 
     inline Bool IsRoot() const { return m_Parent == NULL; }
 
@@ -69,6 +70,10 @@ public:
     inline Float GetUniformScale() { return m_UniformScale; }
 
     void SetTranslation(const Vec3f& i_Translation);
+
+    inline Vec3f& GetTranslation() {
+		return GetWorldMatrix().GetTranslation();
+	}
 
     inline Mat4x4& GetInverseWorldMatrix() {
         if (GetFlag() & FL_NODE_INVALIDMAT) {
@@ -116,6 +121,15 @@ public:
     Agent_ZHdl& GetAgent() {
         return m_Agent;
     }
+
+	inline void SetLight(LightData_Z* i_LightData) {
+		m_LightData = i_LightData;
+	}
+
+	inline void SetObject(Object_Z* i_Object) {
+		m_Object = i_Object;
+		Changed();
+	}
 
 private:
     Agent_ZHdl m_Agent;

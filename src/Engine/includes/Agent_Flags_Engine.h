@@ -21,7 +21,7 @@
 #define FL_AGENT_UNK_0x20000 ((U32)1 << 17)    // 0x20000 - Unknown
 #define FL_AGENT_UNK_0x40000 ((U32)1 << 18)    // 0x40000 - Unknown
 #define FL_AGENT_UNK_0x80000 ((U32)1 << 19)    // 0x80000 - Unknown
-#define FL_AGENT_UNK_0x100000 ((U32)1 << 20)   // 0x100000 - Unknown
+#define FL_AGENT_PAUSED ((U32)1 << 20)       // 0x100000 - Will get executed even if ScriptMgr is paused
 #define FL_AGENT_UNK_0x200000 ((U32)1 << 21)   // 0x200000 - Unknown
 #define FL_AGENT_UNK_0x400000 ((U32)1 << 22)   // 0x400000 - Unknown
 #define FL_AGENT_UNK_0x800000 ((U32)1 << 23)   // 0x800000 - Unknown

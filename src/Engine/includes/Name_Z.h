@@ -4,46 +4,50 @@
 
 class Name_Z {
 public:
-    Name_Z(const Name_Z& a1) {
-        m_ID = a1.m_ID;
+    Name_Z(const Name_Z& i_Name) {
+        m_ID = i_Name.m_ID;
     }
 
-    Name_Z(const Char* a1) {
-        S32 result = 0;
-        if (a1) {
-            result = GetID(a1, 0);
-        }
-        else {
-            result = 0;
-        }
-        m_ID = result;
+    Name_Z(const Char* i_Str) {
+		SetName(i_Str);
     }
 
-    Name_Z(const S32 a1) { m_ID = (U32)a1; }
+    Name_Z(const S32 i_ID) { m_ID = (U32)i_ID; }
 
     Name_Z() { m_ID = 0; }
 
-    void SetID(S32 a1) { m_ID = a1; }
+    void SetID(S32 i_ID) { m_ID = i_ID; }
 
     U32 GetID() const {
         return m_ID;
     }
 
-    static U32 GetID(const Char* a1, U32 a2 = 0);
-    static U32 GetID(U8* data, U32 size, U32 result);
+	inline void SetName(const Char* i_Str) {
+		S32 l_Res = 0;
+        if (i_Str) {
+            l_Res = GetID(i_Str, 0);
+        }
+        else {
+            l_Res = 0;
+        }
+        m_ID = l_Res;
+	}
+
+    static U32 GetID(const Char* i_Str, U32 i_ContinueCRC = 0);
+    static U32 GetID(U8* i_Data, U32 i_Len, U32 i_ContinueCRC = 0);
 
     inline Name_Z& operator=(const Name_Z& i_Name) {
         m_ID = i_Name.m_ID;
         return (*this);
     }
 
-    Bool operator==(const Name_Z& a1) const { return m_ID == a1.m_ID; }
+    Bool operator==(const Name_Z& i_Name) const { return m_ID == i_Name.m_ID; }
 
-    Bool operator==(Name_Z a1) { return m_ID == a1.m_ID; }
+    Bool operator==(Name_Z i_Name) { return m_ID == i_Name.m_ID; }
 
-    Bool operator!=(const Name_Z& a1) const { return m_ID != a1.m_ID; }
+    Bool operator!=(const Name_Z& i_Name) const { return m_ID != i_Name.m_ID; }
 
-    Bool operator!=(Name_Z a1) { return m_ID != a1.m_ID; }
+    Bool operator!=(Name_Z i_Name) { return m_ID != i_Name.m_ID; }
 
     U32 m_ID;
 };

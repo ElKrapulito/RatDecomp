@@ -1,6 +1,7 @@
 #ifndef _CLASSMANAGER_Z_H_
 #define _CLASSMANAGER_Z_H_
 #include "Handle_Z.h"
+#include "File_Z.h"
 
 #define REGISTER_CLASS(a, b, c) gData.ClassMgr->RegisterClass(a, b, c)
 
@@ -34,8 +35,11 @@ public:
 
     Bool IsBigFileOpened() const { return m_IsBigFileOpened; }
 
-    BaseObject_ZHdl& NewObject(const char* a1);
-    BaseObject_ZHdl& NewObject(const Name_Z& a1, const Name_Z& a2);
+    BaseObject_ZHdl& NewObject(const Char* i_ClassName);
+    BaseObject_ZHdl& NewObject(const Name_Z& i_ClassName);
+    BaseObject_ZHdl& NewObject(const Name_Z& i_ClassName, const Name_Z& i_Name);
+    Bool IsObjectInherit(const Name_Z& i_ClassName, const Name_Z& i_ParentClassName);
+    Bool GetFile(const Char* i_Path, File_Z& i_File);
 
 private:
     Char m_Unks[0x522];

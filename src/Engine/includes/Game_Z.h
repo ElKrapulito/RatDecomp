@@ -1,8 +1,60 @@
 #ifndef _GAME_Z_H_
 #define _GAME_Z_H_
 #include "BaseObject_Z.h"
+#include "World_ZHdl.h"
+#include "Node_ZHdl.h"
+#include "CameraAgent_ZHdl.h"
+#include "LodMove_ZHdl.h"
+#include "LodAgent_ZHdl.h"
+#include "ObjectsGame_ZHdl.h"
+#include "RtcAgent_ZHdl.h"
 
 class Game_Z : public BaseObject_Z {
+public:
+    struct SubInterp_Z {
+        U8 m_UnkBytes_0x0[20];
+    };
+
+    typedef DynArray_Z<SubInterp_Z, 8, FALSE, TRUE> SubInterp_ZDA;
+
+    Game_Z();
+
+    virtual void Init();
+    virtual ~Game_Z();
+    virtual Bool MarkHandles();
+
+    void DeclareObjectGame(const ObjectGame_ZHdl& i_ObjectGameHdl);
+    void InitAgent(Node_Z* i_StartNode, Bool i_RecursiveBelow, Bool i_RecursiveNextTo);
+    U32 GetFirstVp() const;
+    U32 GetNbVp() const;
+    void SetGameWorld(const World_ZHdl& i_WorldHdl, const Char* i_GameName);
+	void Update(Float i_DeltaTime);
+	void Stream(const Vec3f& i_Pos, Agent_ZHdl i_NotifyAgent, abc_message i_Msg);
+	void SetGamePlayerNb(S32 i_Nb, Bool i_IsMono, const Name_Z& i_CameraAgentClass);
+
+private:
+    World_ZHdl m_WorldHdl;
+    Node_ZHdl m_SubRootNodeHdl;
+    String_Z<ARRAY_CHAR_MAX> m_GameName;
+    CameraAgent_ZHdlDA m_PlayerCamAgentHdls;
+    LodMove_ZHdlDA m_PlayerLodMoveHdls;
+    LodAgent_ZHdlDA m_PlayerLodAgentHdls;
+    Node_ZHdlDA m_PlayerCamNodeHdls;
+    ObjectsGame_ZHdl m_ObjectsGameMgrHdl;
+    ObjectGame_ZHdlDA m_ObjectGameHdls;
+    Agent_ZHdlDA m_GameAgentHdls;
+    RtcAgent_ZHdlDA m_RtcAgentHdls;
+    S32 m_NbPlayer;
+    Bool m_InitAgentRunning;
+    S32 m_NbAgent;
+    S32 m_InitAgentDepth;
+    Agent_ZHdl m_StreamNotifyAgent;
+    S32DA m_StreamUnkDA_0x164;
+    abc_message m_StreamNotifyMsg;
+    Vec3f m_StreamWorldPos;
+    BitArray_Z m_StreamUnkBA_0x17c;
+    S32DA m_StreamUnkDA_0x188;
+    SubInterp_ZDA m_StreamSubInterps;
 };
 
 #endif // _GAME_Z_H_

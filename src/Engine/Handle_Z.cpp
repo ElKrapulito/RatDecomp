@@ -119,5 +119,7 @@ S32 HandleManager_Z::HandleToU32(const BaseObject_ZHdl& i_Hdl) {
 }
 
 BaseObject_ZHdl HandleManager_Z::U32ToHandle(S32 i_Hdl) {
-    return *((BaseObject_ZHdl*)&i_Hdl);
+    BaseObject_ZHdl l_Hdl;
+    l_Hdl.m_RealID.GblID = i_Hdl;
+    return l_Hdl;
 }

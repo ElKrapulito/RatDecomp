@@ -4,6 +4,8 @@
 #include "Assert_Z.h"
 
 Extern_Z "C" U32 strlen(const Char* str);
+Extern_Z "C" char* strupr(Char* str);
+Extern_Z "C" int strcmp(const Char* str1, const Char* str2);
 Extern_Z "C" int strcpy(Char* dest, const Char* src);
 Extern_Z "C" int vsprintf(const Char* i_Buf, const Char* i_Format, va_list i_Args);
 Extern_Z "C" int strncpy(Char* dest, const Char* src, S32 count);
@@ -23,7 +25,7 @@ public:
 
     void StrCpy(const Char* i_Str) { strcpy(m_Str, i_Str); }
 
-    inline String_Z<Size>& operator=(const char* i_Text) {
+    inline String_Z<Size>& operator=(const Char* i_Text) {
         StrCpy(i_Text);
         return *this;
     }
@@ -44,6 +46,15 @@ public:
         return m_Str;
     }
 
+    S32 CpyTo(Char* i_Dst, S32 i_Size) {
+        S32 i = 0;
+        do {
+            i_Dst[i] = m_Str[i];
+            i++;
+            i_Size--;
+        } while (i_Size);
+    }
+
     S32 StrnCpy(const Char* i_Src, S32 i_Count) {
         return strncpy(m_Str, i_Src, i_Count);
     }
@@ -56,6 +67,18 @@ public:
 
         va_end(args);
         return 0;
+    }
+
+    Char* Upr() {
+        return strupr(m_Str);
+    }
+
+    S32 FStrCmp(const Char* i_Str) const {
+        return fstricmp(m_Str, i_Str);
+    }
+
+    S32 StrCmp(const Char* i_Str) const {
+        return strcmp(m_Str, i_Str);
     }
 
     inline Char& operator[](S32 i_Index) {

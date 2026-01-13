@@ -1,6 +1,7 @@
 #ifndef _TYPES_Z_H_
 #define _TYPES_Z_H_
 #include "Macros_Z.h"
+
 typedef bool Bool;
 typedef char Char;
 typedef unsigned char U8;
@@ -41,6 +42,8 @@ typedef volatile double VDouble;
 
 #undef _ALLOCDEFAULTALIGN
 #define _ALLOCDEFAULTALIGN 4
+
+#define ALIGN(A, B) (((U32)(A) + (B) - 1) & ~((B) - 1))
 
 #undef Weak_Z
 #ifdef __MWERKS__

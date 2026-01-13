@@ -2,7 +2,7 @@
 #include "Memory_Z.h"
 #include "Program_Z.h"
 #include "Renderer_Z.h"
-Extern_Z "C" void memcpy(void* dest, const void* src, int n);
+Extern_Z "C" void* memcpy(void* dest, const void* src, int n);
 #pragma dont_inline on
 
 Bitmap_Z::Bitmap_Z() {

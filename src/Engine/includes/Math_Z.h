@@ -21,11 +21,14 @@ inline Float InvSqrt(register Float x, register Float y = 1.f) {
     register Float Ret = 0.0f;
 
     if (x) {
-        asm
-        {
-            frsqrte fp4,x
-            fmuls   Ret,fp4,y
+#if defined(__MWERKS__)
+        asm {
+        	frsqrte fp4,x
+        	fmuls   Ret,fp4,y
         }
+#else
+        Ret = 1.0f / sqrtf(x) * y;
+#endif
     }
     return Ret;
 }
@@ -163,7 +166,7 @@ struct Vec3f {
         return *this;
     }
 
-    Vec3f operator=(const Vec3f& i_Vec) {
+    Vec3f& operator=(const Vec3f& i_Vec) {
         x = i_Vec.x;
         y = i_Vec.y;
         z = i_Vec.z;
@@ -607,6 +610,10 @@ struct Mat4x4 {
     U32 GetCRC() const;
     inline Vec3f operator*(const Vec3f& i_Vec) const;
     inline Vec4f operator*(const Vec4f& i_Vec) const;
+
+    inline Vec3f& GetTranslation() {
+        return *(Vec3f*)(&m[3][0]);
+    }
 
 } Aligned_Z(16);
 

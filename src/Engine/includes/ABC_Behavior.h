@@ -80,10 +80,6 @@ struct ABC_BehaviorHolder {
         m_Next = NULL;
         return *this;
     }
-
-    ~ABC_BehaviorHolder() {
-        if (m_Next) Delete_Z m_Next;
-    }
 };
 
 struct ABC_CategoryHolder {
@@ -102,7 +98,6 @@ struct ABC_CategoryHolder {
     ABC_CategoryHolder(abc_category i_Category, const Char* i_CategoryName = NULL);
     ABC_CategoryHolder& operator=(const ABC_CategoryHolder& i_Holder);
     ABC_CategoryHolder(const ABC_CategoryHolder& i_Holder);
-    ~ABC_CategoryHolder();
 };
 
 #define BHV_STARTED (U16)(1 << 0)

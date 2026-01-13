@@ -8,4 +8,6 @@ class AnimatedMsgAgent_Z;
 
 HANDLE_Z(RtcAgent_Z, AnimatedMsgAgent_Z);
 
+typedef DynArray_Z<RtcAgent_ZHdl, 8> RtcAgent_ZHdlDA;
+
 #endif

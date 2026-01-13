@@ -4,4 +4,4 @@ EffectManager_Z::EffectManager_Z() { }
 
 EffectManager_Z::~EffectManager_Z() { }
 
-void EffectManager_Z::Update(Float i_Unk) { }
+void EffectManager_Z::Update(Float i_DeltaTime) { }

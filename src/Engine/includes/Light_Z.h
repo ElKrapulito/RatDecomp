@@ -58,4 +58,8 @@ private:
     Vec3f m_Translation;
 };
 
+class LightData_Z : public ObjectDatas_Z {
+public:
+};
+
 #endif // _LIGHT_Z_H_
