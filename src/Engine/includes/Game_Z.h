@@ -8,6 +8,14 @@
 #include "LodAgent_ZHdl.h"
 #include "ObjectsGame_ZHdl.h"
 #include "RtcAgent_ZHdl.h"
+#include "Math_Z.h"
+#include "SubWorld_ZHdl.h"
+
+Extern_Z void RegisterGameCommand();
+Bool Cmd_LoadSubLevel();
+Bool Cmd_RemoveSubLevel();
+Bool Cmd_LoadSubData();
+Bool Cmd_RemoveSubData();
 
 class Game_Z : public BaseObject_Z {
 public:
@@ -23,14 +31,18 @@ public:
     virtual ~Game_Z();
     virtual Bool MarkHandles();
 
+    static BaseObject_Z* NewObject() { return NewL_Z(149) Game_Z; }
+
     void DeclareObjectGame(const ObjectGame_ZHdl& i_ObjectGameHdl);
     void InitAgent(Node_Z* i_StartNode, Bool i_RecursiveBelow, Bool i_RecursiveNextTo);
     U32 GetFirstVp() const;
     U32 GetNbVp() const;
     void SetGameWorld(const World_ZHdl& i_WorldHdl, const Char* i_GameName);
-	void Update(Float i_DeltaTime);
-	void Stream(const Vec3f& i_Pos, Agent_ZHdl i_NotifyAgent, abc_message i_Msg);
-	void SetGamePlayerNb(S32 i_Nb, Bool i_IsMono, const Name_Z& i_CameraAgentClass);
+    void Update(Float i_DeltaTime);
+    void Stream(const Vec3f& i_Pos, Agent_ZHdl i_NotifyAgent, abc_message i_Msg);
+    void SetGamePlayerNb(S32 i_Nb, Bool i_IsMono, const Name_Z& i_CameraAgentClass);
+    S32 GetSubId(S32 i_SubDataId, S32 i_Unk);
+    void AddSubLevel(const SubWorld_ZHdl& i_SubWorldHdl, S32 i_SubLevelId);
 
 private:
     World_ZHdl m_WorldHdl;

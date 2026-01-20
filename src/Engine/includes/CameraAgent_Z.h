@@ -30,7 +30,7 @@ private:
     S32 m_ViewportId;
     ParticlesAgent_ZHdlDA m_ParticlesAgents;
 
-    DECL_BHV(CameraAgentSuspend)
+    DECL_BHV(CameraAgentSuspend);
 END_AGENT_CLASS
 
 // clang-format on

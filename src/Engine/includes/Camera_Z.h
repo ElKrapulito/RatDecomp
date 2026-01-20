@@ -87,6 +87,8 @@ public:
     virtual void Draw(DrawInfo_Z& i_DrawInfo, ObjectDatas_Z* i_Data); /* 0x14 */
     virtual void UpdateObject(Node_Z* a1, ObjectDatas_Z* a2);         /* 0x18 */
 
+    static BaseObject_Z* NewObject() { return NewL_Z(188) Camera_Z; }
+
     void SetFov(Float i_Fov);
 
     inline void SetRoll(Float i_Roll) {

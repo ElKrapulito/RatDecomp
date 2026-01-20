@@ -11,6 +11,8 @@ public:
     virtual void Init();
     virtual void Update(Float i_DeltaTime);
 
+    static BaseObject_Z* NewObject() { return NewL_Z(31) ObjectsGameClip_Z; }
+
     void SetObjectsGameHdl(ObjectsGame_ZHdl& i_ObjectsGameHdl) {
         m_ObjectsGameHdl = i_ObjectsGameHdl;
     }

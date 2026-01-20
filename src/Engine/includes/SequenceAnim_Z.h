@@ -17,14 +17,18 @@ struct SeqAnim_Z {
 
 class SequenceAnim_Z : public BaseObject_Z {
 public:
-    virtual ~SequenceAnim_Z();                            /* 0x08 */
-    virtual void ResetSeqMan(S32 a1, Bool a2);            /* 0x0C */
-    virtual void Next(S32 a1);                            /* 0x10 */
-    virtual void WarnNext(S32 a1);                        /* 0x14 */
-    virtual void SetSeq(const SeqAnim_Z& a1, S32 a2);     /* 0x18 */
-    virtual void SetNextSeq(const SeqAnim_Z& a1, S32 a2); /* 0x1C */
-    virtual void AddSeq(const SeqAnim_Z& a1, S32 a2);     /* 0x20 */
-    virtual void GetNbRsc();                              /* 0x24 */
+    virtual ~SequenceAnim_Z();
+    virtual void ResetSeqMan(S32 a1, Bool a2);
+    virtual void Next(S32 a1);
+    virtual void WarnNext(S32 a1);
+    virtual void SetSeq(const SeqAnim_Z& a1, S32 a2);
+    virtual void SetNextSeq(const SeqAnim_Z& a1, S32 a2);
+    virtual void AddSeq(const SeqAnim_Z& a1, S32 a2);
+    virtual void GetNbRsc();
+
+    static BaseObject_Z* NewObject() {
+        return NewL_Z(41) SequenceAnim_Z;
+    }
 };
 
 #endif // _SEQUENCEANIM_Z_H_

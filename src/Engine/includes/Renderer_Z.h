@@ -8,6 +8,7 @@
 #include "PrimitiveBuffers_Z.h"
 #include "Assert_Z.h"
 #include "Viewport_Z.h"
+#include "StaticArray_Z.h"
 
 #define RATIO_SCREEN_STANDARD (4.f / 3.f)
 #define RATIO_SCREEN_WIDESCREEN (16.f / 9.f)
@@ -29,10 +30,52 @@
 #define FL_EFFECT_UNK_0x4000 (U32)(1 << 14)  // 0x4000
 #define FL_EFFECT_UNK_0x8000 (U32)(1 << 15)  // 0x8000
 
+class Omni_Z;
+class Camera_Z;
+class LightData_Z;
+class HFogData_Z;
+class Occluder_Z;
+
 enum ScreenType {
     screen_standard = 0,
     screen_widescreen
 };
+
+struct OmniFrust_Z {
+    Sphere_Z m_BSphereCamSpace;
+    Vec3f m_DirectionCamSpace;
+    Float m_InvCosOuterHalfRad;
+    Vec2f m_SinCosOuterHalfRad;
+    U8 m_Unk_0x28[8]; // could be align, which means struct from 0x0 to 0x30
+    Vec4f m_TranslationWorldSpace;
+    Vec4f m_DirectionWorldSpace;
+    Float m_UniformStartSquared; // omni m_Start * node->m_UniformScale
+    Node_Z* m_Node;
+    Omni_Z* m_Omni;
+    U8 m_IndexInSA;
+};
+
+typedef StaticArray_Z<OmniFrust_Z*, 64, FALSE, FALSE> OmniFrustPtr_ZSA;
+
+struct OmniStruct_Z {
+    Vec4f m_TranslationLocalSpace;
+    Vec3f m_DirectionWorldSpace;
+    Float m_InvCosOuterHalfRad;
+    Float m_SinOuterHalfRad;
+    Float m_CosOuterHalfRad;
+    Float m_Unk_0x28;
+    Float m_Unk_0x2c;
+    Float m_StartSqr;
+    Float m_Attn;
+    Float m_SpotAtt0;
+    Float m_SpotAtt1;
+    S32 m_Flag;
+    OmniFrust_Z* m_OmniFrust;
+    Float m_Unk_0x48;
+    Float m_Unk_0x4c;
+};
+
+typedef StaticArray_Z<OmniStruct_Z, 64, FALSE, FALSE> OmniStruct_ZSA;
 
 struct DrawInfo_Z {
     Mat4x4 Local2Cam;
@@ -40,8 +83,71 @@ struct DrawInfo_Z {
     Box_Z m_BBoxCamSpace;
     ClipSphere_Z m_ClipSph;
     Viewport_Z* m_Vp;
+    S32 m_VpId;
+    S32 m_FirstPlayerVpId;
+    S32 m_VpCount;
+    Float m_VpTangent; // idk to what
+    Float m_VpInvDiagTangent;
+    Float m_VpDFov;
+    Float m_VpRatio;
+    Float m_VpHRatio;
+    Float m_VpVRatio;
+    Float m_VpStartX;
+    Float m_VpStartY;
+    Float m_VpSizeX;
+    Float m_VpSizeY;
+    Camera_Z* m_Camera;
+    Node_Z* m_CameraNode;
+    S32 m_UnkZero_0x120;
+    Node_Z* m_Node;
+    LightData_Z* m_LightData;
+    S32 m_UnkZero_0x12c;
+    HFogData_Z* m_CurrentNodeHFogData;
+    HFogData_Z* m_MainHFogData; // HFog from first hfog node that can be found in children of root
+    U8 m_UnkBytes_0x138[8];     // could be alignment
+    Vec4f m_CameraTranslation;  // last is 1.0f
+    Vec4f m_CameraDirection;    // last is 1.0f
+    S32 m_Lod;                  // lod level to use for current
+    S32 m_Flag;
+    Float m_FadeValue; // idk what else to call it, it determines whether the object should be drawn or not
+    Float m_Unk_0x16c;
+    OmniFrustPtr_ZSA m_OmniFrustPtrSA;
+    OmniStruct_ZSA m_OmniStructSA;
+    S32 m_ActiveOmniCount;
+    S32 m_ActiveOmniFlags;
+    OmniStruct_Z* m_OmniStructs[64];
+    Float m_LodFadeDist;
+    Float m_LodShadowFadeDist;
+    Float m_ParticlesFadeDist;
+    Float m_LodDist;
+    Float m_LodPatchMin;
+    Float m_LodPatchMax;
+    Float m_LodPatchDist;
+    Occluder_Z* m_Occluder;
+    Bool m_IsOccluding;
+    BitArray_Z* m_OccludedZonesBA;
+    S32 m_Unk0_0x17c0_From_Renderer_0x704; // gets assigned from Renderer_Z::m_UnkBoolFalse_0x704
+    Float m_DeltaTime;
 
-    DrawInfo_Z() { }
+    DrawInfo_Z() {
+        m_Node = NULL;
+        m_UnkZero_0x120 = 0;
+        m_Vp = NULL;
+        m_Camera = NULL;
+        m_LightData = NULL;
+        m_UnkZero_0x12c = 0;
+        m_CurrentNodeHFogData = NULL;
+        m_MainHFogData = NULL;
+        m_OccludedZonesBA = NULL;
+        m_ActiveOmniCount = 0;
+        m_VpCount = 0;
+        m_DeltaTime = 0.0f;
+        m_Occluder = NULL;
+        m_IsOccluding = FALSE;
+    }
+
+    ~DrawInfo_Z() {
+    }
 };
 
 struct CacheState_Z {
@@ -68,6 +174,21 @@ struct IndexBuffer_Z;
 struct Vertex3D;
 class LightData_Z;
 
+enum BitmapType {
+    BITMAP_DIFFUSE = 0,   // Color bitmap
+    BITMAP_RADIOSITY = 1, // Baked lighting bitmap
+    BITMAP_UNK_0x2 = 2,   // Unknown purpose
+    BITMAP_UNK_0x3 = 3,   // Unknown purpose
+    BITMAP_UNK_0x4 = 4,   // Unknown purpose
+    BITMAP_UNK_0x5 = 5,   // Unknown purpose
+    BITMAP_UNK_0x6 = 6,   // Unknown purpose
+    BITMAP_UNK_0x7 = 7,   // Unknown purpose
+    BITMAP_UNK_0x8 = 8,   // Unknown purpose
+    BITMAP_UNK_0x9 = 9,   // Unknown purpose
+    BITMAP_UNK_0xA = 10,  // Unknown purpose
+    BITMAP_NB_TYPES
+};
+
 class Renderer_Z {
 private:
     Viewport_Z m_Viewports[7];
@@ -76,9 +197,7 @@ private:
     S32 m_SizeX;
     S32 m_SizeY;
     Material_Z* m_ActiveMaterial;
-    Bitmap_Z* m_ActiveBitmap;
-    Bitmap_Z* m_ActiveRadiosityBitmap;
-    Char m_Pad0x6a8[36];
+    Bitmap_Z* m_ActiveBitmaps[BITMAP_NB_TYPES];
     void* m_NullVertexConstant;
     Float m_LodDist;
     Float m_LodPatchDist;
@@ -106,7 +225,7 @@ private:
     Char m_Pad_0x764[8];
     Vec3f m_UnkVec3f_001_0x76c;
     Vec3f m_UnkVec3f_100_0x778;
-    Float m_LodfadeDist;
+    Float m_LodFadeDist;
     Float m_LodShadowFadeDist;
     Float m_ParticlesFadeDist;
     Float m_DOF_Depth;
@@ -163,93 +282,93 @@ public:
 
     Float GetScreenRatio();
     // clang-format off
-    virtual ~Renderer_Z();                                                                                                                   /* 0x08 */
-    virtual Bool Init(S32 i_SizeX, S32 i_SizeY);                                                                                             /* 0x0C */
-    virtual void Shut();                                                                                                                     /* 0x10 */
-    virtual void Reset();                                                                                                                    /* 0x14 */
-    virtual void UpdateResource();                                                                                                           /* 0x18 */
-    virtual void BeginRender();                                                                                                              /* 0x1C */
-    virtual void EndRender(Float a1);                                                                                                        /* 0x20 */
-    virtual void Draw(Float a1);                                                                                                             /* 0x24 */
-    virtual void WaitEndFrame();                                                                                                             /* 0x28 */
-    virtual void WaitForRetrace(Float a1);                                                                                                   /* 0x2C */
-    virtual void CleanAllDatas();                                                                                                            /* 0x30 */
-    virtual void Minimize();                                                                                                                 /* 0x34 */
-    virtual void Draw(S32 a1, Float a2);                                                                                                     /* 0x38 */
-    virtual void SetViewMatrix(Bool a1);                                                                                                     /* 0x3C */
-    virtual void DrawTransparent(DrawInfo_Z& a1);                                                                                            /* 0x40 */
-    virtual void DrawPostRenderEffects(DrawInfo_Z& a1);                                                                                      /* 0x44 */
-    virtual void InitViewport(U32 a1);                                                                                                       /* 0x48 */
-    virtual void ClearZBuffer(S32 a1, S32 a2, S32 a3, S32 a4);                                                                               /* 0x4C */
-    virtual void ClearFrameBuffer(S32 a1, S32 a2, S32 a3, S32 a4);                                                                           /* 0x50 */
-    virtual void GetRendererParams(Float& a1, Float& a2, Float& a3, Float& a4, Float& a5);                                                   /* 0x54 */
-    virtual void GetViewportParam(S32 a1, Float& a2, Float& a3, Float& a4, Float& a5, Float& a6);                                            /* 0x58 */
-    virtual void SetGammaRamp(Float a1, Float a2, Float a3);                                                                                 /* 0x5C */
-    virtual void SetBrightness(Float a1);                                                                                                    /* 0x60 */
-    virtual void SetContrast(Float a1);                                                                                                      /* 0x64 */
-    virtual void SetGamma(Float a1);                                                                                                         /* 0x68 */
-    virtual void SetClearColor(const Color& a1);                                                                                             /* 0x6C */
-    virtual void GetBrightness();                                                                                                            /* 0x70 */
-    virtual void GetContrast();                                                                                                              /* 0x74 */
-    virtual void GetGamma();                                                                                                                 /* 0x78 */
-    virtual void GetClearColor();                                                                                                            /* 0x7C */
-    virtual void MoveScreenOrigin(S32 a1, S32 a2);                                                                                           /* 0x80 */
-    virtual void SetDOF_Depth(Float i_DofDepth);                                                                                                     /* 0x84 */
-    virtual void PushOrder(Float a1);                                                                                                        /* 0x88 */
-    virtual void PushSo(U8 a1);                                                                                                              /* 0x8C */
-    virtual void PushDo(U8 a1);                                                                                                              /* 0x90 */
-    virtual void PushDs(U16 a1);                                                                                                             /* 0x94 */
-    virtual void PushGroupId(U8 a1);                                                                                                         /* 0x98 */
-    virtual void PushDraw(const PrimitiveInfo_Z* a1, S32 a2);                                                                                /* 0x9C */
-    virtual void PushMatrix(const Mat4x4* a1);                                                                                               /* 0xA0 */
-    virtual void SetDLight(const DrawInfo_Z& a1);                                                                                            /* 0xA4 */
-    virtual void GetPushedVertexConstant(S32 a1);                                                                                            /* 0xA8 */
-    virtual void PushVertexConstant(S32 a1);                                                                                                 /* 0xAC */
-    virtual void SetVertexConstant(ObjConstant_Z* a1, S32 a2);                                                                               /* 0xB0 */
-    virtual void SetActiveMaterial(Material_Z* a1);                                                                                          /* 0xB4 */
-    virtual void SetBlankMaterial();                                                                                                         /* 0xB8 */
-    virtual void SetActiveTexture(Bitmap_Z* a1, S32 a2);                                                                                     /* 0xBC */
-    virtual void FreeTexture(S16 a1) {}                                                                                                      /* 0xC0 */
-    virtual void CreateVertexBuffer(S32 a1);                                                                                                 /* 0xC4 */
-    virtual void DeleteVertexBuffer(VertexBuffer_Z* a1);                                                                                     /* 0xC8 */
-    virtual void CreateIndexBuffer(S32 a1);                                                                                                  /* 0xCC */
-    virtual void DeleteIndexBuffer(IndexBuffer_Z* a1);                                                                                       /* 0xD0 */
-    virtual void SetLightFactor(Float a1, Float a2, Float a3);                                                                               /* 0xD4 */
-    virtual void GetLightFactor(Float& a1, Float& a2, Float& a3);                                                                            /* 0xD8 */
-    virtual void GetSpecialVisionColor(Vec3f& a1, Vec3f& a2, Node_Z* a3) const;                                                              /* 0xDC */
-    virtual void SetSpecialVisionColor(const Vec3f& a1, const Vec3f& a2, const Vec3f& a3, const Vec3f& a4);                                  /* 0xE0 */
-    virtual void GetTextureSize();                                                                                                           /* 0xE4 */
-    virtual void GetPercentAlloc(S32 a1);                                                                                                    /* 0xE8 */
-    virtual void MarkHandles();                                                                                                              /* 0xEC */
-    virtual void SetCurrentFogColor(const Vec3f& a1);                                                                                        /* 0xF0 */
-    virtual void ApplyDirectionalOnVertex(Vertex3D* a1, Vec3f& a2, LightData_Z& a3);                                                         /* 0xF4 */
-    virtual void ApplyFogOnVertex(Vertex3D* a1, Vec4f& a2);                                                                                  /* 0xF8 */
-    virtual void DrawFace(Vertex3D& a1, Vertex3D& a2, Vertex3D& a3);                                                                         /* 0xFC */
-    virtual void DrawStrip(Vertex3D* a1, U32 a2, Bool a3);                                                                                   /* 0x100 */
-    virtual void DrawStripAfterScene(Vertex3D* a1, U32 a2, Bool a3);                                                                         /* 0x104 */
-    virtual void DrawLine(const Vec3f& a1, const Vec3f& a2, const Color& a3, Bool a4, Bool a5);                                              /* 0x108 */
-    virtual void DrawLine(const Vec2f& a1, const Vec2f& a2, const Color& a3, Float a4);                                                      /* 0x10C */
-    virtual void DrawImage(Bitmap_ZHdl& a1);                                                                                                 /* 0x110 */
-    virtual void DrawCross(const Vec3f& a1, const Color& a2, Float a3);                                                                      /* 0x114 */
-    virtual void Draw2DQuad(const Vec2f& a1, const Vec2f& a2, const Vec2f& a3, const Vec2f& a4, const Color& a5, const Color& a6, Float a7); /* 0x118 */
-    virtual void DrawQuad(Vec2f& a1, Vec2f& a2, Color& a3, Color& a4, Float a5);                                                             /* 0x11C */
-    virtual void DrawQuad(Vec2f& a1, Vec2f& a2, Color& a3, Float a4);                                                                        /* 0x120 */
-    virtual void DrawQuad(Vec2f& a1, Vec2f& a2, Vec2f& a3, Vec2f& a4, Vec3f& a5, Float a6);                                                  /* 0x124 */
-    virtual void DrawTri(Vec2f& a1, Vec2f& a2, Vec2f& a3, Color& a4, Float a5);                                                              /* 0x128 */
-    virtual void Draw2DQuad(Vec2f* a1, Vec3f* a2, Vec2f* a3, Float a4, Float a5);                                                            /* 0x12C */
-    virtual void DrawStrip(Vec2f* a1, S32 a2, const Color& a3, Float a4);                                                                    /* 0x130 */
-    virtual void DrawFan(Vec2f* a1, S32 a2, const Color& a3, Float a4);                                                                      /* 0x134 */
-    virtual void EnableZBuffer(Bool a1);                                                                                                     /* 0x138 */
-    virtual void DrawString(const Vec2f& a1, const Char* a2, const Color& a3, Float a4, Float a5);                                           /* 0x13C */
-    virtual void DrawString(const Vec3f& a1, const Char* a2, Bool a3);                                                                       /* 0x140 */
-    virtual void DrawString(const Vec3f& a1, const Char* a2, const Color& a3, Bool a4);                                                      /* 0x144 */
-    virtual void SetShadowMapRect(Vec2f& a1, Vec2f& a2, Vec2f& a3);                                                                          /* 0x148 */
-    virtual void RenderScreen(U8** a1, S32& a2, S32& a3, U8& a4, Bool a5);                                                                   /* 0x14C */
-    virtual void MakeScreenShot(Char* a1);                                                                                                   /* 0x150 */
-    virtual void MakeAVI(S32 a1, S32 a2);                                                                                                    /* 0x154 */
-    virtual void CloseAVI();                                                                                                                 /* 0x158 */
-    virtual void SetActiveViewport(S32 i_ViewportID);                                                                                        /* 0x15C */
-    virtual void FlushActiveViewport();                                                                                                      /* 0x160 */
+    virtual ~Renderer_Z();                                                                                                                   // 0x08 
+    virtual Bool Init(S32 i_SizeX, S32 i_SizeY);                                                                                             // 0x0C 
+    virtual void Shut();                                                                                                                     // 0x10 
+    virtual void Reset();                                                                                                                    // 0x14 
+    virtual void UpdateResource();                                                                                                           // 0x18 
+    virtual void BeginRender();                                                                                                              // 0x1C 
+    virtual void EndRender(Float i_DeltaTime);                                                                                               // 0x20 
+    virtual void Draw(Float i_DeltaTime);                                                                                                    // 0x24 
+    virtual void WaitEndFrame();                                                                                                             // 0x28 
+    virtual void WaitForRetrace(Float a1);                                                                                                   // 0x2C 
+    virtual void CleanAllDatas();                                                                                                            // 0x30 
+    virtual void Minimize();                                                                                                                 // 0x34 
+    virtual void Draw(S32 i_ViewportId, Float i_DeltaTime);                                                                                  // 0x38 
+    virtual void SetViewMatrix(Bool a1);                                                                                                     // 0x3C 
+    virtual void DrawTransparent(DrawInfo_Z& a1);                                                                                            // 0x40 
+    virtual void DrawPostRenderEffects(DrawInfo_Z& a1);                                                                                      // 0x44 
+    virtual void InitViewport(U32 a1);                                                                                                       // 0x48 
+    virtual void ClearZBuffer(S32 a1, S32 a2, S32 a3, S32 a4);                                                                               // 0x4C 
+    virtual void ClearFrameBuffer(S32 a1, S32 a2, S32 a3, S32 a4);                                                                           // 0x50 
+    virtual void GetRendererParams(Float& a1, Float& a2, Float& a3, Float& a4, Float& a5);                                                   // 0x54 
+    virtual void GetViewportParam(S32 a1, Float& a2, Float& a3, Float& a4, Float& a5, Float& a6);                                            // 0x58 
+    virtual void SetGammaRamp(Float a1, Float a2, Float a3);                                                                                 // 0x5C 
+    virtual void SetBrightness(Float a1);                                                                                                    // 0x60 
+    virtual void SetContrast(Float a1);                                                                                                      // 0x64 
+    virtual void SetGamma(Float a1);                                                                                                         // 0x68 
+    virtual void SetClearColor(const Color& a1);                                                                                             // 0x6C 
+    virtual void GetBrightness();                                                                                                            // 0x70 
+    virtual void GetContrast();                                                                                                              // 0x74 
+    virtual void GetGamma();                                                                                                                 // 0x78 
+    virtual void GetClearColor();                                                                                                            // 0x7C 
+    virtual void MoveScreenOrigin(S32 a1, S32 a2);                                                                                           // 0x80 
+    virtual void SetDOF_Depth(Float i_DofDepth);                                                                                             // 0x84 
+    virtual void PushOrder(Float a1);                                                                                                        // 0x88 
+    virtual void PushSo(U8 a1);                                                                                                              // 0x8C 
+    virtual void PushDo(U8 a1);                                                                                                              // 0x90 
+    virtual void PushDs(U16 a1);                                                                                                             // 0x94 
+    virtual void PushGroupId(U8 a1);                                                                                                         // 0x98 
+    virtual void PushDraw(const PrimitiveInfo_Z* a1, S32 a2);                                                                                // 0x9C 
+    virtual void PushMatrix(const Mat4x4* a1);                                                                                               // 0xA0 
+    virtual void SetDLight(const DrawInfo_Z& a1);                                                                                            // 0xA4 
+    virtual void GetPushedVertexConstant(S32 a1);                                                                                            // 0xA8 
+    virtual void PushVertexConstant(S32 a1);                                                                                                 // 0xAC 
+    virtual void SetVertexConstant(ObjConstant_Z* a1, S32 a2);                                                                               // 0xB0 
+    virtual void SetActiveMaterial(Material_Z* i_Material);                                                                                  // 0xB4 
+    virtual void SetBlankMaterial();                                                                                                         // 0xB8 
+    virtual void SetActiveTexture(Bitmap_Z* a1, S32 a2);                                                                                     // 0xBC 
+    virtual void FreeTexture(S16 a1) {}                                                                                                      // 0xC0 
+    virtual void CreateVertexBuffer(S32 a1);                                                                                                 // 0xC4 
+    virtual void DeleteVertexBuffer(VertexBuffer_Z* a1);                                                                                     // 0xC8 
+    virtual void CreateIndexBuffer(S32 a1);                                                                                                  // 0xCC 
+    virtual void DeleteIndexBuffer(IndexBuffer_Z* a1);                                                                                       // 0xD0 
+    virtual void SetLightFactor(Float a1, Float a2, Float a3);                                                                               // 0xD4 
+    virtual void GetLightFactor(Float& a1, Float& a2, Float& a3);                                                                            // 0xD8 
+    virtual void GetSpecialVisionColor(Vec3f& a1, Vec3f& a2, Node_Z* a3) const;                                                              // 0xDC 
+    virtual void SetSpecialVisionColor(const Vec3f& a1, const Vec3f& a2, const Vec3f& a3, const Vec3f& a4);                                  // 0xE0 
+    virtual void GetTextureSize();                                                                                                           // 0xE4 
+    virtual void GetPercentAlloc(S32 a1);                                                                                                    // 0xE8 
+    virtual void MarkHandles();                                                                                                              // 0xEC 
+    virtual void SetCurrentFogColor(const Vec3f& a1);                                                                                        // 0xF0 
+    virtual void ApplyDirectionalOnVertex(Vertex3D* a1, Vec3f& a2, LightData_Z& a3);                                                         // 0xF4 
+    virtual void ApplyFogOnVertex(Vertex3D* a1, Vec4f& a2);                                                                                  // 0xF8 
+    virtual void DrawFace(Vertex3D& a1, Vertex3D& a2, Vertex3D& a3);                                                                         // 0xFC 
+    virtual void DrawStrip(Vertex3D* a1, U32 a2, Bool a3);                                                                                   // 0x100 
+    virtual void DrawStripAfterScene(Vertex3D* a1, U32 a2, Bool a3);                                                                         // 0x104 
+    virtual void DrawLine(const Vec3f& a1, const Vec3f& a2, const Color& a3, Bool a4, Bool a5);                                              // 0x108 
+    virtual void DrawLine(const Vec2f& a1, const Vec2f& a2, const Color& a3, Float a4);                                                      // 0x10C 
+    virtual void DrawImage(Bitmap_ZHdl& a1);                                                                                                 // 0x110 
+    virtual void DrawCross(const Vec3f& a1, const Color& a2, Float a3);                                                                      // 0x114 
+    virtual void Draw2DQuad(const Vec2f& a1, const Vec2f& a2, const Vec2f& a3, const Vec2f& a4, const Color& a5, const Color& a6, Float a7); // 0x118 
+    virtual void DrawQuad(Vec2f& a1, Vec2f& a2, Color& a3, Color& a4, Float a5);                                                             // 0x11C 
+    virtual void DrawQuad(Vec2f& a1, Vec2f& a2, Color& a3, Float a4);                                                                        // 0x120 
+    virtual void DrawQuad(Vec2f& a1, Vec2f& a2, Vec2f& a3, Vec2f& a4, Vec3f& a5, Float a6);                                                  // 0x124 
+    virtual void DrawTri(Vec2f& a1, Vec2f& a2, Vec2f& a3, Color& a4, Float a5);                                                              // 0x128 
+    virtual void Draw2DQuad(Vec2f* a1, Vec3f* a2, Vec2f* a3, Float a4, Float a5);                                                            // 0x12C 
+    virtual void DrawStrip(Vec2f* a1, S32 a2, const Color& a3, Float a4);                                                                    // 0x130 
+    virtual void DrawFan(Vec2f* a1, S32 a2, const Color& a3, Float a4);                                                                      // 0x134 
+    virtual void EnableZBuffer(Bool a1);                                                                                                     // 0x138 
+    virtual void DrawString(const Vec2f& a1, const Char* a2, const Color& a3, Float a4, Float a5);                                           // 0x13C 
+    virtual void DrawString(const Vec3f& a1, const Char* a2, Bool a3);                                                                       // 0x140 
+    virtual void DrawString(const Vec3f& a1, const Char* a2, const Color& a3, Bool a4);                                                      // 0x144 
+    virtual void SetShadowMapRect(Vec2f& a1, Vec2f& a2, Vec2f& a3);                                                                          // 0x148 
+    virtual void RenderScreen(U8** a1, S32& a2, S32& a3, U8& a4, Bool a5);                                                                   // 0x14C 
+    virtual void MakeScreenShot(Char* a1);                                                                                                   // 0x150 
+    virtual void MakeAVI(S32 a1, S32 a2);                                                                                                    // 0x154 
+    virtual void CloseAVI();                                                                                                                 // 0x158 
+    virtual void SetActiveViewport(S32 i_ViewportID);                                                                                        // 0x15C 
+    virtual void FlushActiveViewport();                                                                                                      // 0x160
     // clang-format on
 
     void EnableEffectFlag(U32 i_Flag) { m_EffectFlag |= i_Flag; }
@@ -263,7 +382,7 @@ public:
     }
 
     void SetLodFadeDist(Float i_LodFadeDist) {
-        m_LodfadeDist = i_LodFadeDist;
+        m_LodFadeDist = i_LodFadeDist;
     }
 
     void SetLodPatchDist(Float i_LodPatchDist) {
@@ -300,6 +419,10 @@ public:
 
     void SetLodPatchMax(S32 i_LodPatchMax) {
         m_LodPatchMax = i_LodPatchMax;
+    }
+
+    S32 GetNbViewport() const {
+        return m_NbViewports;
     }
 
 private:

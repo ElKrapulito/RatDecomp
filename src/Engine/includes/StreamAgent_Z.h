@@ -13,10 +13,10 @@ public:
     virtual ~StreamAgent_Z() { }                                          /* 0x08 */
     virtual Bool MarkHandles();                                           /* 0x0C */
 
-    DECL_BHV(StreamEnd)
-    DECL_BHV(StreamAborted)
-    DECL_BHV(StreamError)
-    DECL_BHV(StreamResumed)
+    DECL_BHV(StreamEnd);
+    DECL_BHV(StreamAborted);
+    DECL_BHV(StreamError);
+    DECL_BHV(StreamResumed);
 
     virtual void Start();                                                 /* 0x30 */
     virtual void End();                                                   /* 0x34 */

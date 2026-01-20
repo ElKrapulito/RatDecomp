@@ -13,34 +13,38 @@ public:
     virtual void LoadDone();
     virtual Bool MarkHandles();
 
+    void EndDraw();
+
     Node_ZHdl GetNodeByName(const Name_Z& i_Name) const;
-	void Update(Float i_DeltaTime);
+    void Update(Float i_DeltaTime);
 
-	inline OccludedSeadHandle_Z& GetSeadDisplay() {
-		return m_SeadDisplay;
-	}
+    inline OccludedSeadHandle_Z& GetSeadDisplay() {
+        return m_SeadDisplay;
+    }
 
-	inline SeadHandle_Z& GetSeadCollide() {
-		return m_SeadCollide;
-	}
+    inline SeadHandle_Z& GetSeadCollide() {
+        return m_SeadCollide;
+    }
 
-	inline Node_ZHdl& GetRoot() {
-		return m_RootNodeHdl;
-	}
+    inline Node_ZHdl& GetRoot() {
+        return m_RootNodeHdl;
+    }
+
+    static BaseObject_Z* NewObject() { return NewL_Z(314) World_Z; }
 
 private:
-	U32 m_Flag;
-	S32 m_NbVp;
-	S32 m_FirstPlayerVpId;
-	BaseObject_ZHdl m_WarpHdl; // TODO: It's a Warp_ZHdl
-	BaseObject_ZHdl m_UnkHdl_0x24; // TODO: Unknown type but check correct inheritance
-	BaseObject_ZHdl m_GenWorldHdl; // TODO: It's a GenWorld_ZHdl
-	BaseObject_ZHdl m_GameObjHdl; // TODO: It's a GameObj_ZHdl
-	Node_ZHdl m_RootNodeHdl;
-	BaseObject_ZHdl m_MainHFogDataHdl; // TODO: It's a HFogData_ZHdl
-	OccludedSeadHandle_Z m_SeadDisplay;
-	SeadHandle_Z m_SeadCollide;
-	// TODO: More members
+    U32 m_Flag;
+    S32 m_NbVp;
+    S32 m_FirstPlayerVpId;
+    BaseObject_ZHdl m_WarpHdl;     // TODO: It's a Warp_ZHdl
+    BaseObject_ZHdl m_UnkHdl_0x24; // TODO: Unknown type but check correct inheritance
+    BaseObject_ZHdl m_GenWorldHdl; // TODO: It's a GenWorld_ZHdl
+    BaseObject_ZHdl m_GameObjHdl;  // TODO: It's a GameObj_ZHdl
+    Node_ZHdl m_RootNodeHdl;
+    BaseObject_ZHdl m_MainHFogDataHdl; // TODO: It's a HFogData_ZHdl
+    OccludedSeadHandle_Z m_SeadDisplay;
+    SeadHandle_Z m_SeadCollide;
+    // TODO: More members
 };
 
 #endif // _WORLD_Z_H_

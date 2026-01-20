@@ -33,9 +33,12 @@ public:
 };
 
 class UserDefine_Z : public ResourceObject_Z {
+public:
     UserDefine_Z();
     virtual ~UserDefine_Z();
-    void Load(void** i_Data);
+    virtual void Load(void** i_Data);
+
+    static BaseObject_Z* NewObject() { return NewL_Z(83) UserDefine_Z; }
 
 private:
     UserDefineCmd_Z m_Cmd;

@@ -98,6 +98,7 @@ protected:
 
 struct HandleRec_Z {
     enum {
+        NONE = 0,
         RSC = 8
     };
 
@@ -111,8 +112,17 @@ struct HandleRec_Z {
     S16 m_xRamBlock;
 };
 
+class HandleStream_Z {
+public:
+    void Draw(DrawInfo_Z& i_DrawInfo);
+    void Update(Float i_DeltaTime);
+};
+
 class HandleManager_Z {
-private:
+public:
+    static HandleStream_Z HandleStream;
+
+protected:
     DynArray_Z<HandleRec_Z, HandleGranularity> m_HandleRecDA;
     DynArray_Z<S32, HandleGranularity> m_FreeRecDA;
     HashS32Table_Z m_HandleIdHT;
@@ -135,7 +145,7 @@ public:
 
     virtual void CheckHandles();
     virtual void MarkHandles(S32 a1);
-    virtual void Update(Float a1);
+    virtual void Update(Float i_DeltaTime);
     virtual void Draw(DrawInfo_Z& i_DrawInfo);
     virtual void Minimize();
     virtual void ClearMark();
@@ -153,7 +163,7 @@ public:
     Bool MarkHandle(const BaseObject_ZHdl&);
     void MarkHandles(const BaseObject_ZHdl&);
     void ForbidCheckHandles(Bool i_ForbidCheckHandles);
-    const BaseObject_ZHdl& CreateNewHandle(BaseObject_Z* i_BObj, const Name_Z& i_Name, S16 i_ClassID, U8 i_Flag);
+    const BaseObject_ZHdl& CreateNewHandle(BaseObject_Z* i_BObj, const Name_Z& i_Name, S16 i_ClassID, U8 i_Flag = HandleRec_Z::NONE);
     void ExpandSize(S32 i_NewSize = HandleGranularity);
     void AddResourceRef(const HandleRec_Z& i_HandleRec, S32 i_Index);
     void RemoveResourceRef(const HandleRec_Z& i_HandleRec);

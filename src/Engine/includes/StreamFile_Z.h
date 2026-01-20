@@ -11,12 +11,12 @@ public:
     StreamFile_Z() { }
 
     virtual ~StreamFile_Z();
+    virtual void Init();
+    virtual void Update(Float i_DeltaTime);
+
+    static BaseObject_Z* NewObject() { return NewL_Z(56) StreamFile_Z; }
 
     Stream_Z& GetStream() { return m_Str; }
-
-    virtual void Init();
-
-    virtual void Update(Float i_DeltaTime);
 
 private:
     S32 m_LoadStage;
@@ -27,7 +27,7 @@ private:
     S32 m_CurBlockIdx;
     BigFileRsc_Z m_CurResource;
     StreamAgent_ZHdl m_AgentHdl;
-    Char m_BfPath[ARRAY_CHAR_MAX];
+    String_Z<ARRAY_CHAR_MAX> m_BfPath;
     DynPtrArray_Z<BaseObject_Z*, 32> m_Resources;
     S32 m_CurResourceIdx;
     S32 m_UnkS32_0x174;

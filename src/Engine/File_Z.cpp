@@ -67,7 +67,6 @@ Bool File_Z::Open(const Char* i_FilePath, U32 i_Flags) {
     return TRUE;
 }
 
-// TODO: Finish matching
 Bool File_Z::Read(void* o_Data, U32 i_Size) {
     if (!i_Size) {
         return TRUE;
@@ -84,9 +83,9 @@ Bool File_Z::Read(void* o_Data, U32 i_Size) {
         }
         else {
             if (i_Size < 32) {
+                Char* l_Data = (Char*)o_Data;
                 for (S32 i = 0; i < i_Size; i++) {
-                    *(Char*)o_Data = m_Buffer[m_CurPos + i];
-                    o_Data = (Char*)o_Data + 1;
+                    l_Data[i] = m_Buffer[m_CurPos + i];
                 }
             }
             else {

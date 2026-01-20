@@ -107,7 +107,7 @@ private:
     // Vec3f m_Translation;
     Mat3x3 m_RotInWorldMatrix; // m[0][3] is 2 S/U16 m_WorldMatrixId and m_InverseWorldMatrixId, m[1][3] is Mat4x4* m_WorldMatrixPtr, m[2][3] is Mat4x4* m_InverseWorldMatrixPtr
     Quat m_RotInWorld;
-    Mat3x3 m_InverseRotInWorldMatrix; // Mat3x3 assumed, m[0][3] is m_Parent, m[1][3] is m_PrevSibling and m[2][3] is m_NextSibling
+    Mat3x3 m_InverseRotInWorldMatrix; // Mat3x3 assumed, m[0][3] is m_Parent, m[1][3] is m_Prev and m[2][3] is m_Next
     UserDefine_ZHdl m_UserDefineHdl;
     Name_Z m_Name;
 };

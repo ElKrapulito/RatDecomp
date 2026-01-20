@@ -18,7 +18,7 @@ public:
     virtual void RegisterWithGame(Game_ZHdl& a1);
     virtual void UnRegisterFromGame(Game_ZHdl& a1);
 
-    DECL_BHV(RtcEnd)
+    DECL_BHV(RtcEnd);
 
     virtual void Start(S32 a1);
     virtual void End();

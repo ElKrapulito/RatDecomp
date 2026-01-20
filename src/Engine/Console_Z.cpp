@@ -65,7 +65,7 @@ void Console_Z::MarkHandles() {
 }
 
 void Console_Z::DisableFlag(U32 i_Flag) {
-    ASSERTLE_Z(!((m_Flag & FL_CONS_PAUSED) && (i_Flag & FL_CONS_PAUSED) && gData.ClassMgr->IsBigFileOpened()), "", 95, "! (Flag&(1<<5) && _Flag&(1<<5) && gData.ClassMgr->IsBigFileOpened())");
+    ASSERTLE_Z(!((m_Flag & FL_CONSOLE_PAUSED) && (i_Flag & FL_CONSOLE_PAUSED) && gData.ClassMgr->IsBigFileOpened()), "", 95, "! (Flag&(1<<5) && _Flag&(1<<5) && gData.ClassMgr->IsBigFileOpened())");
     m_Flag &= ~i_Flag;
 }
 
@@ -137,14 +137,14 @@ Bool Help() {
 }
 
 Bool Pause() {
-    gData.Cons->EnableFlag(FL_CONS_PAUSED);
-
+    gData.Cons->EnableFlag(FL_CONSOLE_PAUSED);
     return TRUE;
 }
 
 void Console_Z::InterpFile() {
     if (gData.Cons->GetInterp() == NULL) {
-        m_Interp = (ConsoleInterp_ZHdl)gData.ClassMgr->NewObject(Name_Z::GetID("ConsoleInterp_Z", 0), Name_Z::GetID("ConsoleInterp", 0));
+        // $SABE: Weird hack where I have to wrap GetID in Name_Z constructor, otherwise it calls the other overload of NewObject using the hash as a class id
+        m_Interp = (ConsoleInterp_ZHdl)gData.ClassMgr->NewObject(Name_Z(Name_Z::GetID("ConsoleInterp_Z", 0)), Name_Z::GetID("ConsoleInterp", 0));
         m_Interp->Deactivate();
     }
     GetInterp()->Start(m_StrParam[1], &m_StrParam[0], GetNbParam());
@@ -156,7 +156,7 @@ Bool Source() {
 }
 
 Bool BSource() {
-    gData.Cons->EnableFlag(FL_CONS_UNK0x10);
+    gData.Cons->EnableFlag(FL_CONSOLE_UNK_0x10);
     gData.Cons->InterpFile();
     return TRUE;
 }

@@ -31,6 +31,8 @@ public:
     virtual void Draw(DrawInfo_Z& i_DrawInfo, ObjectDatas_Z* i_Data);
     virtual void UpdateObject(Node_Z* i_Node, ObjectDatas_Z* i_Data);
 
+    static BaseObject_Z* NewObject() { return NewL_Z(79) Omni_Z; }
+
     void Changed();
     // TODO: Define OmniFrust_Z
     //static void InFrustrum(DrawInfo_Z& i_DrawInfo, const Sphere_Z& i_UnkSph, Node_Z* i_Node, Omni_Z* i_Omni, OmniFrust_Z& i_OmniFrust, U8 i_Index);

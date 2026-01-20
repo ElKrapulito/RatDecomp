@@ -19,6 +19,8 @@ public:
     virtual void Start(const Game_ZHdl& a1);
     virtual void UpdateLod(Float a1);
 
+    static BaseObject_Z* NewObject() { return NewL_Z(129) RtcPlayer_Z; }
+
 private:
     U8 m_Pad_0x24[0xf0];
 };

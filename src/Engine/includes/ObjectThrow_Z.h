@@ -33,6 +33,8 @@ public:
     virtual void UpdateCollision(const ColLineResult_Z& a1, ObjectMoveSphereColl_Z& a2, Float a3, S32 a4);
     virtual void UpdateCollisionCarrying(SeadZone_Z& a1, const Vec3f& a2, const Vec3f& a3);
     virtual void SetNodeDepl(const Vec3f& a1, Float a2);
+
+    static BaseObject_Z* NewObject() { return NewL_Z(140) ObjectThrow_Z; }
 };
 
 #endif // _OBJECTTHROW_Z_H_

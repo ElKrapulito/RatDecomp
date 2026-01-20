@@ -75,6 +75,8 @@ public:
     virtual void GetAcceleration(void) const;
     virtual void GetVolumeMemory(S32 a1);
 
+    static BaseObject_Z* NewObject() { return NewL_Z(276) ObjectMove_Z; }
+
     inline Bool IsOwnerCollisionRestored() {
         return !m_OwnerHdl.IsValid();
     }

@@ -802,6 +802,10 @@ private:
 
 class KeyframerFloatLinearComp_Z : public Keyframer_Z {
 public:
+    KeyframerFloatLinearComp_Z() {
+        m_Flag = FL_KEYFRAMER_LINEAR;
+    }
+
     inline S32 GetNbKeys() const {
         return m_Keys.GetSize();
     }
@@ -1150,6 +1154,10 @@ private:
 
 class KeyframerVec2fLinear_Z : public Keyframer_Z {
 public:
+    KeyframerVec2fLinear_Z() {
+        m_Flag = FL_KEYFRAMER_LINEAR;
+    }
+
     inline S32 GetNbKeys() const {
         return m_Keys.GetSize();
     }
@@ -1253,6 +1261,10 @@ private:
 
 class KeyframerVec4fLinear_Z : public Keyframer_Z {
 public:
+    KeyframerVec4fLinear_Z() {
+        m_Flag = FL_KEYFRAMER_LINEAR;
+    }
+
     inline S32 GetNbKeys() const {
         return m_Keys.GetSize();
     }

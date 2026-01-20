@@ -17,10 +17,15 @@ private:
     StreamID m_ID;
 
 public:
-    virtual void StreamOpened(S32 a1, S32 a2);
-    virtual void StreamReaded(S32 a1, S32 a2);
-    virtual void Opened(S32 a1, S32 a2, S32 a3);
-    virtual void Readed(S32 a1, S32 a2, S32 a3);
+    BaseStream_Z() {
+        m_ID.Ref.m_StreamId = -1;
+        m_ID.Ref.m_ReadId = -1;
+    }
+
+    virtual void StreamOpened(S32 i_FileSize, S32 i_UserDefined);
+    virtual void StreamReaded(S32 i_NbBytesRead, S32 i_UserDefined);
+    virtual void Opened(S32 i_ErrorCode, S32 i_FileSize, S32 i_UserDefined);
+    virtual void Readed(S32 i_ErrorCode, S32 i_NbBytesRead, S32 i_UserDefined);
 
     const StreamID& GetID() const {
         return m_ID;

@@ -1,6 +1,7 @@
 #include "Handle_Z.h"
 #include "Main_Z.h"
 #include "Program_Z.h"
+#include "XRamManager_Z.h"
 
 #define HANDLEREC_GRANULARITY 16384
 
@@ -96,7 +97,6 @@ S32 HandleManager_Z::IsResourceRef(S32 i_Hdl) {
 
 S32 HandleManager_Z::ChangeHandleName(const BaseObject_ZHdl& i_Hdl, const Name_Z& i_Name) {
     S32 l_ID = i_Hdl.GetID();
-
     if (CheckKey(l_ID, i_Hdl.GetKey())) {
         HandleRec_Z& l_HandleRec = m_HandleRecDA[l_ID];
         ASSERTLE_Z(!(l_HandleRec.m_Flag & HandleRec_Z::RSC), "", 157, "!(HdlRec.Flag&HandleRec_Z::RSC)");
@@ -106,11 +106,44 @@ S32 HandleManager_Z::ChangeHandleName(const BaseObject_ZHdl& i_Hdl, const Name_Z
     return FALSE;
 }
 
+void HandleManager_Z::Draw(DrawInfo_Z& i_DrawInfo) {
+    HandleStream.Draw(i_DrawInfo);
+}
+
+void HandleManager_Z::ForbidCheckHandles(Bool i_ForbidCheckHandles) {
+    if (i_ForbidCheckHandles) {
+        if (m_ForbidCheckHandles) {
+            return;
+        }
+        m_CheckHandlesQueued = FALSE;
+    }
+    m_ForbidCheckHandles = i_ForbidCheckHandles;
+    if (m_CheckHandlesQueued) {
+        m_ForbidCheckHandles = FALSE;
+        CheckHandles();
+    }
+}
+
+void HandleManager_Z::Update(Float i_DeltaTime) {
+    HandleStream.Update(i_DeltaTime);
+}
+
 void HandleManager_Z::MarkU32Handle(U32 i_Hdl) {
     BaseObject_ZHdl l_Hdl = U32ToHandle(i_Hdl);
     S32 l_ID = l_Hdl.GetID();
     if (CheckKey(i_Hdl, l_Hdl.GetKey())) {
         m_HandleRecDA[l_ID].m_ObjPtr->MarkHandles();
+    }
+}
+
+void HandleManager_Z::ExpandSize(S32 i_NewSize) {
+    S32 l_NewSize = m_HandleRecDASize + i_NewSize;
+    m_HandleRecDA.SetSize(l_NewSize);
+    m_FreeRecDA.SetSize(l_NewSize);
+    m_NbFree = i_NewSize;
+    m_HandleRecDASize = l_NewSize;
+    for (S32 i = 0; i < m_HandleRecDASize; i++) {
+        m_FreeRecDA[i] = l_NewSize--;
     }
 }
 
@@ -122,4 +155,7 @@ BaseObject_ZHdl HandleManager_Z::U32ToHandle(S32 i_Hdl) {
     BaseObject_ZHdl l_Hdl;
     l_Hdl.m_RealID.GblID = i_Hdl;
     return l_Hdl;
+}
+
+void HandleStream_Z::Draw(DrawInfo_Z& i_DrawInfo) {
 }

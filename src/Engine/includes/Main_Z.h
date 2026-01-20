@@ -1,23 +1,56 @@
 #ifndef _MAIN_Z_H_
 #define _MAIN_Z_H_
-#include "ManipulatorManager_Z.h"
-#include "Types_Z.h"
-#include "ClassManager_Z.h"
-#include "Timer_Z.h"
-#include "Console_Z.h"
-class AnimationManager_Z;
-class SoundManager_Z;
-class ABC_ScriptManager;
-#include "XRamManager_Z.h"
-#include "MatrixCache_Z.h"
+#include "Name_Z.h"
+#include "String_Z.h"
 
 Extern_Z Char* strcpy(Char* __dest, Char* __src);
 Extern_Z "C" void memset(void* __s, S32 __c, U32 __n);
-class GCConsole_Z;
+
+// Extern Platform Functions
+
+Extern_Z void RegisterLowLevelClasses();
+Extern_Z void LowLevelInitProgram();
+
+// Extern Game Functions
+
+Extern_Z void RegisterGameClasses();
+Extern_Z void GameProgramInit();
+
+// Engine Main Functions
+
+void RegisterClasses();
+void ProgramMain();
+void ProgramInit();
+void _CoreMainLoop();
+
+#define FL_GAME_NONE (U32)(0 << 0)
+
+class ManipulatorManager_Z;
+class AnimationManager_Z;
+class SoundManager_Z;
+class ABC_ScriptManager;
+class XRamManager_Z;
+class Mat4x4Buffer_Z;
+class Console_Z;
 class Renderer_Z;
 class GameManager_Z;
 class EffectManager_Z;
 class SystemDatas_Z;
+class StreamManager_Z;
+class ClassManager_Z;
+class WorldManager_Z;
+class MaterialManager_Z;
+class BaseColSurfaceCache_Z;
+class ColTriangleCache_Z;
+class ObjectBankManager_Z;
+class InputPlatForm_Z;
+class Movie_Z;
+class InputEngine_Z;
+class SaveGame_Z;
+class ParticlesManager_Z;
+class SurfaceCache_Z;
+class VolatileMgr_Z;
+class NetManager_Z;
 
 class Globals {
 public:
@@ -27,30 +60,74 @@ public:
     virtual void GetDate();
     void InitTime();
 
-    U8 m_Pad_0x0[0x4];
+    void* UnkMgr_0x4;
     Console_Z* Cons;
     Renderer_Z* MainRdr;
     ClassManager_Z* ClassMgr;
-    U8 m_Pad_0x14[0x8];
+    WorldManager_Z* WorldMgr;
+    MaterialManager_Z* MaterialMgr;
     ABC_ScriptManager* ScriptMgr;
-    U8 m_Pad_0x20[0xC];
+    BaseColSurfaceCache_Z* ColSurfaceCache;
+    void* UnkMgr_0x24;
+    ColTriangleCache_Z* ColTriangleCache;
     Mat4x4Buffer_Z* MatrixBuffer;
     ManipulatorManager_Z* ManipMgr;
     GameManager_Z* GameMgr;
-    U8 m_Pad_0x34[0x4];
+    void* UnkMgr_0x38;
     AnimationManager_Z* AnimMgr;
-	EffectManager_Z* EffectMgr;
-	SystemDatas_Z* SystemDatas;
-    U8 m_Pad_0x40[0x8];
+    EffectManager_Z* EffectMgr;
+    SystemDatas_Z* SystemDatas;
+    ObjectBankManager_Z* ObjectBankMgr;
+    InputPlatForm_Z* InputMgr;
     SoundManager_Z* SoundMgr;
-    U8 m_Pad_0x54[0x30];
+    Movie_Z* MovieMgr;
+    InputEngine_Z* ScriptInputMgr;
+    SaveGame_Z* SavingMgr;
+    ParticlesManager_Z* ParticlesMgr;
+    void* UnkMgr_0x64;
+    SurfaceCache_Z* SurfaceCacheMgr;
+    void* UnkMgr_0x6c;
+    StreamManager_Z* StreamMgr;
+    VolatileMgr_Z* VolatileMgr;
+    void* UnkMgr_0x78;
+    NetManager_Z* NetMgr;
+    void* UnkMgr_0x80;
     XRamManager_Z* XRamMgr;
-    U8 m_Pad_0x88[0x4];
-    Bool m_ExitApp;
+    S32 m_UnkS32_0x88;
+    Bool m_Running;
     Bool m_BlockFrame;
-    Bool m_SkipLowLevelInitAndAgentInit; // $SABE: Never set to TRUE, I suppose it was used in BF Write mode
+    Bool m_IsPlatformAgnostic; // $SABE: Never set to TRUE, I suppose it was used in BF Write mode
     Bool m_UpdatingResource;
-    U8 m_Pad_0x90[0x750];
+    Float FrameBlockCountDownTime;
+    Float m_FrameBlockTime;
+    Float m_TimeFactor;
+    Bool m_UnPauseRequested;
+    String_Z<ARRAY_CHAR_MAX> m_DBPath;
+    String_Z<ARRAY_CHAR_MAX> m_DFPath;
+    String_Z<ARRAY_CHAR_MAX> m_UnkString_0x29d;
+    String_Z<ARRAY_CHAR_MAX> m_UnkString_0x39d;
+    String_Z<ARRAY_CHAR_MAX> m_AppPath;
+    String_Z<ARRAY_CHAR_MAX> m_UnkString_0x59d;
+    String_Z<ARRAY_CHAR_MAX> m_LocalSavePath; // In Roaming on windows
+    U32 m_EngineFlag;
+    U32 m_UserJobId;
+    U32 m_GameFlag;
+    U32 m_Unk_0x7ac;
+    U32 m_UnkError_0x7b0;
+    U32 m_UnkError_0x7b4;
+    U32 m_FrameCount;
+    Float m_Timer;
+    U32 m_Unk_0x7c0;
+    Bool m_IsTimerCalibrated;
+    Float m_TargetSecondsPerFrame;
+    Float m_AbsoluteTime;
+    U16 m_Unk_0x7d0;
+    U16 m_Unk_0x7d2;
+    U16 m_Unk_0x7d4;
+    U16 m_Unk_0x7d6;
+    U16 m_Unk_0x7d8;
+    U16 m_Unk_0x7da;
+    U32 m_Unk_0x7dc;
 
     // TODO: Properly define members for all this so we don't gotta move stuff around
     inline Globals() {

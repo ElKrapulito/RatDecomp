@@ -262,6 +262,8 @@ public:
 
     // clang-format on
 
+    static BaseObject_Z* NewObject() { return NewL_Z(228) AnimFrame_Z; }
+
     void ResetFlag();
     void ResetAnim();
     void Update();

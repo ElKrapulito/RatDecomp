@@ -6,6 +6,10 @@
 struct StrBuffer {
     void* m_RealPtr;
     void* m_AlignedPtr;
+
+    StrBuffer() {
+        m_RealPtr = NULL;
+    }
 };
 
 class Stream_Z : public BaseStream_Z {

@@ -858,7 +858,7 @@ config.libs = [
             Object(Matching,    "Engine/BitArray_Z.cpp"),
             Object(NonMatching, "Engine/CameraZone_Z.cpp"),
             Object(Matching,    "Engine/String_Z.cpp"),
-            Object(NonMatching, "Engine/StreamManager_Z.cpp"),
+            Object(Matching,    "Engine/StreamManager_Z.cpp"),
             Object(NonMatching, "Engine/GameManagerCmd_Z.cpp"),
             Object(Matching,    "Engine/Animation_Z.cpp"),
             Object(NonMatching, "Engine/LodMoveCollCling_Z.cpp"),

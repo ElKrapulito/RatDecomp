@@ -87,6 +87,10 @@ public:
     virtual Bool MarkHandles();       /* 0x20 */
     // clang-format on
 
+    static BaseObject_Z* NewObject() {
+        return NewL_Z(102) Animation_Z;
+    }
+
     S32 GetIndexOfNodeById(S32 Id) const;
     Float GetTimeFromMessage(S32 i_MsgId, S32 i_NodeId, Float i_StartTime = 0.f);
     Bool GetMessageFromNode(S32 i_NodeId, Float i_PrecTime, Float i_CurTime, Float i_MaxTime, RegMessage_Z* o_Msg, S32& io_NbMsg);
@@ -161,10 +165,6 @@ public:
 
     inline const AnimationMorphData_Z& GetKfrMorph() const {
         return m_MorphKfr;
-    }
-
-    static BaseObject_Z* NewObject() {
-        return NewL_Z(102) Animation_Z;
     }
 
 private:

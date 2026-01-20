@@ -8,7 +8,7 @@ public:
     SkinAgent_Z();
     virtual ~SkinAgent_Z() { }
 
-    DECL_BHV(Act)
+    DECL_BHV(Act);
 END_AGENT_CLASS
 
 // clang-format on

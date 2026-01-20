@@ -50,6 +50,13 @@ struct Sphere_Z {
         Radius = i_Sph.Radius;
         return *this;
     }
+
+    inline void Set(const Vec3f& i_Center, Float i_Radius) {
+        Center.x = i_Center.x;
+        Center.y = i_Center.y;
+        Center.z = i_Center.z;
+        Radius = i_Radius;
+    }
 } Aligned_Z(16);
 
 struct ClipSphere_Z {
@@ -92,6 +99,22 @@ struct Rect_Z {
     S16 y1;
     S16 x2;
     S16 y2;
+
+    Rect_Z() { }
+
+    Rect_Z(S16 _x1, S16 _y1, S16 _x2, S16 _y2) {
+        x1 = _x1;
+        y1 = _y1;
+        x2 = _x2;
+        y2 = _y2;
+    }
+
+    void Set(S16 _x1, S16 _y1, S16 _x2, S16 _y2) {
+        x1 = _x1;
+        y1 = _y1;
+        x2 = _x2;
+        y2 = _y2;
+    }
 };
 
 struct Capsule_Z {

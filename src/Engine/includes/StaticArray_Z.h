@@ -27,9 +27,11 @@ public:
     }
 
     ~StaticArray_Z() {
-        // $SABE: Supposedly they hadn't added the check for DeleteObject here yet
-        for (int i = 0; i < m_Size; i++)
-            Get(i).~T();
+        if (DeleteObject) {
+            for (int i = 0; i < m_Size; i++) {
+                Get(i).~T();
+            }
+        }
     }
 
     T& Get(int Id) {
@@ -56,8 +58,11 @@ public:
         DYNARRAY_Z_EXP(m_Size < ReservedSize);
 
         if (m_Size >= ReservedSize) {
+            // $SABE: Bug?
+#ifdef BUGFIXES_Z
             if (DeleteObject)
                 Get(ReservedSize - 1).~T();
+#endif
             if (InitObject)
                 new (&Get(ReservedSize - 1)) T();
             return ReservedSize - 1;

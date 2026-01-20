@@ -7,6 +7,9 @@
 #include "Camera_Z.h"
 #include "Console_Z.h"
 #include "Program_Z.h"
+#include "SystemDatas_Z.h"
+#include "World_Z.h"
+
 #pragma dont_inline on
 
 Renderer_Z::Renderer_Z() {
@@ -173,7 +176,56 @@ void Renderer_Z::FlushActiveViewport() { }
 
 void Renderer_Z::Draw(S32 i_ViewportId, Float i_DeltaTime) {
     SetActiveViewport(i_ViewportId);
+
     DrawInfo_Z l_DrawInfo;
+    l_DrawInfo.m_FirstPlayerVpId = -1;
+    l_DrawInfo.m_VpCount = -1;
+    l_DrawInfo.m_Unk0_0x17c0_From_Renderer_0x704 = m_UnkBoolFalse_0x704;
+    l_DrawInfo.m_ParticlesFadeDist = m_ParticlesFadeDist;
+    l_DrawInfo.m_LodShadowFadeDist = m_LodShadowFadeDist;
+    l_DrawInfo.m_LodFadeDist = m_LodFadeDist;
+    l_DrawInfo.m_LodDist = m_LodDist;
+    l_DrawInfo.m_LodPatchMin = m_LodPatchMin;
+    l_DrawInfo.m_LodPatchMax = m_LodPatchMax;
+    l_DrawInfo.m_LodPatchDist = m_LodPatchDist;
+    l_DrawInfo.m_VpId = i_ViewportId;
+    l_DrawInfo.m_DeltaTime = i_DeltaTime;
+    m_Viewports[i_ViewportId].Draw(l_DrawInfo);
+
+    if (i_ViewportId == 6) {
+        // TODO: Implement debug draw
+    }
+}
+
+void Renderer_Z::Draw(Float i_DeltaTime) {
+    for (S32 i = 0; i < GetNbViewport(); i++) {
+        Draw(i, i_DeltaTime);
+    }
+    Draw(6, i_DeltaTime);
+}
+
+void Renderer_Z::BeginRender() {
+    m_ActiveMaterial = NULL;
+    for (S32 i = 0; i < BITMAP_NB_TYPES; i++) {
+        m_ActiveBitmaps[i] = NULL;
+    }
+}
+
+void Renderer_Z::EndRender(Float i_DeltaTime) {
+    FlushActiveViewport();
+    if (!i_DeltaTime) {
+        return;
+    }
+    for (S32 i = 0; i < GetNbViewport(); i++) {
+        World_Z* l_VpWorld = GetViewport(i).GetWorld();
+        if (l_VpWorld) {
+            l_VpWorld->EndDraw();
+        }
+    }
+}
+
+void Renderer_Z::SetBlankMaterial() {
+    SetActiveMaterial(gData.SystemDatas->GetDefaultMaterial());
 }
 
 // TODO: Implement commands below
@@ -187,6 +239,18 @@ Bool SetWorldToSplit() {
 }
 
 Bool SetLodRender() {
+    S32 l_Nb = gData.Cons->GetNbParam();
+    if (l_Nb != 2) {
+        return TRUE;
+    }
+    if (!gData.Cons->IsParamFloat(1)) {
+        return TRUE;
+    }
+    U32 l_Lod = gData.Cons->GetParamFloat(1);
+    if (l_Lod > 8 || l_Lod < 1) {
+        return TRUE;
+    }
+    gData.MainRdr->SetLodPatchMax(l_Lod);
     return TRUE;
 }
 

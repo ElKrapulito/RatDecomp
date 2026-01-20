@@ -6,10 +6,18 @@
 #include "GCConsole_Z.h"
 #include "LowMemory_Z.h"
 #include "GCMain_Z.h"
+
+#define BIGFILE_MAJOR_VERSION "1"
+#define BIGFILE_MINOR_VERSION 6
+#define BIGFILE_PATCH_VERSION ".63"
+#define BIGFILE_VERSION_STRING "v" BIGFILE_MAJOR_VERSION ".%02d%s%s"
+#define BIGFILE_VERSION_COPYRIGHT " - Asobo Studio - Internal Cross Technology"
+
 Extern_Z GCGlobals gData;
 Extern_Z S32 User_NbMatrix;
 Extern_Z Float User_MaxSqrDistActive;
 Extern_Z Float User_DefaultAgentMaxSqrDistActive;
 Extern_Z Float User_DefaultAgentMinSqrDistActive;
 Extern_Z S32 User_BFVersion;
+
 #endif

@@ -66,6 +66,8 @@ public:
     Bool GetCharDesc(const Char* i_Char, CharDesc_Z& o_CharDesc);
     S32 GetSizeChar(const Char* i_Char);
 
+    static BaseObject_Z* NewObject() { return NewL_Z(161) Fonts_Z; }
+
 private:
     Material_ZHdlDA m_MaterialDA; // $VIOLET: Fix the stupid and dumb Material_ZHdl issues you were having
     HashTableBase_Z<FontGlyphHash_Z> m_FontGlyphHashHT;

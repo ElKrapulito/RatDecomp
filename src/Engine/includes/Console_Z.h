@@ -9,8 +9,20 @@
 #define REGISTERCOMMANDC(a, b, c) gData.Cons->AddCommand(a, b, c);
 #define REGISTERCOMMAND(a, b) gData.Cons->AddCommand(a, b, "No Comment");
 
-#define FL_CONS_UNK0x10 (1 << 4)
-#define FL_CONS_PAUSED (1 << 5)
+#define CONSOLE_STACK_COMMAND_LEN_MAX 80
+#define CONSOLE_MAX_STACK_COMMAND 2048
+#define CONSOLE_STATIC_COMMAND_LEN_MAX 1088
+#define CONSOLE_MAX_STATIC_COMMAND 16
+#define CONSOLE_STATIC_COMMAND_VAR_LEN_MAX 32
+#define CONSOLE_MAX_STATIC_COMMAND_VAR 32
+
+#define FL_CONSOLE_NONE (U32)(0 << 0)
+#define FL_CONSOLE_UNK_0x1 (U32)(1 << 0)
+#define FL_CONSOLE_UNK_0x2 (U32)(1 << 1)
+#define FL_CONSOLE_UNK_0x4 (U32)(1 << 2)
+#define FL_CONSOLE_UNK_0x8 (U32)(1 << 3)
+#define FL_CONSOLE_UNK_0x10 (U32)(1 << 4)
+#define FL_CONSOLE_PAUSED (U32)(1 << 5)
 
 Bool DisplayHelp();
 Bool Pause();
@@ -85,13 +97,13 @@ private:
     U32 m_CommIndex;
     U32 m_MaxComm;
     U32 m_UnkU32_0x23bc;
-    String_Z<1088> m_CommandStack[16];
+    String_Z<CONSOLE_STATIC_COMMAND_LEN_MAX> m_CommandStack[CONSOLE_MAX_STATIC_COMMAND];
     S32 m_NbParam;
     Char* m_StrParam[16];
     Bool m_IsFloatParam[16];
     Float m_FloatParam[16];
     S32 m_CommandNbVar;
-    String_Z<32> m_CommandVar[32];
+    String_Z<CONSOLE_STATIC_COMMAND_VAR_LEN_MAX> m_CommandVar[CONSOLE_MAX_STATIC_COMMAND_VAR];
     S32 m_StackNbVar;
     Bool m_StackVarState[8];
     U32 m_FolderFlag;
@@ -115,11 +127,13 @@ public:
     void AddCommand(const Char* i_Command, CommandProc i_Proc, const Char* i_Desc);
     Bool LaunchCommand(const Char* a1, const Char* i_CommandStr, U32 i_Depth, Command_Z* o_Command);
 
-    U32 GetNbParam() { return m_NbParam; }
+    S32 GetNbParam() const {
+        return m_NbParam;
+    }
 
     Bool InterpCommandLine(const Char* i_CommandStr, U32 i_Depth);
     void InterpFile();
-    void NewCommand(const Char* i_CommandStr, U32 i_Depth);
+    Bool NewCommand(const Char* i_CommandStr, U32 i_Depth);
     void PushCommand(const Char* i_CommandLine, Bool i_Unk);
     S32 NbPushedCommand();
     Bool InterpCommand(const Char* i_CommandStr, U32 i_Depth);
@@ -135,24 +149,36 @@ public:
 
     Command_Z* IsCommand(const Name_Z& l_CommandName) const;
 
-    Char* GetStrParam(S32 i_Index) const {
+    Char* GetStrParam(U32 i_Index) const {
         return m_StrParam[i_Index];
+    }
+
+    Float GetParamFloat(U32 i_Index) const {
+        return m_FloatParam[i_Index];
+    }
+
+    Bool IsParamFloat(U32 i_Index) const {
+        return m_IsFloatParam[i_Index];
     }
 
     inline void PopVar() {
         m_StackNbVar--;
     }
 
+    U32 IsFlagEnable(U32 i_Flag) const {
+        return m_Flag & i_Flag;
+    }
+
     virtual ~Console_Z();
     virtual void Init();
-    virtual U32 InitConsole();
+    virtual Bool InitConsole();
 
     virtual void CloseConsole() { };
 
     virtual void EnableFolder(U32 a1);
     virtual void DisableFolder(U32 a1);
     virtual void EnableFlag(U32 i_Flag);
-    virtual void DisableFlag(U32 a1);
+    virtual void DisableFlag(U32 i_Flag);
     virtual void Update(Float a1);
     virtual void Draw(DrawInfo_Z& i_DrawInfo);
     virtual PopupMenu_Z* GetPopupMenu() const;

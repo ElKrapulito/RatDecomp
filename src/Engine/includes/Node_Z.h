@@ -12,17 +12,21 @@
 #include "Agent_Z.h"
 #include "HFog_Z.h"
 #include "NodeFlag_Z.h"
+#include "MatrixCache_Z.h"
 
 class World_Z;
 class LightData_Z;
 
 class Node_Z : public ResourceObject_Z {
 public:
-    virtual ~Node_Z();                /* 0x08 */
-    virtual void Load(void** i_Data); /* 0x0C */
-    virtual void EndLoad();           /* 0x10 */
-    virtual void AfterEndLoad();      /* 0x14 */
-    virtual Bool MarkHandles();       /* 0x18 */
+    Node_Z();
+    virtual ~Node_Z();
+    virtual void Load(void** i_Data);
+    virtual void EndLoad();
+    virtual void AfterEndLoad();
+    virtual Bool MarkHandles();
+
+    static BaseObject_Z* NewObject() { return NewL_Z(309) Node_Z; }
 
     void UpdateRootTM();
     void UpdateTM(Node_Z* i_Parent);
@@ -31,7 +35,7 @@ public:
     void GetLocal(const Capsule_Z& i_WorldCapsule, Capsule_Z& o_LocalCapsule);
     void Changed();
     void Changed(S32 i_Flag);
-	void AddSon(const Node_ZHdl& i_Son, Bool i_IsWorldRelative = FALSE, Bool i_Changed = TRUE);
+    void AddSon(const Node_ZHdl& i_Son, Bool i_IsWorldRelative = FALSE, Bool i_Changed = TRUE);
 
     inline Bool IsRoot() const { return m_Parent == NULL; }
 
@@ -39,9 +43,9 @@ public:
 
     inline Node_Z* GetHeadSon() const { return m_HeadSon; }
 
-    inline Node_Z* GetPrev() const { return m_PrevSibling; }
+    inline Node_Z* GetPrev() const { return m_Prev; }
 
-    inline Node_Z* GetNext() const { return m_NextSibling; }
+    inline Node_Z* GetNext() const { return m_Next; }
 
     Object_Z* GetObject(Bool) const;
 
@@ -59,6 +63,10 @@ public:
 
     inline Mat4x4& GetWorldMatrix() { return *(Mat4x4*)m_RotInWorldMatrix.m.m13.dummy.i32; }
 
+    inline void SetWorldMatrixPtr() {
+        m_RotInWorldMatrix.m.m13.dummy.u32 = (U32)gData.MatrixBuffer->GetMatrix(GetWorldMatrixId());
+    }
+
     inline Mat4x4* GetWorldMatrixPtr() { return (Mat4x4*)m_RotInWorldMatrix.m.m13.dummy.i32; }
 
     void SetRotation(const Quat& i_Rotation);
@@ -72,8 +80,8 @@ public:
     void SetTranslation(const Vec3f& i_Translation);
 
     inline Vec3f& GetTranslation() {
-		return GetWorldMatrix().GetTranslation();
-	}
+        return GetWorldMatrix().GetTranslation();
+    }
 
     inline Mat4x4& GetInverseWorldMatrix() {
         if (GetFlag() & FL_NODE_INVALIDMAT) {
@@ -122,20 +130,64 @@ public:
         return m_Agent;
     }
 
-	inline void SetLight(LightData_Z* i_LightData) {
-		m_LightData = i_LightData;
-	}
+    inline void SetLight(LightData_Z* i_LightData) {
+        m_LightData = i_LightData;
+    }
 
-	inline void SetObject(Object_Z* i_Object) {
-		m_Object = i_Object;
-		Changed();
-	}
+    inline void SetObject(Object_Z* i_Object) {
+        m_Object = i_Object;
+        Changed();
+    }
+
+    inline void SetCollideSeadId(S32 i_Id) {
+        m_RotInWorldMatrix.m.m03.dummy.i32 = i_Id;
+    }
+
+    inline S32 GetCollideSeadId() const {
+        return m_RotInWorldMatrix.m.m03.dummy.i32;
+    }
+
+    inline void SetDisplaySeadId(S32 i_Id) {
+        m_RotInWorldMatrix.m.m23.dummy.i32 = i_Id;
+    }
+
+    inline S32 GetDisplaySeadId() const {
+        return m_RotInWorldMatrix.m.m23.dummy.i32;
+    }
+
+    inline void SetWorldId(S16 i_Id) {
+        m_InverseRotInWorldMatrix.m.m23.dummy.i16[0] = i_Id;
+    }
+
+    inline S16 GetWorldId() const {
+        return m_InverseRotInWorldMatrix.m.m23.dummy.i16[0];
+    }
+
+    inline void SetUnkFloat5(Float i_Value) {
+        m_InverseRotInWorldMatrix.m.m03.dummy.f32 = i_Value;
+    }
+
+    inline Float GetUnkFloat5() const {
+        return m_InverseRotInWorldMatrix.m.m03.dummy.f32;
+    }
+
+    inline void SetUnkFloat6(Float i_Value) {
+        m_InverseRotInWorldMatrix.m.m13.dummy.f32 = i_Value;
+    }
+
+    inline Float GetUnkFloat6() const {
+        return m_InverseRotInWorldMatrix.m.m13.dummy.f32;
+    }
+
+    inline void SetWorldMatrixId(U16 i_Id) { m_InverseRotInWorldMatrix.m.m23.dummy.u16[1] = i_Id; }
+
+    inline U16 GetWorldMatrixId() const { return m_InverseRotInWorldMatrix.m.m23.dummy.u16[1]; }
 
 private:
     Agent_ZHdl m_Agent;
     Mat4x4 m_InverseWorldMatrix;
-    Mat3x3 m_RotInWorldMatrix;
-    Mat3x3 m_InverseRotInWorldMatrix;
+    Mat3x3 m_RotInWorldMatrix;        // has 3 hidden values (cause it's 3x4) mat[0][3] = collideSeadsId1, mat[1][3] = placeholderWorldMatrixPtr, mat[2][3] = displaySeadsId1
+    Mat3x3 m_InverseRotInWorldMatrix; // has 3 hidden values (cause it's 3x4) mat[0][3] = unknown5, mat[1][3] = unknown6 and mat[2][3] is 2 uint16's (worldId and worldMatrixId)
     Quat m_RotInWorld;
     Vec3f m_Translation;
     U32 m_Flag;
@@ -153,12 +205,12 @@ private:
     UserDefine_Z* m_UserDefine;
     Node_Z* m_Parent;
     Node_Z* m_HeadSon;
-    Node_Z* m_PrevSibling;
-    Node_Z* m_NextSibling;
+    Node_Z* m_Prev;
+    Node_Z* m_Next;
     LightData_Z* m_LightData; // needs actually defined.
-    HFogData_Z* m_FogData;
-    Bitmap_Z* m_BitmapRadiosityRelated;
-    BaseObject_Z* m_UnkObj;
+    HFogData_Z* m_HFogData;
+    Bitmap_Z* m_RadiosityBitmap;
+    BaseObject_Z* m_UnkObjPtr_0x158;
 };
 
 #endif

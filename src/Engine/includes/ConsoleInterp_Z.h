@@ -4,31 +4,39 @@
 #include "Manipulator_Z.h"
 #include "FileInterp_Z.h"
 
-class StackCommandInterp_Z {
-private:
-    Char m_Unk[84];
+struct StackCommandInterp_Z {
+    U32 m_CommandName;
+    String_Z<CONSOLE_STACK_COMMAND_LEN_MAX> m_CommandLine;
 };
 
 class ConsoleInterp_Z : public Manipulator_Z {
 public:
-    void PushCommand(const Char* i_CommandLine, Bool i_Unk);
+    // clang-format off
 
-    inline S32 NbCommands() const { return m_StackCommIdx; }
+    virtual void Init();
+    virtual ~ConsoleInterp_Z() { }
+    virtual void Update(Float i_DeltaTime);
 
-    void Start(const Char* i_CommandLine, S32 i_Unk);
-    void Start(const Char* i_CommandLine, Char** i_Args, S32 i_Unk);
+    // clang-format on
+
+    static BaseObject_Z* NewObject() { return NewL_Z(70) ConsoleInterp_Z; }
+
+    inline S32 NbCommands() const { return m_StackCommNb; }
+
+    void Start(const Char* i_CommandLine, S32 i_FileSize);
+    void Start(const Char* i_FileName, Char** i_CommandLine, S32 i_ParamCount);
+    Bool PushCommand(const Char* i_CommandLine, Bool i_TopOfStack);
+    Bool PopCommand(String_Z<CONSOLE_STACK_COMMAND_LEN_MAX>& i_CommandString);
+    Bool DoCommand(U32 i_Depth, Char* i_CommandString, S32& io_CommentCurrentDepth, Bool& o_Skipped, FileInterp_Z* i_ReplacementFileInterp = NULL);
+    void End();
 
     DynArray_Z<FileInterp_Z>& GetFileStack() {
         return m_FileStack;
     }
 
-    virtual void Init();
-    virtual ~ConsoleInterp_Z();
-    virtual void Update(Float a1);
-
 private:
-    S32 m_StackCommIdx;
-    StackCommandInterp_Z m_StackComm[2048];
+    S32 m_StackCommNb;
+    StackCommandInterp_Z m_StackComm[CONSOLE_MAX_STACK_COMMAND];
     DynArray_Z<FileInterp_Z> m_FileStack;
 };
 

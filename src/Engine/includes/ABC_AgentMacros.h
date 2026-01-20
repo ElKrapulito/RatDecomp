@@ -79,7 +79,7 @@
     RestartBhv(BhvName)
 
 #define DECL_BHV(BhvName) \
-    virtual behavior_result BhvName(behavior_state_type BehaviorState, ABC_Behavior* Behavior = NULL);
+    virtual behavior_result BhvName(behavior_state_type BehaviorState, ABC_Behavior* Behavior = NULL)
 
 extern S32 behaviorLocalVariablesSize;
 extern void* behaviorLocalData;

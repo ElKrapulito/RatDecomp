@@ -53,7 +53,6 @@ public:
     };
 
     struct ReadOp {
-
         enum Status {
             Start = 0,
             Failed = 1,
@@ -61,6 +60,10 @@ public:
             CloseRequested = 3,
             Finished = 4,
         };
+
+        ReadOp() {
+            m_Status = Start;
+        }
 
         Bool NeedsProcessing() const {
             return m_Status == Start;
@@ -82,14 +85,14 @@ public:
 
     Bool Init();
 
-    void Heartbeat(Float i_DeltaTime);
+    Bool Heartbeat(Float i_DeltaTime);
     void Update(Float i_DeltaTime);
     void Thread();
     static void* ThreadProcVoid(void* i_Param);
 
     Bool Open(const Char* i_FilePath, BaseStream_Z* i_Stream, void* i_UnkPtr_0x160, S32 i_UnkS32_0x164, S32 i_UserDefined);
     Bool Read(void* i_Buffer, S32 i_StartOfBlock, S32 i_BlockSize, BaseStream_Z* i_Stream, S32 i_UserDefined);
-    Bool Close(BaseStream_Z* i_Stream, Bool);
+    Bool Close(BaseStream_Z* i_Stream, Bool i_CloseAllReadsForFile);
 
     S32 GetLastError() {
         return m_LastError;
@@ -105,8 +108,8 @@ private:
     SharedResource_Z m_ReadMutex;
     Event_Z m_ReadyToCloseEvent;
     Event_Z m_UnkEvent_0x18;
-    StaticArray_Z<ReadOp, STR_MAX_OPERATIONS, FALSE> m_ReadOps;
-    StaticArray_Z<OpenOp, STR_MAX_OPERATIONS, FALSE> m_OpenOps;
+    StaticArray_Z<ReadOp, STR_MAX_OPERATIONS> m_ReadOps;
+    StaticArray_Z<OpenOp, STR_MAX_OPERATIONS> m_OpenOps;
 };
 
 #endif // _STREAMMANAGER_Z_H_

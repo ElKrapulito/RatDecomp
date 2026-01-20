@@ -60,7 +60,7 @@ public:
     virtual void SetDfltColorAlpha(Float i_Alpha);
     virtual void FreeLightCacheEntry(U16 i_Index);
 
-private:
+protected:
     U32 m_Flag;
     Color m_DefaultColor;
 };
@@ -158,7 +158,17 @@ public:
         return FALSE;
     }
 
-    virtual S32 GetCollisions(Node_Z* i_Node, ObjectDatas_Z* i_Data, const Sphere_Z& i_Sph, const Vec3f& i_Dir, Float i_Len, ColLineResult_Z* o_Result, S32 i_MaxElem, U64 i_Flag, U64 i_NoFlag) {
+    virtual S32 GetCollisions(
+        Node_Z* i_Node,
+        ObjectDatas_Z* i_Data,
+        const Sphere_Z& i_Sph,
+        const Vec3f& i_Dir,
+        Float i_Len,
+        ColLineResult_Z* o_Result,
+        S32 i_MaxElem,
+        U64 i_Flag,
+        U64 i_NoFlag
+    ) {
         return 0;
     }
 

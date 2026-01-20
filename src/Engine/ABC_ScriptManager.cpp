@@ -37,7 +37,7 @@ void InitEngineScriptClasses() {
 ABC_ScriptManager::ABC_ScriptManager()
     : m_MsgEnum(64) {
     m_DisplayMaxUsageTime = 0.0f;
-    m_IsPaused = false;
+    m_IsPaused = FALSE;
     m_TimedMessages = NULL;
     m_ScriptTime = 0.0f;
     m_CycleDuration = 0.0f;

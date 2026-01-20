@@ -259,6 +259,7 @@ struct Vec3f {
 };
 
 Extern_Z const Vec3f VEC3F_NULL;
+Extern_Z const Vec3f VEC3F_ONE;
 
 inline Vec3f operator*(Float i_Factor, const Vec3f& i_Vec) {
     return i_Vec * i_Factor;
@@ -535,7 +536,23 @@ public:
     //Mat3x3(const Mat3x3& i_m);
     //Mat3x3(const Mat4x4& i_m);
     Mat3x3& SetNull();
-    Mat3x3& SetIdentity();
+
+    Mat3x3& SetIdentity() {
+        m.m[0][0] = 1.f;
+        m.m[0][1] = 0.f;
+        m.m[0][2] = 0.f;
+        m.m[0][3] = 0.f;
+        m.m[1][0] = 0.f;
+        m.m[1][1] = 1.f;
+        m.m[1][2] = 0.f;
+        m.m[1][3] = 0.f;
+        m.m[2][0] = 0.f;
+        m.m[2][1] = 0.f;
+        m.m[2][2] = 1.f;
+        m.m[2][3] = 0.f;
+        return *this;
+    }
+
     void Transp(Mat3x3& o_m) const;
     Mat3x3& operator=(const Mat3x3& i_m);
     Mat3x3& operator*=(const Mat3x3& i_m);
@@ -635,9 +652,9 @@ struct Quat {
 
     inline Quat(Float _w, Float i_x, Float i_y, Float i_z) {
         w = _w;
-        v.x = i_x;
-        v.y = i_y;
         v.z = i_z;
+        v.y = i_y;
+        v.x = i_x;
     }
 
     inline Quat(Float Angle, const Vec3f& Axis) {

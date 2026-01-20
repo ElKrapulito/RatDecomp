@@ -46,20 +46,20 @@ void PrintMemoryStatus(Char* i_Comment) {
     OSReport("\n\n");
 }
 
-void InitProgram() {
+void InitProgram(int i_Argc, Char** i_Argv) {
     OSInit();
     ExceptionHandler();
     MemManager.Init();
-    *(S32*)(&gData.m_Pad_0x14[0x794]) = 0;
+    gData.m_GameFlag = FL_GAME_NONE;
     GetFlagsFromGame();
     gData.Cons = NewL_Z(283) GCConsole_Z;
-    if (!(gData.Cons->InitConsole() & 0xFF)) {
+    if (!gData.Cons->InitConsole()) {
         exit(0x14);
     }
     gData.Cons->Init();
     gData.Cons->SetVar("_GC");
     gData.Cons->SetVar("_FORCEBFREAD");
     MathInitTables();
-    strcpy((Char*)(&gData.m_Pad_0x14[0x7D4]), ".\\");
+    strcpy(gData.m_AliasPath, ".\\");
     DVDInit();
 }

@@ -13,7 +13,7 @@ class Message_Z;
 class RegMessage_Z;
 
 typedef BnkLinkArray_Z<ABC_Message> MessageBnkLinkArray;
-typedef BnkLinkArray_Z<ABC_Behavior, 256, TRUE> BehaviorBnkLinkArray;
+typedef BnkLinkArray_Z<ABC_Behavior> BehaviorBnkLinkArray;
 typedef BnkLinkArray_Z<ABC_BehaviorHolder> BehaviorHolderBnkLinkArray;
 typedef BnkLinkArray_Z<ABC_CategoryHolder> CategoryHolderBnkLinkArray;
 typedef BnkLinkArray_Z<ABC_CategoryData> CategoryDataBnkLinkArray;

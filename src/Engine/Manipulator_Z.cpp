@@ -1,6 +1,7 @@
 #include "Manipulator_Z.h"
 #include "Program_Z.h"
 #include "Renderer_Z.h"
+#include "ManipulatorManager_Z.h"
 
 Manipulator_Z::Manipulator_Z() {
     m_PreviousPtr = NULL;

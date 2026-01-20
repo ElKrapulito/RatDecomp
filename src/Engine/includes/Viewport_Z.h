@@ -4,6 +4,8 @@
 #include "Assert_Z.h"
 #include "ManipulatorDraw_ZHdl.h"
 #include "Node_ZHdl.h"
+#include "World_ZHdl.h"
+#include "Occluder_ZHdl.h"
 class Renderer_Z;
 
 class Viewport_Z {
@@ -45,16 +47,21 @@ public:
         return m_CameraNodeHdl;
     }
 
+    const World_ZHdl& GetWorld() const {
+        return m_WorldHdl;
+    } 
+
     void RegisterManip(const ManipulatorDraw_ZHdl& i_ManipDrawHdl);
     void UnregisterManip(const ManipulatorDraw_ZHdl& i_ManipDrawHdl);
+    void Draw(DrawInfo_Z& i_DrawInfo);
 
 private:
     U32 m_StartX;
     U32 m_StartY;
     U32 m_SizeX;
     U32 m_SizeY;
-    BaseObject_ZHdl m_WorldHdl;
-    BaseObject_ZHdl m_OccluderHdl;
+    World_ZHdl m_WorldHdl;
+    Occluder_ZHdl m_OccluderHdl;
     Node_ZHdl m_CameraNodeHdl;
     Float m_Tangent;
     Float m_InvDiagTangent;

@@ -9,7 +9,7 @@ public:
     virtual ~VolumeAgent_Z() { }
     virtual void UseNode(Node_ZHdl& a1);
 
-    DECL_BHV(VolumeAnimReset)
+    DECL_BHV(VolumeAnimReset);
 
     virtual void StartAnims();
     virtual void ResetAnims();

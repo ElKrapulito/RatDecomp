@@ -18,8 +18,8 @@ void AnimationManager_Z::ReserveMsgArray() {
     m_DfltSkelMsg.m_BoneNodePtr = NULL;
     m_DfltSkelMsg.m_VsBoneNodePtr = NULL;
     m_DfltSkelMsg.m_VsAgentPtr = NULL;
-    m_DfltSkelMsg.m_CanVsSphereCollide = false;
-    m_DfltSkelMsg.m_CanSphereCollide = false;
+    m_DfltSkelMsg.m_CanVsSphereCollide = FALSE;
+    m_DfltSkelMsg.m_CanSphereCollide = FALSE;
     m_AnimMsg = NewL_Z(17) RegMessage_Z[MAX_REGMSG_ARRAY_SIZE];
     m_BufAnimMsg = NewL_Z(18) RegMessage_Z[MAX_REGMSG_ARRAY_SIZE];
     m_BufAnimMsgNb = 0;

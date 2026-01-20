@@ -7,6 +7,7 @@ Extern_Z "C" U32 strlen(const Char* str);
 Extern_Z "C" char* strupr(Char* str);
 Extern_Z "C" int strcmp(const Char* str1, const Char* str2);
 Extern_Z "C" int strcpy(Char* dest, const Char* src);
+Extern_Z "C" int strcat(Char* dest, const Char* src);
 Extern_Z "C" int vsprintf(const Char* i_Buf, const Char* i_Format, va_list i_Args);
 Extern_Z "C" int strncpy(Char* dest, const Char* src, S32 count);
 Bool fstricmp(const Char* a1, const Char* a2);
@@ -24,6 +25,8 @@ public:
     }
 
     void StrCpy(const Char* i_Str) { strcpy(m_Str, i_Str); }
+
+    void StrCat(const Char* i_Str) { strcat(m_Str, i_Str); }
 
     inline String_Z<Size>& operator=(const Char* i_Text) {
         StrCpy(i_Text);
@@ -83,6 +86,10 @@ public:
 
     inline Char& operator[](S32 i_Index) {
         return m_Str[i_Index];
+    }
+
+    U32 StrLen() const {
+        return strlen(m_Str);
     }
 
 private:

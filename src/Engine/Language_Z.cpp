@@ -41,4 +41,9 @@ U8 GetCharIdFromText(Char* i_Text) {
 }
 
 Bool TT(int i_Id) {
+    return TRUE;
+}
+
+Bool FreeLanguage() {
+    return TRUE;
 }

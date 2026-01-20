@@ -88,8 +88,8 @@ Bool Console_Z::LaunchCommand(const Char* a1, const Char* i_CommandStr, U32 i_De
     FIXDEBUGINLINING_Z();
 }
 
-void Console_Z::NewCommand(const Char* i_CommandStr, U32 i_Depth) {
-    InterpCommandLine(i_CommandStr, i_Depth);
+Bool Console_Z::NewCommand(const Char* i_CommandStr, U32 i_Depth) {
+    return InterpCommandLine(i_CommandStr, i_Depth);
 }
 
 void Console_Z::PushCommand(const Char* i_CommandLine, Bool i_Unk) {

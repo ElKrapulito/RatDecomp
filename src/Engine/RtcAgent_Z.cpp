@@ -5,3 +5,5 @@
 BEGIN_INIT_AGENT_CLASS(RtcAgent_Z, AnimatedMsgAgent_Z)
     ADD_BEHAVIOR(RtcEnd)
 END_INIT_AGENT_CLASS
+
+// clang-format on

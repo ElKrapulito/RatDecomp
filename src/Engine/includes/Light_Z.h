@@ -2,6 +2,7 @@
 #define _LIGHT_Z_H_
 #include "Object_Z.h"
 #include "Node_ZHdl.h"
+#include "LightData_Z.h"
 
 class Light_Z;
 
@@ -10,11 +11,11 @@ public:
     Light_Z();
 
     // clang-format off
-    virtual ~Light_Z() { }                                            /* 0x08 */
-    virtual void Load(void** i_Data);                                 /* 0x0C */
-    virtual void Clean();                                             /* 0x10 */
-    virtual void Draw(DrawInfo_Z& i_DrawInfo, ObjectDatas_Z* i_Data); /* 0x14 */
-    virtual void UpdateObject(Node_Z* i_Node, ObjectDatas_Z* i_Data); /* 0x18 */
+    virtual ~Light_Z() { }
+    virtual void Load(void** i_Data);
+    virtual void Clean();
+    virtual void Draw(DrawInfo_Z& i_DrawInfo, ObjectDatas_Z* i_Data);
+    virtual void UpdateObject(Node_Z* i_Node, ObjectDatas_Z* i_Data);
     // clang-format on
 
     inline Vec3f& GetColor() { return m_Color; }
@@ -56,10 +57,6 @@ private:
     Float m_Intensity;
     Vec3f m_AmbientColor;
     Vec3f m_Translation;
-};
-
-class LightData_Z : public ObjectDatas_Z {
-public:
 };
 
 #endif // _LIGHT_Z_H_

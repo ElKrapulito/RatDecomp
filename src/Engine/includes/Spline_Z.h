@@ -27,6 +27,8 @@ public:
     virtual void Clean();
     virtual void Draw(DrawInfo_Z& i_DrawInfo, ObjectDatas_Z* i_Data);
 
+    static BaseObject_Z* NewObject() { return NewL_Z(119) Spline_Z; }
+
     Float GetValueOnTrack(Float i_Ratio, Vec3f& i_Pos);
     Float GetValueOutTrack(Float i_Ratio, Vec3f& i_Pos);
 

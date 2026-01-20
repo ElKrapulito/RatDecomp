@@ -61,7 +61,7 @@ void ObjectDatas_Z::Clone(ObjectDatas_ZHdl& o_ObjectDatasHdl, Object_ZHdl& o_Obj
     ObjectDatas_Z* l_ObjectDatas = (ObjectDatas_Z*)GETPTR(o_ObjectDatasHdl);
     l_ObjectDatas->m_DefaultColor = m_DefaultColor;
     l_ObjectDatas->m_Flag = m_Flag | FL_OBJECTDATAS_CLONED;
-    l_ObjectDatas->SetName(m_Name, false);
+    l_ObjectDatas->SetName(m_Name, FALSE);
 }
 
 void ObjectDatas_Z::Load(void** i_Data) {

@@ -20,7 +20,7 @@ public:
     GCConsole_Z();
 
     virtual ~GCConsole_Z();
-    virtual U32 InitConsole();
+    virtual Bool InitConsole();
     virtual void CloseConsole();
     virtual void Update(Float a1);
     virtual void Flush();

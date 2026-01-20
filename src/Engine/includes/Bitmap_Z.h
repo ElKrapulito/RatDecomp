@@ -48,6 +48,8 @@ public:
     virtual void Clean();
     void InitBmap(S32 i_SizeX, S32 i_SizeY, U8 l_Format, U8* i_Datas, U8* i_Palette);
 
+    static BaseObject_Z* NewObject() { return NewL_Z(196) Bitmap_Z; }
+
     S16 GetTexId() { return m_TexID; }
 
     S32 GetSizeX() { return m_SizeX; }

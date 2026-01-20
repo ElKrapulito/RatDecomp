@@ -10,6 +10,7 @@ public:
 
     virtual ~MovingAgent_Z() {}
     virtual void Init();
+    virtual Bool MarkHandles();
     virtual void Suspend();
     virtual void Restore();
     virtual void UseNode(Node_ZHdl& a1);

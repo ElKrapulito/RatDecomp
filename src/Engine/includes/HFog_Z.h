@@ -7,16 +7,6 @@
 class HFogData_Z;
 class HFog_Z;
 
-class HFogData_Z : public ObjectDatas_Z {
-
-private:
-    Float m_Unk0x28;
-    Float m_Unk0x2C;
-    Mat4x4 m_UnkMatrix;
-    Vec3f m_Color;
-    Float m_Active;
-};
-
 class HFog_Z : public Object_Z {
 public:
     HFog_Z();
@@ -71,6 +61,22 @@ private:
     Vec3f m_Scale;
     Bool m_Active;
     Node_ZHdlDA m_UserNodeHdls;
+};
+
+class HFogData_Z : public ObjectDatas_Z {
+public:
+    virtual ~HFogData_Z();
+    virtual void Load(void** i_Data);
+    virtual void Clone(ObjectDatas_ZHdl& o_ObjectDatasHdl, Object_ZHdl& o_ObjectHdl);
+
+    static BaseObject_Z* NewObject() { return NewL_Z(83) HFogData_Z; }
+
+private:
+    Float m_Unk0x28;
+    Float m_Unk0x2C;
+    Mat4x4 m_UnkMatrix;
+    Vec3f m_Color;
+    Float m_Active;
 };
 
 #endif
