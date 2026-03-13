@@ -8,7 +8,7 @@ Replace with your repository's URL.
 
 [Build Status]: https://github.com/ZounaModding/RatDecomp/actions/workflows/build.yml/badge.svg
 [actions]: https://github.com/ZounaModding/RatDecomp/actions/workflows/build.yml
-[Discord Badge]: https://img.shields.io/discord/888080380752707624?color=%237289DA&logo=discord&logoColor=%23FFFFFF
+[Discord Badge]: https://img.shields.io/discord/888080380752707624?color=%2354b497&logo=discord&logoColor=%23FFffff
 [discord]: https://discord.gg/cgUVpB6GNc
 [Rat Code]: https://decomp.dev/ZounaModding/RatDecomp.svg?mode=shield&category=rat&measure=matched_code_percent
 [Game Code]: https://decomp.dev/ZounaModding/RatDecomp.svg?mode=shield&category=game&measure=matched_code_percent
