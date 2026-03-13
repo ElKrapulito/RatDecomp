@@ -1,5 +1,5 @@
 Ratatouille  
-[![Build Status]][actions] [![Game Code]][progress] [![Engine Code]][progress] [![LibGC Code]][progress] [![Discord Badge]][discord]
+[![Build Status]][actions] [![Rat Code]][rat-progress] [![Game Code]][game-progress] [![Engine Code]][engine-progress] [![LibGC Code]][libgc-progress] [![Discord Badge]][discord]
 =============
 
 <!--
@@ -10,10 +10,14 @@ Replace with your repository's URL.
 [actions]: https://github.com/ZounaModding/RatDecomp/actions/workflows/build.yml
 [Discord Badge]: https://img.shields.io/discord/888080380752707624?color=%237289DA&logo=discord&logoColor=%23FFFFFF
 [discord]: https://discord.gg/cgUVpB6GNc
+[Rat Code]: https://decomp.dev/ZounaModding/RatDecomp.svg?mode=shield&category=rat&measure=matched_code_percent
 [Game Code]: https://decomp.dev/ZounaModding/RatDecomp.svg?mode=shield&category=game&measure=matched_code_percent
 [Engine Code]: https://decomp.dev/ZounaModding/RatDecomp.svg?mode=shield&category=engine&measure=matched_code_percent
 [LibGC Code]: https://decomp.dev/ZounaModding/RatDecomp.svg?mode=shield&category=libgc&measure=matched_code_percent
-[progress]: https://decomp.dev/ZounaModding/RatDecomp
+[rat-progress]: https://decomp.dev/ZounaModding/RatDecomp?category=rat
+[game-progress]: https://decomp.dev/ZounaModding/RatDecomp?category=game
+[engine-progress]: https://decomp.dev/ZounaModding/RatDecomp?category=engine
+[libgc-progress]: https://decomp.dev/ZounaModding/RatDecomp?category=libgc
 
 A work-in-progress decompilation of Ratatouille.
 
