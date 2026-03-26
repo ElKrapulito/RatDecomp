@@ -28,6 +28,6 @@ END_BEHAVIOR
 // clang-format on
 
 SkinAgent_Z::SkinAgent_Z() {
-    EnableFlag(FL_AGENT_UNK_0x20000000);
-    DisableFlag(FL_AGENT_UNK_0x200);
+    EnableFlag(FL_AGENT_SKIN);
+    DisableFlag(FL_AGENT_ANIMATED_SEQ);
 }

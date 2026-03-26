@@ -1,6 +1,7 @@
 #include "Node_Z.h"
 #include "MatrixCache_Z.h"
 
+// TODO: Finish matching
 Node_Z::Node_Z()
     : m_RotInWorld(1.0f, 0.0f, 0.0f, 0.0f)
     , m_Rotation(1.0f, 0.0f, 0.0f, 0.0f) {
@@ -33,4 +34,8 @@ Node_Z::Node_Z()
     SetTranslation(VEC3F_NULL);
     SetWorldMatrixId(gData.MatrixBuffer->GetNewMatrix());
     SetWorldMatrixPtr();
+}
+
+void Node_Z::SetTranslation(const Vec3f& i_Translation) {
+    m_Translation = i_Translation;
 }

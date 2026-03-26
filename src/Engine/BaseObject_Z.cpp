@@ -32,7 +32,7 @@ void BaseObject_Z::Send(abc_message i_Msg, ABC_Agent* i_Receiver, Float i_Param)
 }
 
 void BaseObject_Z::SendTimed(abc_message i_Msg, ABC_Agent* i_Receiver, Float i_Delay, Float i_Param) {
-	gData.ScriptMgr->SendTimed(i_Msg, i_Receiver, i_Delay, i_Param);
+    gData.ScriptMgr->SendTimed(i_Msg, i_Receiver, i_Delay, i_Param);
 }
 
 Bool BaseObject_Z::MarkHandles() {

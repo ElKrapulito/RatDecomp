@@ -35,6 +35,9 @@ ClassManager_Z::ClassManager_Z() {
     m_BfHeader.StrCat(BIGFILE_VERSION_COPYRIGHT);
 }
 
+ClassManager_Z::~ClassManager_Z() {
+}
+
 void ClassManager_Z::RegisterClass(const Char* i_ClassName, const Char* i_ParentClassName, NewObjectProc i_NewObject) {
     Name_Z l_ClassName(i_ClassName);
     Name_Z l_ParentClassName(i_ParentClassName);

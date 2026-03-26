@@ -2,8 +2,18 @@
 #define _SYSTEMDATAS_Z_H_
 #include "Light_ZHdl.h"
 #include "Material_ZHdl.h"
+#include "Fonts_ZHdl.h"
+#include "Rtc_ZHdl.h"
+#include "GameObj_ZHdl.h"
+#include "MaterialObj_ZHdl.h"
+#include "MaterialAnim_ZHdl.h"
+#include "Bitmap_ZHdl.h"
+
 class SystemDatas_Z {
 public:
+    SystemDatas_Z();
+    ~SystemDatas_Z();
+
     inline LightData_ZHdl& GetDefaultLight() {
         return m_DefaultLightDataHdl;
     }
@@ -13,9 +23,28 @@ public:
     }
 
 private:
-    U8 m_Pad_0x0[0x38];
+    GameObj_ZHdlDA m_ExtGameObjHdls;
+    GameObj_ZHdlDA m_GameObjHdls;
+    MaterialObj_ZHdlDA m_MaterialObjHdls;
+    Fonts_ZHdlDA m_FontHdls;
+    Rtc_ZHdlDA m_RtcHdls;
+    Material_ZHdl m_ShadowMaterialHdl;
+    Material_ZHdl m_BloomMaterialHdl;
+    Material_ZHdl m_StencilMaterialHdl;
+    Material_ZHdl m_SonarMaterialHdl;
     Material_ZHdl m_DefaultMaterialHdl;
-    U8 m_Pad_0x40[0x2c];
+    MaterialAnim_ZHdl m_DefaultMaterialAnimHdl;
+    Bitmap_ZHdl m_WhiteBitmapHdl;
+    Material_ZHdl m_BlackMaterialHdl;
+    Bitmap_ZHdl m_BlackBitmapHdl;
+    Bitmap_ZHdl m_BloomBitmapHdl;
+    Material_ZHdl m_RadialMotionBlurMaterialHdl;
+    Material_ZHdl m_OverdrawMaterialHdl;
+    Material_ZHdl m_NoTextureMaterialHdl;
+    Material_ZHdl m_FlashMaterialHdl;
+    Material_ZHdl m_UnkMaterialHdl_0x60;
+    Bitmap_ZHdl m_UnkBitmapHdl_0x64;
     LightData_ZHdl m_DefaultLightDataHdl;
+    LightData_ZHdl m_SubDefaultLightDataHdl;
 };
 #endif // _SYSTEMDATAS_Z_H_

@@ -5,6 +5,6 @@
 class AnimFrame_Z;
 HANDLE_Z(AnimFrame_Z, ResourceObject_Z);
 
-typedef DynArray_Z<AnimFrame_ZHdl> AnimFrame_ZHdlArray;
+typedef DynArray_Z<AnimFrame_ZHdl, 32> AnimFrame_ZHdlDA;
 
 #endif

@@ -31,12 +31,12 @@ BEGIN_BEHAVIOR
         Message(msg_thrown_begin)
     START_ACTION
         ThrowBegin();
-        EnableFlag(FL_AGENT_UNK_0x10000)
+        EnableFlag(FL_AGENT_THROWN)
     FINISH_COND
         Message(msg_thrown_end)
     FINISH_ACTION
         ThrowEnd();
-        DisableFlag(FL_AGENT_UNK_0x10000)
+        DisableFlag(FL_AGENT_THROWN)
     CONDITION
         !Message(msg_thrown_begin) && (
             (Message(msg_lod_collide) || Message(msg_decor_collide)) &&

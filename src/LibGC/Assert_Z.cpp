@@ -1,6 +1,6 @@
 #include "Assert_Z.h"
 #include "Types_Z.h"
-#include "GXStruct.h"
+#include "dolphin.h"
 #include "os.h"
 #include <string.h>
 

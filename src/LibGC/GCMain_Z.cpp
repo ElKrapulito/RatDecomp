@@ -27,22 +27,18 @@ Extern_Z "C" void* _db_stack_addr;
 void PrintMemoryStatus(Char* i_Comment) {
     void* l_ArenaLo = OSGetArenaLo();
     void* l_ArenaHi = OSGetArenaHi();
-    void** l_StackEnd = &_stack_end;
-    void** l_StackAddr = &_stack_addr;
-    void** l_DbStackAddr = &_stack_addr;
-    void** l_DbStackEnd = &_db_stack_end;
-    U32 l_FreeMem = MemManager.GetFreeMem();
-    U32 l_HeapSize = MemManager.GetHeapSize();
-    U32 l_SizeInKo = ((U32)l_ArenaHi - (U32)l_ArenaLo) >> 10;
-    void* l_End = (void*)0x803c317e;
+    U32 l_Size = ((U32)l_ArenaHi - (U32)l_ArenaLo);
+    U32 l_HeapSize = MemManager.GetHeapSize() - MemManager.GetFreeMem();
+    U32 l_StackAddr = (U32)_stack_addr;
+    U32 l_StackEnd = (U32)_stack_end;
 
     OSReport("\n\n");
     OSReport("> %s :\n", i_Comment ? i_Comment : "Memory Status");
     OSReport(">              start       end         size         usage\n");
-    OSReport(">     ELF      0x%08x  0x%08x  %08d ko\n", (U32)&__start, (U32)l_End, 3836);
-    OSReport(">     STACK    0x%08x  0x%08x  %08d ko\n", l_StackEnd, l_StackAddr, 256);
-    OSReport(">     DBSTACK  0x%08x  0x%08x  %08d ko\n", l_DbStackEnd, &l_DbStackAddr, 64);
-    OSReport(">     HEAP     0x%08x  0x%08x  %08d ko  %.2f mo\n", l_ArenaLo, l_ArenaHi, l_SizeInKo, l_HeapSize);
+    OSReport(">     ELF      0x%08x  0x%08x  %08d ko\n", __start, 0x803c317e, (0x803c317e - (U32)&__start) >> 10);
+    OSReport(">     STACK    0x%08x  0x%08x  %08d ko\n", l_StackEnd, l_StackAddr, ((U32)&l_StackEnd - (U32)&l_StackAddr) >> 10);
+    OSReport(">     DBSTACK  0x%08x  0x%08x  %08d ko\n", _db_stack_end, _db_stack_addr, ((U32)&_db_stack_end - (U32)&_db_stack_addr) >> 10);
+    OSReport(">     HEAP     0x%08x  0x%08x  %08d ko  %.2f mo\n", l_ArenaLo, l_ArenaHi, l_Size >> 10, (Float)l_HeapSize / (1024.0f * 1024.0f));
     OSReport("\n\n");
 }
 

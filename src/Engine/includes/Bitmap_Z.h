@@ -5,7 +5,11 @@
 #include "Assert_Z.h"
 #include "Color_Z.h"
 #define INVALID_TEXID -1
-#define FL_BITMAP_BILINEAR 1 << 2
+
+#define FL_BITMAP_NONE (0 << 0)
+#define FL_BITMAP_UNK_0x1 (1 << 0)
+#define FL_BITMAP_BILINEAR (1 << 2)
+#define FL_BITMAP_UNK_0x8 (1 << 3)
 
 enum BmFormat_Z {
     BM_4 = 0x01,    // 4 Bits Indexed RGB
@@ -73,7 +77,11 @@ public:
     Bool IsFlagEnable(U16 i_Flag) { return (m_Flag & i_Flag) != 0; }
 
     void SetDatas(U8* i_Datas);
-    void SetTransp(U8 i_Transp);
+
+    inline void SetTransp(U8 i_Transp) {
+        m_Transp = i_Transp;
+    }
+
     void Clear(Color i_Color);
     U8 GetBestPalEntry(U8 i_Red, U8 i_Green, U8 i_Blue, U8 i_Alpha);
     U16 GetColor(const Color& i_Color);

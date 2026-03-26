@@ -39,7 +39,12 @@ Bool MarkMemory();
 Bool ShowUnmarkedMemory();
 
 class GameManager_Z {
+public:
     void DebugDisplay(Viewport_Z* i_Vp);
+
+    inline Bool IsCameraUser(const S32 i_VpId) const {
+        return m_CameraUserBools[i_VpId];
+    }
 
 private:
     CameraUser_ZHdl m_CameraUserHdls[4];

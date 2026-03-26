@@ -42,8 +42,8 @@ Bool Material_Z::MarkHandles() {
     }
     else {
         for (S32 i = 0; i < mtl_nb_params; i++) {
-            if (gData.ClassMgr->GetPtr(m_BmapHdl[i]) != NULL) {
-                gData.ClassMgr->GetPtr(m_BmapHdl[i])->MarkHandles();
+            if (gData.ClassMgr->GetPtr(m_BmapHdls[i]) != NULL) {
+                gData.ClassMgr->GetPtr(m_BmapHdls[i])->MarkHandles();
             }
         }
         return TRUE;
@@ -59,7 +59,7 @@ void Material_Z::Clean() {
     }
 }
 
-Extern_Z void O_SinCos(Vec2f, Float);
+Extern_Z void O_SinCos(Vec2f&, Float);
 
 void Material_Z::UpdateTMatrix() {
     Vec2f m_SinCos;

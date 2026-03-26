@@ -18,9 +18,9 @@ public:
     virtual void UnregistredFromGame(const Agent_ZHdl& i_AgentHdl);
     virtual void SetGame(const Game_ZHdl& i_GameHdl);
 
-	inline void SetNbVp(U32 i_NbVp) {
-		m_NbVp = i_NbVp;
-	}
+    inline void SetNbVp(U32 i_NbVp) {
+        m_NbVp = i_NbVp;
+    }
 
     inline S32 GetNbVp() const {
         return m_NbVp;

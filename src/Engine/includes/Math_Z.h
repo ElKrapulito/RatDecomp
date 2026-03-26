@@ -260,6 +260,13 @@ struct Vec3f {
 
 Extern_Z const Vec3f VEC3F_NULL;
 Extern_Z const Vec3f VEC3F_ONE;
+Extern_Z const Vec3f VEC3F_HALF;
+Extern_Z const Vec3f VEC3F_UP;
+Extern_Z const Vec3f VEC3F_DOWN;
+Extern_Z const Vec3f VEC3F_LEFT;
+Extern_Z const Vec3f VEC3F_RIGHT;
+Extern_Z const Vec3f VEC3F_FRONT;
+Extern_Z const Vec3f VEC3F_BACK;
 
 inline Vec3f operator*(Float i_Factor, const Vec3f& i_Vec) {
     return i_Vec * i_Factor;

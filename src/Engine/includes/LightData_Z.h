@@ -12,6 +12,12 @@ public:
 
     static BaseObject_Z* NewObject() { return NewL_Z(42) LightData_Z; }
 
+    inline void SetColor(const Vec3f& i_Color) { m_Color = i_Color; }
+
+    inline void SetAmbiant(const Vec3f& i_Ambient) { m_Ambient = i_Ambient; }
+
+    inline void SetDir(const Vec3f& i_Direction) { m_Direction = i_Direction; }
+
 private:
     Float m_UnkFloat_0x28;
     Float m_UnkFloat_0x2C;

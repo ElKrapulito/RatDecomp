@@ -1,0 +1,79 @@
+#include "SystemDatas_Z.h"
+#include "ClassManager_Z.h"
+#include "Math_Z.h"
+#include "Material_Z.h"
+#include "MaterialAnim_Z.h"
+#include "MaterialManager_Z.h"
+#include "LightData_Z.h"
+
+SystemDatas_Z::SystemDatas_Z() {
+    m_DefaultMaterialAnimHdl = gData.ClassMgr->NewResource(Name_Z("MaterialAnim_Z"), Name_Z("DefaultMaterialAnim"));
+    m_DefaultMaterialHdl = gData.ClassMgr->NewResource(Name_Z("Material_Z"), Name_Z("DefaultMaterial"));
+    m_BloomMaterialHdl = gData.ClassMgr->NewResource(Name_Z("Material_Z"), Name_Z("BloomMaterial"));
+    m_StencilMaterialHdl = gData.ClassMgr->NewResource(Name_Z("Material_Z"), Name_Z("StencilMaterial"));
+    m_SonarMaterialHdl = gData.ClassMgr->NewResource(Name_Z("Material_Z"), Name_Z("SonarMaterial"));
+    m_RadialMotionBlurMaterialHdl = gData.ClassMgr->NewResource(Name_Z("Material_Z"), Name_Z("RadialMBlurMaterial"));
+    m_FlashMaterialHdl = gData.ClassMgr->NewResource(Name_Z("Material_Z"), Name_Z("FlashMaterial"));
+    m_BlackMaterialHdl = gData.ClassMgr->NewResource(Name_Z("Material_Z"), Name_Z("BlackMaterial"));
+    m_WhiteBitmapHdl = gData.ClassMgr->NewResource(Name_Z("Bitmap_Z"), Name_Z("WhiteTexture"));
+    m_BlackBitmapHdl = gData.ClassMgr->NewResource(Name_Z("Bitmap_Z"), Name_Z("BlackTexture"));
+    m_BloomBitmapHdl = gData.ClassMgr->NewResource(Name_Z("Bitmap_Z"), Name_Z("BloomTexture"));
+    m_OverdrawMaterialHdl = gData.ClassMgr->NewResource(Name_Z("Material_Z"), Name_Z("OverdrawMaterial"));
+
+    Bitmap_Z* l_Bitmap = m_WhiteBitmapHdl;
+    l_Bitmap->InitBmap(64, 64, BM_5551, NULL, NULL);
+    l_Bitmap->EnableFlag(FL_BITMAP_UNK_0x8);
+    memset(l_Bitmap->GetDatas(), 0xFF, 0x2000);
+    l_Bitmap->SetTransp(BM_NO_TRANSP);
+
+    m_DefaultMaterialAnimHdl->SetMaterial(m_DefaultMaterialHdl);
+    m_DefaultMaterialHdl->SetBitmap(m_WhiteBitmapHdl, 0);
+    gData.MaterialMgr->AddMaterialAnim(m_DefaultMaterialAnimHdl);
+
+    l_Bitmap = m_BlackBitmapHdl;
+    l_Bitmap->InitBmap(64, 64, BM_5551, 0, 0);
+    l_Bitmap->EnableFlag(FL_BITMAP_UNK_0x8);
+    l_Bitmap->SetTransp(BM_NO_TRANSP);
+    m_BlackMaterialHdl->SetBitmap(m_BlackBitmapHdl, 0);
+
+    l_Bitmap = m_BloomBitmapHdl;
+    l_Bitmap->InitBmap(32, 32, BM_5551, 0, 0);
+    l_Bitmap->EnableFlag(FL_BITMAP_UNK_0x8);
+    memset(l_Bitmap->GetDatas(), 0xFF, 0x800);
+    l_Bitmap->SetTransp(BM_NO_TRANSP);
+
+    m_StencilMaterialHdl->SetCode(MATERIAL_CODE_UNK4);
+    m_StencilMaterialHdl->EnableRenderFlag(FL_ADDITIF);
+
+    m_BloomMaterialHdl->SetCode(MATERIAL_CODE_UNK2 | MATERIAL_CODE_UNK3);
+    m_BloomMaterialHdl->SetDiffuse(Vec3f(0.35f, 0.35f, 0.35f));
+    m_BloomMaterialHdl->SetOpacity(1.0f);
+
+    m_SonarMaterialHdl->SetCode(MATERIAL_CODE_UNK0 | MATERIAL_CODE_UNK1 | MATERIAL_CODE_UNK2 | MATERIAL_CODE_UNK3);
+    m_SonarMaterialHdl->SetBitmap(m_BloomBitmapHdl, 0);
+    m_SonarMaterialHdl->SetDiffuse(Vec3f(0.5f, 0.5f, 0.5f));
+    m_SonarMaterialHdl->SetEmissive(Vec3f(0.75f, 0.75f, 1.0f));
+    m_SonarMaterialHdl->GetParams().Set(96.0f, 80.0f, 50.0f, 30.0f);
+
+    m_RadialMotionBlurMaterialHdl->SetDiffuse(Vec3f(0.5f, 0.5f, 0.5f));
+    m_RadialMotionBlurMaterialHdl->SetEmissive(Vec3f(1.0f, 0.75f, 0.75f));
+    m_RadialMotionBlurMaterialHdl->GetParams().Set(64.0f, 64.0f, 64.0f, 64.0f);
+
+    m_OverdrawMaterialHdl->SetBitmap(m_WhiteBitmapHdl, Material_Z::mtl_diffuse);
+    m_OverdrawMaterialHdl->SetDiffuse(Vec3f(0.0f, 0.0f, 0.0f));
+    m_OverdrawMaterialHdl->SetEmissive(Vec3f(0.05f, 0.0f, 0.05f));
+    m_OverdrawMaterialHdl->EnableRenderFlag(FL_IS_ALPHABLENDED | FL_ADDITIF);
+    m_OverdrawMaterialHdl->Changed();
+
+    m_DefaultLightDataHdl = gData.ClassMgr->NewResource(Name_Z("LightData_Z"), Name_Z("DefaultLight"));
+    m_DefaultLightDataHdl->SetColor(VEC3F_NULL);
+    m_DefaultLightDataHdl->SetAmbiant(VEC3F_NULL);
+    m_DefaultLightDataHdl->SetDir(VEC3F_FRONT);
+
+    m_SubDefaultLightDataHdl = gData.ClassMgr->NewResource(Name_Z("LightData_Z"), Name_Z("SubDefaultLight"));
+    m_SubDefaultLightDataHdl->SetColor(VEC3F_NULL);
+    m_SubDefaultLightDataHdl->SetAmbiant(Vec3f(0.3f, 0.3f, 0.3f));
+    m_SubDefaultLightDataHdl->SetDir(VEC3F_FRONT);
+}
+
+SystemDatas_Z::~SystemDatas_Z() { }

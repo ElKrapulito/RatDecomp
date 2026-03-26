@@ -6,6 +6,8 @@
 #include "Node_ZHdl.h"
 #include "World_ZHdl.h"
 #include "Occluder_ZHdl.h"
+#include "StaticArray_Z.h"
+
 class Renderer_Z;
 
 class Viewport_Z {
@@ -14,12 +16,9 @@ public:
     ~Viewport_Z();
     void Init();
 
-    void SetPosAndSize(S32 i_StartX, S32 i_StartY, S32 i_SizeX, S32 i_SizeY) {
-        m_StartX = i_StartX;
-        m_StartY = i_StartY;
-        m_SizeX = i_SizeX;
-        m_SizeY = i_SizeY;
-    }
+    void SetPosAndSize(S32 i_StartX, S32 i_StartY, S32 i_SizeX, S32 i_SizeY);
+
+    void GetPosAndSize(S32& o_StartX, S32& o_StartY, S32& o_SizeX, S32& o_SizeY) const;
 
     void SetRenderer(Renderer_Z* i_Renderer) {
         m_Renderer = i_Renderer;
@@ -47,19 +46,21 @@ public:
         return m_CameraNodeHdl;
     }
 
+    void SetWorld(const World_ZHdl& i_WorldHdl);
+
     const World_ZHdl& GetWorld() const {
         return m_WorldHdl;
-    } 
+    }
 
     void RegisterManip(const ManipulatorDraw_ZHdl& i_ManipDrawHdl);
     void UnregisterManip(const ManipulatorDraw_ZHdl& i_ManipDrawHdl);
     void Draw(DrawInfo_Z& i_DrawInfo);
 
 private:
-    U32 m_StartX;
-    U32 m_StartY;
-    U32 m_SizeX;
-    U32 m_SizeY;
+    S32 m_StartX;
+    S32 m_StartY;
+    S32 m_SizeX;
+    S32 m_SizeY;
     World_ZHdl m_WorldHdl;
     Occluder_ZHdl m_OccluderHdl;
     Node_ZHdl m_CameraNodeHdl;
@@ -91,12 +92,9 @@ private:
     Float m_UnkFloat0x80;
     Float m_UnkFloat0x84;
     Float m_UnkFloat0x88;
-    U16 m_IdxInMat4x4Buffer;
-    ManipulatorDraw_ZHdl* ManipDrawHdls[16];
-    S32 m_NumOfManipDraws;
-    Char m_UnkBytes0xD4[12];
+    U16 m_CameraMatrixId; // Index of camera matrix in Mat4x4Buffer_Z
+    StaticArray_Z<ManipulatorDraw_ZHdl, 16> m_ManipDrawHdls;
     Renderer_Z* m_Renderer;
-    U8 m_UnkBytes0xE4[12];
 };
 
 #endif

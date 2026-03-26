@@ -88,8 +88,8 @@ public:
         return m_Str[i_Index];
     }
 
-    U32 StrLen() const {
-        return strlen(m_Str);
+    S32 StrLen() const {
+        return (S32)strlen(m_Str);
     }
 
 private:

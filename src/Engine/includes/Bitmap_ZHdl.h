@@ -6,6 +6,6 @@
 class Bitmap_Z;
 HANDLE_Z(Bitmap_Z, ResourceObject_Z);
 
-typedef DynArray_Z<Bitmap_ZHdl> Bitmap_ZHdlArray;
+typedef DynArray_Z<Bitmap_ZHdl, 32> Bitmap_ZHdlDA;
 
 #endif

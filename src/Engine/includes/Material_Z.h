@@ -57,11 +57,11 @@ public:
     }
 
     inline Float GetOpacity() const {
-        return m_Opacity;
+        return m_DiffuseOpacity;
     }
 
     inline Bitmap_ZHdl& GetBitmap(S32 i_Id = mtl_diffuse) {
-        return m_BmapHdl[i_Id];
+        return m_BmapHdls[i_Id];
     }
 
     inline U8 GetTileU() {
@@ -73,7 +73,8 @@ public:
     }
 
     inline void SetBitmap(const Bitmap_ZHdl& i_BmapHdl, S32 i_Id = mtl_diffuse) {
-        m_BmapHdl[i_Id] = i_BmapHdl;
+        m_BmapHdls[i_Id] = i_BmapHdl;
+        Changed();
     }
 
     inline void SetTranslation(const Vec2f& i_Trans) {
@@ -97,7 +98,8 @@ public:
     }
 
     inline void SetOpacity(Float i_Opacity) {
-        m_Opacity = i_Opacity;
+        m_DiffuseOpacity = i_Opacity;
+        Changed();
     }
 
     inline void GetTileU(U8 i_TileU) {
@@ -153,6 +155,7 @@ public:
 
     inline void EnableRenderFlag(U32 i_Flag) {
         m_RdrFlag |= i_Flag;
+        Changed();
     }
 
     inline void DisableRenderFlag(U32 i_Flag) {
@@ -179,11 +182,23 @@ public:
         return m_ConstantAlphaWriteValue;
     }
 
+    inline void SetCode(U32 i_Code) {
+        m_RdrFlag = (m_RdrFlag & ~MATERIAL_CODE_ALL) | i_Code;
+    }
+
+    inline U32 GetCode() const {
+        return m_RdrFlag & MATERIAL_CODE_ALL;
+    }
+
+    inline Vec4f& GetParams() {
+        return m_Params;
+    }
+
 private:
     Vec3f m_DiffuseColor Aligned_Z(16); // $SABE: Could be wrong, maybe they had manual padding
     Float m_DiffuseOpacity;
     Vec3f m_EmissiveColor;
-    Float m_Opacity; // $VIOLET: COULD BE WRONG
+    Float m_UnkFloat_0x3c; // $VIOLET: COULD BE WRONG
     Mat3x3 m_UVTransform;
     Vec4f m_Specular; // $VIOLET: Power in W
     Vec4f m_Params;   // Used by water
@@ -191,7 +206,7 @@ private:
     Vec2f m_Translation;
     Vec2f m_Scale;
     U32 m_ColFlag;
-    U32 m_RdrFlag;
+    U32 m_RdrFlag; // Lower 5 bits are "Code"
     U32 m_ObjectFlag;
     U8 m_Flag; // Used to indicate which bitmaps are used + pawap material
     U8 m_TileU;
@@ -199,7 +214,7 @@ private:
     U8 m_ConstantAlphaWriteValue;
     U32 m_RdrFlag2;
     WaterHeightMap_Z* m_WaterHeightMap;
-    Bitmap_ZHdl m_BmapHdl[mtl_nb_params];
+    Bitmap_ZHdl m_BmapHdls[mtl_nb_params];
 };
 
 #endif

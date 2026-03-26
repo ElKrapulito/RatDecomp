@@ -5,8 +5,7 @@
 DSIOResult __read_file(u32 handle, u8* buffer, size_t* count, void* ref_con);
 DSIOResult __write_file(u32 handle, u8* buffer, size_t* count, void* ref_con);
 DSIOResult __close_file(u32 handle, u8* buffer, size_t* count, void* ref_con);
-DSIOResult __access_file(u32 handle, u8* buffer, size_t* count, void* ref_con,
-                         MessageCommandID cmd);
+DSIOResult __access_file(u32 handle, u8* buffer, size_t* count, void* ref_con, MessageCommandID cmd);
 
 /* 80372258-80372314 36CB98 00BC+00 0/0 1/0 0/0 .text            __read_console */
 DSIOResult __read_console(u32 handle, u8* buffer, size_t* count, void* ref_con) {
@@ -32,8 +31,7 @@ static DSIOResult __write_file(u32 handle, u8* buffer, size_t* count, void* ref_
     return __access_file(handle, buffer, count, ref_con, DSMSG_WriteFile);
 }
 
-static DSIOResult __access_file(u32 handle, u8* buffer, size_t* count, void* ref_con,
-                                       MessageCommandID cmd) {
+static DSIOResult __access_file(u32 handle, u8* buffer, size_t* count, void* ref_con, MessageCommandID cmd) {
     size_t countTemp;
     u32 r0;
 
@@ -46,11 +44,30 @@ static DSIOResult __access_file(u32 handle, u8* buffer, size_t* count, void* ref
     *count = countTemp;
 
     switch ((u8)r0) {
-    case DS_IONoError:
-        return DS_IONoError;
-    case DS_IOEOF:
-        return DS_IOEOF;
+        case DS_IONoError:
+            return DS_IONoError;
+        case DS_IOEOF:
+            return DS_IOEOF;
     }
 
     return DS_IOError;
+}
+
+static DSIOResult __close_file(u32 handle, u8* buffer, size_t* count, void* ref_con) {
+
+    if (GetTRKConnected() == DS_NoError) {
+        return DS_IOError;
+    }
+
+    handle = TRKCloseFile(0xd3, (u32)buffer);
+    switch (handle & 0xFF) {
+        case DS_IONoError:
+            return DS_IONoError;
+
+        case DS_IOEOF:
+            return DS_IOEOF;
+
+        default:
+            return DS_IOError;
+    }
 }

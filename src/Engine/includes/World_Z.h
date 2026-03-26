@@ -3,6 +3,18 @@
 #include "ResourceObject_Z.h"
 #include "Node_ZHdl.h"
 #include "OccludedSeadHandle_Z.h"
+#include "AnimFrame_ZHdl.h"
+#include "Graph_ZHdl.h"
+#include "ManipulatorDraw_ZHdl.h"
+#include "CameraZone_ZHdl.h"
+#include "Occluder_ZHdl.h"
+#include "StaticArray_Z.h"
+
+struct SubWorldData_Z {
+    U8 m_Pad_0x0[0x168];
+};
+
+typedef DynArray_Z<SubWorldData_Z, 8> SubWorldData_ZDA;
 
 class World_Z : public ResourceObject_Z {
 public:
@@ -30,6 +42,14 @@ public:
         return m_RootNodeHdl;
     }
 
+    inline S32 GetNbOccluder() {
+        return m_OccluderHdls.GetSize();
+    }
+
+    inline Occluder_ZHdl& GetOccluder(S32 i_Idx) {
+        return m_OccluderHdls[i_Idx];
+    }
+
     static BaseObject_Z* NewObject() { return NewL_Z(314) World_Z; }
 
 private:
@@ -44,6 +64,15 @@ private:
     BaseObject_ZHdl m_MainHFogDataHdl; // TODO: It's a HFogData_ZHdl
     OccludedSeadHandle_Z m_SeadDisplay;
     SeadHandle_Z m_SeadCollide;
+    AnimFrame_ZHdlDA m_AnimFrameHdls;
+    Graph_ZHdlDA m_GraphHdls;
+    Node_ZHdlDA m_NoSeadNodeHdls; // Not sure
+    Node_ZHdlDA m_NoFrustumClippingNodeHdls;
+    Node_ZHdlDA m_NoOccluderClippingNodeHdls;
+    SubWorldData_ZDA m_SubWorldDatas;
+    ManipulatorSceneDraw_ZHdlDA m_ManipulatorSceneDrawHdls;
+    StaticArray_Z<CameraZone_ZHdl, 8> m_CameraZoneHdls;
+    StaticArray_Z<Occluder_ZHdl, 8> m_OccluderHdls;
     // TODO: More members
 };
 

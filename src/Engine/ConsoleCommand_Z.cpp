@@ -258,7 +258,7 @@ Bool Console_Z::InterpCommand(const Char* i_CommandStr, U32 i_Depth) {
         return TRUE;
     }
     else {
-        LaunchCommand(i_CommandStr, l_CommandStack[0], i_Depth, l_Curr);
+        return LaunchCommand(i_CommandStr, l_CommandStack[0], i_Depth, l_Curr);
     }
 }
 

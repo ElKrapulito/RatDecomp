@@ -50,9 +50,9 @@ public:
     void RemoveClassId(const Name_Z& i_Name, const Name_Z& i_FileName);
     BaseObject_ZHdl GetObjectInClass(const S32 i_ClassID, const S32 i_EnumID);
 
-	HashName_ZTable_Z& GetEnum() {
-		return m_Enum;
-	}
+    HashName_ZTable_Z& GetEnum() {
+        return m_Enum;
+    }
 };
 
 #endif

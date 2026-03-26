@@ -31,6 +31,10 @@ public:
     void DoStart();
     void Stop();
 
+    inline void SetMaterial(const Material_ZHdl& i_MaterialHdl) {
+        m_MaterialHdl = i_MaterialHdl;
+    }
+
 private:
     U8 m_PlayFlag;
     KeyframerHdl_Z m_BmapHdlKfr;

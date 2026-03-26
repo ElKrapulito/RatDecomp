@@ -35,9 +35,10 @@ public:
     void Send(abc_message i_Msg, ABC_Agent* i_Receiver, Float i_Param = UNDEFINED_FVALUE);
     void SendTimed(abc_message i_Msg, ABC_Agent* i_Receiver, Float i_Delay, Float i_Param = UNDEFINED_FVALUE);
     void SetName(const Name_Z& i_Name, Bool i_ResToo = FALSE);
-	operator BaseObject_ZHdl() const {
-		return GetHandle();
-	}
+
+    operator BaseObject_ZHdl() const {
+        return GetHandle();
+    }
 };
 
 #endif

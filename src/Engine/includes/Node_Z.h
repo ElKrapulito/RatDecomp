@@ -207,7 +207,7 @@ private:
     Node_Z* m_HeadSon;
     Node_Z* m_Prev;
     Node_Z* m_Next;
-    LightData_Z* m_LightData; // needs actually defined.
+    LightData_Z* m_LightData;
     HFogData_Z* m_HFogData;
     Bitmap_Z* m_RadiosityBitmap;
     BaseObject_Z* m_UnkObjPtr_0x158;

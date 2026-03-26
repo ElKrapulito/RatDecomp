@@ -110,7 +110,7 @@ public:
     String_Z<ARRAY_CHAR_MAX> m_UnkString_0x59d;
     String_Z<ARRAY_CHAR_MAX> m_LocalSavePath; // In Roaming on windows
     U32 m_EngineFlag;
-    U32 m_UserJobId;
+    U32 m_MaterialFlag; // Which channels of materials are enabled
     U32 m_GameFlag;
     U32 m_Unk_0x7ac;
     U32 m_UnkError_0x7b0;

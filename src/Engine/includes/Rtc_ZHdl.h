@@ -6,5 +6,6 @@
 class Rtc_Z;
 class ResourceObject_Z;
 HANDLE_Z(Rtc_Z, ResourceObject_Z);
+typedef DynArray_Z<Rtc_ZHdl, 4> Rtc_ZHdlDA;
 
 #endif
