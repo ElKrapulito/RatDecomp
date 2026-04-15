@@ -12,11 +12,11 @@ public:
     HFog_Z();
 
     // clang-format off
-    virtual ~HFog_Z() { }                                             /* 0x08 */
-    virtual void Load(void** i_Data);                                 /* 0x0C */
-    virtual void Clean();                                             /* 0x10 */
-    virtual void Draw(DrawInfo_Z& i_DrawInfo, ObjectDatas_Z* i_Data); /* 0x14 */
-    virtual void UpdateObject(Node_Z* i_Node, ObjectDatas_Z* i_Data); /* 0x18 */
+    virtual ~HFog_Z() { }
+    virtual void Load(void** i_Data);
+    virtual void Clean();
+    virtual void Draw(DrawInfo_Z& i_DrawInfo, ObjectDatas_Z* i_Data);
+    virtual void UpdateObject(Node_Z* i_Node, ObjectDatas_Z* i_Data);
     // clang-format on
 
     inline void SetWorldMatrix(const Mat4x4& i_World) {

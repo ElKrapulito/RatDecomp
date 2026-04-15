@@ -8,16 +8,16 @@
 BEGIN_AGENT_CLASS(ParticlesAgent_Z, Agent_Z, 12)
 public:
     ParticlesAgent_Z();
-    virtual void Init();                                /* 0x08 */
-    virtual ~ParticlesAgent_Z() { }                     /* 0x0C */
-    virtual Bool MarkHandles();                         /* 0x10 */
-    virtual void Suspend();                             /* 0x24 */
-    virtual void Restore();                             /* 0x28 */
-    virtual void Reset();                               /* 0x2C */
-    virtual void UseNode(Node_ZHdl& a1);                /* 0x30 */
-    virtual void RegisterWithGame(Game_ZHdl& a1);       /* 0x34 */
-    virtual void UnRegisterFromGame(Game_ZHdl& a1);     /* 0x38 */
-    virtual void DoFollow();                            /* 0x3C */
+    virtual void Init();
+    virtual ~ParticlesAgent_Z() { }
+    virtual Bool MarkHandles();
+    virtual void Suspend();
+    virtual void Restore();
+    virtual void Reset();
+    virtual void UseNode(Node_ZHdl& a1);
+    virtual void RegisterWithGame(Game_ZHdl& a1);
+    virtual void UnRegisterFromGame(Game_ZHdl& a1);
+    virtual void DoFollow();
 
     void Pause();
     void Resume();

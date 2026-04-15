@@ -10,15 +10,51 @@
 class Material_Z;
 class WaterHeightMap_Z;
 
+// Used for shaders and other material specific rendering logic
+enum MaterialCode_Z {
+    FL_MTL_CODE_DIFFUSE = 0,
+    FL_MTL_CODE_TRANSFORM = 1, // Set to use alpha mask for envmap (maybe not this name)
+    FL_MTL_CODE_UNK2 = 2,
+    FL_MTL_CODE_UNK3 = 3,
+    FL_MTL_CODE_UNK4 = 4,
+    FL_MTL_CODE_EAU = 5, // Water
+    FL_MTL_CODE_LAYER = 6,
+    FL_MTL_CODE_EAU_DYNAMIC = 7, // Dynamic water
+    FL_MTL_CODE_WATER_OCEAN = 8,
+    FL_MTL_CODE_UNK9 = 9,
+    FL_MTL_CODE_UNK10 = 10,
+    FL_MTL_CODE_UNK11 = 11,
+    FL_MTL_CODE_BLOOM = 12,
+    FL_MTL_CODE_UNK13 = 13,
+    FL_MTL_CODE_UNK14 = 14,
+    FL_MTL_CODE_SONAR = 15,
+    FL_MTL_CODE_STENCIL = 16,
+    FL_MTL_CODE_UNK17 = 17,
+    FL_MTL_CODE_UNK18 = 18,
+    FL_MTL_CODE_UNK19 = 19,
+    FL_MTL_CODE_UNK20 = 20,
+    FL_MTL_CODE_UNK21 = 21,
+    FL_MTL_CODE_UNK22 = 22,
+    FL_MTL_CODE_UNK23 = 23,
+    FL_MTL_CODE_UNK24 = 24,
+    FL_MTL_CODE_UNK25 = 25,
+    FL_MTL_CODE_UNK26 = 26,
+    FL_MTL_CODE_UNK27 = 27,
+    FL_MTL_CODE_UNK28 = 28,
+    FL_MTL_CODE_LAST = 29
+};
+
+#define FL_MTL_CODE_ALL (FL_MTL_CODE_DIFFUSE | FL_MTL_CODE_TRANSFORM | FL_MTL_CODE_UNK2 | FL_MTL_CODE_UNK3 | FL_MTL_CODE_UNK4)
+
 class Material_Z : public ResourceObject_Z {
 public:
     enum mtl_params {
-        mtl_diffuse = 0, ///< Diffuse bitmap channel
-        mtl_envmap,      ///< EnvMap bitmap channel
-        mtl_bumpmap,     ///< Bump Map bitmap channel
-        mtl_specularmap, ///< Specular Map bitmap channel
+        mtl_diffuse = 0, // Diffuse bitmap channel
+        mtl_envmap,      // EnvMap bitmap channel
+        mtl_bumpmap,     // Bump Map bitmap channel
+        mtl_specularmap, // Specular Map bitmap channel
 
-        mtl_nb_params ///< Total number of channels supported in materials
+        mtl_nb_params // Total number of channels supported in materials
     };
 
     Material_Z();
@@ -183,11 +219,11 @@ public:
     }
 
     inline void SetCode(U32 i_Code) {
-        m_RdrFlag = (m_RdrFlag & ~MATERIAL_CODE_ALL) | i_Code;
+        m_RdrFlag = (m_RdrFlag & ~FL_MTL_CODE_ALL) | i_Code;
     }
 
     inline U32 GetCode() const {
-        return m_RdrFlag & MATERIAL_CODE_ALL;
+        return m_RdrFlag & FL_MTL_CODE_ALL;
     }
 
     inline Vec4f& GetParams() {
@@ -206,7 +242,7 @@ private:
     Vec2f m_Translation;
     Vec2f m_Scale;
     U32 m_ColFlag;
-    U32 m_RdrFlag; // Lower 5 bits are "Code"
+    U32 m_RdrFlag; // Lower 5 bits are "Code" (MaterialCode_Z)
     U32 m_ObjectFlag;
     U8 m_Flag; // Used to indicate which bitmaps are used + pawap material
     U8 m_TileU;

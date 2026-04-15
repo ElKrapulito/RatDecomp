@@ -24,8 +24,8 @@ Node_Z::Node_Z()
     SetDisplaySeadId(-1);
     m_OccluderZoneStartId = 0;
     SetWorldId(-1);
-    SetUnkFloat5(0.0f);
-    SetUnkFloat6(0.0f);
+    SetStart(0.0f);
+    SetEnd(0.0f);
     m_Color.Set(1.0f, 1.0f, 1.0f, 1.0f);
     m_Scale = 1.0f;
     m_UniformScale = 1.0f;

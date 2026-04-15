@@ -21,29 +21,29 @@ class PlayerSaveStruct_G {
 
 class ScriptManager_G : public ABC_ScriptManager {
 
-    virtual ~ScriptManager_G();                                                   /* 0x08 */
-    virtual void Init();                                                          /* 0x0C */
-    virtual void Shut();                                                          /* 0x10 */
-    virtual void MarkHandles();                                                   /* 0x14 */
-    virtual void ReadEnumFromFiles();                                             /* 0x18 */
-    virtual void MateriaInterpColFlag(const Char* a1);                            /* 0x1C */
-    virtual void MateriaInterpObjFlag(const Char* a1);                            /* 0x20 */
-    virtual void MateriaRemoveColFlag(const Char* a1);                            /* 0x24 */
-    virtual void GameSet(const Game_ZHdl& i_GameHdl);                             /* 0x28 */
-    virtual void GameAgentSet(const Game_ZHdl& i_GameHdl);                        /* 0x2C */
-    virtual void RemoveGame(const Game_ZHdl& i_GameHdl);                          /* 0x30 */
-    virtual void GameReseted(const Game_ZHdl& i_GameHdl);                         /* 0x34 */
-    virtual void ActivateGame(const Game_ZHdl& i_GameHdl);                        /* 0x38 */
-    virtual void UpdateIndependentResources(const World_ZHdl& a1);                /* 0x3C */
-    virtual void InterpKeyframeMsg(const RegMessage_Z& a1);                       /* 0x40 */
-    virtual void StreamRemoving(const Game_ZHdl& i_GameHdl, const Node_ZHdl& a2); /* 0x44 */
-    virtual void StreamDone(const Game_ZHdl& i_GameHdl, const Node_ZHdl& a2);     /* 0x48 */
-    virtual void StreamDone(const Game_ZHdl& i_GameHdl, S32 a2);                  /* 0x4C */
-    virtual void Update(Float a1);                                                /* 0x50 */
-    virtual void Minimize();                                                      /* 0x54 */
-    virtual void SetPlayer(S32 a1, ABC_AgentHdl a2);                              /* 0x58 */
-    virtual void GetPlayer(S32 a1);                                               /* 0x5C */
-    virtual void ResetGame(Game_ZHdl& i_GameHdl);                                 /* 0x60 */
+    virtual ~ScriptManager_G();
+    virtual void Init();
+    virtual void Shut();
+    virtual void MarkHandles();
+    virtual void ReadEnumFromFiles();
+    virtual U32 MateriaInterpColFlag(const Char* a1);
+    virtual U32 MateriaInterpObjFlag(const Char* a1);
+    virtual U32 MateriaRemoveColFlag(const Char* a1);
+    virtual void GameSet(const Game_ZHdl& i_GameHdl);
+    virtual void GameAgentSet(const Game_ZHdl& i_GameHdl);
+    virtual void RemoveGame(const Game_ZHdl& i_GameHdl);
+    virtual void GameReseted(const Game_ZHdl& i_GameHdl);
+    virtual void ActivateGame(const Game_ZHdl& i_GameHdl);
+    virtual void UpdateIndependentResources(const World_ZHdl& a1);
+    virtual void InterpKeyframeMsg(const RegMessage_Z& a1);
+    virtual void StreamRemoving(const Game_ZHdl& i_GameHdl, const Node_ZHdl& a2);
+    virtual void StreamDone(const Game_ZHdl& i_GameHdl, const Node_ZHdl& a2);
+    virtual void StreamDone(const Game_ZHdl& i_GameHdl, S32 a2);
+    virtual void Update(Float a1);
+    virtual Bool Minimize();
+    virtual void SetPlayer(S32 a1, ABC_AgentHdl a2);
+    virtual void GetPlayer(S32 a1);
+    virtual void ResetGame(Game_ZHdl& i_GameHdl);
 
     U8 m_Pad_0xc8[0xF8];
     GameDifficulty m_Difficulty;

@@ -79,8 +79,8 @@ public:
 
     void SetTranslation(const Vec3f& i_Translation);
 
-    inline Vec3f& GetTranslation() {
-        return GetWorldMatrix().GetTranslation();
+    inline const Vec3f& GetTranslation() {
+        return GetWorldMatrix().GetMatrixTrans();
     }
 
     inline Mat4x4& GetInverseWorldMatrix() {
@@ -163,19 +163,19 @@ public:
         return m_InverseRotInWorldMatrix.m.m23.dummy.i16[0];
     }
 
-    inline void SetUnkFloat5(Float i_Value) {
+    inline void SetStart(Float i_Value) {
         m_InverseRotInWorldMatrix.m.m03.dummy.f32 = i_Value;
     }
 
-    inline Float GetUnkFloat5() const {
+    inline Float GetStart() const {
         return m_InverseRotInWorldMatrix.m.m03.dummy.f32;
     }
 
-    inline void SetUnkFloat6(Float i_Value) {
+    inline void SetEnd(Float i_Value) {
         m_InverseRotInWorldMatrix.m.m13.dummy.f32 = i_Value;
     }
 
-    inline Float GetUnkFloat6() const {
+    inline Float GetEnd() const {
         return m_InverseRotInWorldMatrix.m.m13.dummy.f32;
     }
 
@@ -187,7 +187,7 @@ private:
     Agent_ZHdl m_Agent;
     Mat4x4 m_InverseWorldMatrix;
     Mat3x3 m_RotInWorldMatrix;        // has 3 hidden values (cause it's 3x4) mat[0][3] = collideSeadsId1, mat[1][3] = placeholderWorldMatrixPtr, mat[2][3] = displaySeadsId1
-    Mat3x3 m_InverseRotInWorldMatrix; // has 3 hidden values (cause it's 3x4) mat[0][3] = unknown5, mat[1][3] = unknown6 and mat[2][3] is 2 uint16's (worldId and worldMatrixId)
+    Mat3x3 m_InverseRotInWorldMatrix; // has 3 hidden values (cause it's 3x4) mat[0][3] = Sound Attenuation Start Distance, mat[1][3] = Sound Attenuation End Distance and mat[2][3] is 2 uint16's (worldId and worldMatrixId)
     Quat m_RotInWorld;
     Vec3f m_Translation;
     U32 m_Flag;

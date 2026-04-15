@@ -25,7 +25,9 @@ public:
     virtual void ActionOnDeactivate();
     virtual void Update(Float i_DeltaTime) = 0;
 
-    inline ActivableGroup_Z GetGroup() { return m_ManipGroup; }
+    inline ActivableGroup_Z GetGroup() const { return m_ManipGroup; }
+
+    inline Bool IsActive() const { return m_IsActive; }
 
 protected:
     Manipulator_Z* m_PreviousPtr;
@@ -38,11 +40,11 @@ protected:
 class ManipulatorDraw_Z : public Manipulator_Z {
 public:
     ManipulatorDraw_Z();
-    virtual void Init();                             /* 0x08 */
-    virtual ~ManipulatorDraw_Z();                    /* 0x0C */
-    virtual void Update(Float i_DeltaTime);          /* 0x10 */
-    virtual void Draw(const Viewport_Z* i_Vp);       /* 0x14 */
-    virtual void Draw(const DrawInfo_Z& i_DrawInfo); /* 0x18 */
+    virtual void Init();
+    virtual ~ManipulatorDraw_Z();
+    virtual void Update(Float i_DeltaTime);
+    virtual void Draw(const Viewport_Z* i_Vp);
+    virtual void Draw(const DrawInfo_Z& i_DrawInfo);
 
     void VpRegister();
     void VpRegister(S32 i_VpId);
@@ -55,13 +57,13 @@ protected:
 class ManipulatorSceneDraw_Z : public Manipulator_Z {
 public:
     ManipulatorSceneDraw_Z();
-    virtual void Init(); /* 0x08 */
+    virtual void Init();
 
-    virtual ~ManipulatorSceneDraw_Z() { } /* 0x0C */
+    virtual ~ManipulatorSceneDraw_Z() { }
 
-    virtual void Update(Float i_DeltaTime);                /* 0x10 */
-    virtual void BeforeDraw(const DrawInfo_Z& i_DrawInfo); /* 0x14 */
-    virtual void Draw(const DrawInfo_Z& i_DrawInfo);       /* 0x18 */
+    virtual void Update(Float i_DeltaTime);
+    virtual void BeforeDraw(const DrawInfo_Z& i_DrawInfo);
+    virtual void Draw(const DrawInfo_Z& i_DrawInfo);
 };
 
 #endif

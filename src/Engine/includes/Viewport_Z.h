@@ -7,6 +7,7 @@
 #include "World_ZHdl.h"
 #include "Occluder_ZHdl.h"
 #include "StaticArray_Z.h"
+#include "Math_Z.h"
 
 class Renderer_Z;
 
@@ -32,6 +33,36 @@ public:
         return m_VSize;
     }
 
+    Float GetDFov() const {
+        ASSERTLE_Z(m_DFov >= 0.0f, "", 67, "DFov>=0.f");
+        return m_DFov;
+    }
+
+    Float GetTang() const {
+        ASSERTLE_Z(m_Tangent >= 0.0f, "", 68, "Tang>=0.f");
+        return m_Tangent;
+    }
+
+    Float GetInvDTang() const {
+        ASSERTLE_Z(m_InvDiagTangent >= 0.0f, "", 69, "InvDTang>=0.f");
+        return m_InvDiagTangent;
+    }
+
+    Float GetRatio() const {
+        ASSERTLE_Z(m_Ratio > 0.0f, "", 70, "Ratio>0.f");
+        return m_Ratio;
+    }
+
+    Float GetHRatio() const {
+        ASSERTLE_Z(m_HRatio > 0.0f, "", 71, "HRatio>0.f");
+        return m_HRatio;
+    }
+
+    Float GetVRatio() const {
+        ASSERTLE_Z(m_VRatio > 0.0f, "", 72, "VRatio>0.f");
+        return m_VRatio;
+    }
+
     Float GetHCenter() const {
         ASSERTLE_Z(m_HCenter > 0.0f, "", 75, "HCenter>0.f");
         return m_HCenter;
@@ -54,6 +85,7 @@ public:
 
     void RegisterManip(const ManipulatorDraw_ZHdl& i_ManipDrawHdl);
     void UnregisterManip(const ManipulatorDraw_ZHdl& i_ManipDrawHdl);
+    void UpdateFrustrum();
     void Draw(DrawInfo_Z& i_DrawInfo);
 
 private:
@@ -64,35 +96,20 @@ private:
     World_ZHdl m_WorldHdl;
     Occluder_ZHdl m_OccluderHdl;
     Node_ZHdl m_CameraNodeHdl;
-    Float m_Tangent;
-    Float m_InvDiagTangent;
-    Float m_DFov;
-    Float m_Ratio;
-    Float m_HRatio;
-    Float m_VRatio;
-    Float m_HSize;
-    Float m_VSize;
-    Float m_HCenter;
-    Float m_VCenter;
-    Float m_UnkFloat0x44;
-    Float m_UnkFloat0x48;
-    Float m_UnkFloat0x4C;
-    Float m_UnkFloat0x50;
-    Float m_UnkFloat0x54;
-    Float m_UnkFloat0x58;
-    Float m_UnkFloat0x5C;
-    Float m_UnkFloat0x60;
-    Float m_UnkFloat0x64;
-    Float m_UnkFloat0x68;
-    Float m_UnkFloat0x6C;
-    Float m_UnkFloat0x70;
-    Float m_UnkFloat0x74;
-    Float m_UnkFloat0x78;
-    Float m_UnkFloat0x7C;
-    Float m_UnkFloat0x80;
-    Float m_UnkFloat0x84;
-    Float m_UnkFloat0x88;
-    U16 m_CameraMatrixId; // Index of camera matrix in Mat4x4Buffer_Z
+    Float m_Tangent;          // tan(FOV / 2)
+    Float m_InvDiagTangent;   // Ratio between the alternate/edit FOV tangent and m_Tangent
+    Float m_DFov;             // Projection plane distance derived from viewport width and FOV
+    Float m_Ratio;            // Aspect ratio normalized against 4:3. 1.0f = 4:3, > 1.0f = wider, < 1.0f = narrower
+    Float m_HRatio;           // Horizontal frustum half-extent at unit distance
+    Float m_VRatio;           // Vertical frustum half-extent at unit distance
+    Float m_HSize;            // Horizontal projection scale or derived horizontal projection size
+    Float m_VSize;            // Vertical projection scale or derived vertical projection size
+    Float m_HCenter;          // Horizontal viewport center or projection center offset
+    Float m_VCenter;          // Vertical viewport center or projection center offset
+    Vec3f m_PlanesDir[4];     // World space directions of the 4 main side frustum planes
+    Vec3f m_FrustumBoundsMin; // Minimum corner of the viewport frustum AABB in world space
+    Vec3f m_FrustumBoundsMax; // Maximum corner of the viewport frustum AABB in world space
+    U16 m_CameraMatrixId;     // Index of camera matrix in Mat4x4Buffer_Z
     StaticArray_Z<ManipulatorDraw_ZHdl, 16> m_ManipDrawHdls;
     Renderer_Z* m_Renderer;
 };

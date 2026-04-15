@@ -8,18 +8,18 @@
 BEGIN_AGENT_CLASS(CameraAgent_Z, Agent_Z, 11)
 public:
     CameraAgent_Z();
-    virtual ~CameraAgent_Z() { }                                               /* 0x0C */
-    virtual void Init();                                                       /* 0x08 */
-    virtual Bool MarkHandles();                                                /* 0x10 */
-    virtual void Suspend();                                                    /* 0x24 */
-    virtual void Restore();                                                    /* 0x28 */
-    virtual void Reset();                                                      /* 0x2C */
-    virtual void RegisterWithGame(Game_ZHdl& a1);                              /* 0x30 */
-    virtual void UnRegisterFromGame(Game_ZHdl& a1);                            /* 0x34 */
-    virtual void GetNbCameraManipulator();                                     /* 0x38 */
-    virtual void GetCameraManipulator(S32 a1);                                 /* 0x3C */
-    virtual void SetViewport(S32 m_ViewportId);                                /* 0x40 */
-    virtual void InterpMessage(int a1, Float a2);                              /* 0x44 */
+    virtual ~CameraAgent_Z() { }
+    virtual void Init();
+    virtual Bool MarkHandles();
+    virtual void Suspend();
+    virtual void Restore();
+    virtual void Reset();
+    virtual void RegisterWithGame(Game_ZHdl& a1);
+    virtual void UnRegisterFromGame(Game_ZHdl& a1);
+    virtual void GetNbCameraManipulator();
+    virtual void GetCameraManipulator(S32 a1);
+    virtual void SetViewport(S32 m_ViewportId);
+    virtual void InterpMessage(int a1, Float a2);
 
     S32 GetViewport() {
         return m_ViewportId;

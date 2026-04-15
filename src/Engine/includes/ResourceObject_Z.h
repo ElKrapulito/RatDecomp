@@ -29,7 +29,7 @@ public:
     virtual void LoadLinks(void** a1);
     virtual void EndLoadLinks();
     virtual Bool MarkHandles();
-    ResourceObjectLink_Z m_ResObjLink; /* 0x08 */
+    ResourceObjectLink_Z m_ResObjLink;
 };
 
 #endif

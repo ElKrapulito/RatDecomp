@@ -19,8 +19,7 @@ public:
 protected:
     Vec2f m_PMin;
     Vec2f m_PMax;
-    S32 m_UnkS32_0x10;
-    Float m_UnkFloat_0x14;
+    Vec2f m_InvDiag; // 1.0f / (m_PMax - m_PMin)
     S32 m_SizeX;
     S32 m_SizeY;
     S32 m_FirstFreeIdx;

@@ -151,6 +151,48 @@ public:
         m_ReservedSize = 0;
     }
 
+    void Insert(int i_Index, const T& i_Ele) {
+        DYNARRAY_Z_EXP(m_ArrayPtr == NULL || !(&i_Ele >= m_ArrayPtr && &i_Ele < m_ArrayPtr + (INT_PTR_Z)GetSize()));
+
+        if (i_Index == (int)m_Size) {
+            Add(i_Ele);
+            return;
+        }
+        DYNARRAY_Z_EXP(i_Index < (int)m_Size && i_Index >= 0);
+        if (!m_ReservedSize) {
+            DYNARRAY_Z_EXP(Granularity <= DYA_RSVSIZEMAX);
+            m_ReservedSize = Granularity;
+            Realloc(m_ReservedSize + m_Size);
+        }
+        memmove((void*)&m_ArrayPtr[i_Index + 1], (void*)&m_ArrayPtr[i_Index], (m_Size - i_Index) * sizeof(T));
+        if (InitObject)
+            new (&m_ArrayPtr[i_Index]) T(i_Ele);
+        else
+            m_ArrayPtr[i_Index] = i_Ele;
+        DYNARRAY_Z_EXP(m_Size < DYA_SIZEMAX);
+        m_Size++;
+        m_ReservedSize--;
+    }
+
+    void Insert(int i_Index) {
+        if (i_Index == (int)m_Size) {
+            Add();
+            return;
+        }
+        DYNARRAY_Z_EXP(i_Index < (int)m_Size && i_Index >= 0);
+        if (!m_ReservedSize) {
+            DYNARRAY_Z_EXP(Granularity <= DYA_RSVSIZEMAX);
+            m_ReservedSize = Granularity;
+            Realloc(m_ReservedSize + m_Size);
+        }
+        memmove(&m_ArrayPtr[i_Index + 1], &m_ArrayPtr[i_Index], (m_Size - i_Index) * sizeof(T));
+        if (InitObject)
+            new (&m_ArrayPtr[i_Index]) T();
+        DYNARRAY_Z_EXP(m_Size < DYA_SIZEMAX);
+        m_Size++;
+        m_ReservedSize--;
+    }
+
     T& Get(int i_Index) {
         DYNARRAY_Z_EXP(i_Index < m_Size);
         return m_ArrayPtr[i_Index];

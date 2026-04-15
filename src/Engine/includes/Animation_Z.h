@@ -78,13 +78,13 @@ public:
     Animation_Z();
 
     // clang-format off
-    virtual ~Animation_Z() { }        /* 0x08 */
-    virtual void Load(void** i_Data); /* 0x0C */
-    virtual void EndLoad();           /* 0x10 */
-    virtual void AfterEndLoad();      /* 0x14 */
-    virtual void EndLoadLinks();      /* 0x18 */
-    virtual void Clean();             /* 0x1C */
-    virtual Bool MarkHandles();       /* 0x20 */
+    virtual ~Animation_Z() { }
+    virtual void Load(void** i_Data);
+    virtual void EndLoad();
+    virtual void AfterEndLoad();
+    virtual void EndLoadLinks();
+    virtual void Clean();
+    virtual Bool MarkHandles();
     // clang-format on
 
     static BaseObject_Z* NewObject() {

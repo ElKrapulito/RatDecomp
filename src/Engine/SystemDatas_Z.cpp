@@ -42,14 +42,14 @@ SystemDatas_Z::SystemDatas_Z() {
     memset(l_Bitmap->GetDatas(), 0xFF, 0x800);
     l_Bitmap->SetTransp(BM_NO_TRANSP);
 
-    m_StencilMaterialHdl->SetCode(MATERIAL_CODE_UNK4);
+    m_StencilMaterialHdl->SetCode(FL_MTL_CODE_STENCIL);
     m_StencilMaterialHdl->EnableRenderFlag(FL_ADDITIF);
 
-    m_BloomMaterialHdl->SetCode(MATERIAL_CODE_UNK2 | MATERIAL_CODE_UNK3);
+    m_BloomMaterialHdl->SetCode(FL_MTL_CODE_BLOOM);
     m_BloomMaterialHdl->SetDiffuse(Vec3f(0.35f, 0.35f, 0.35f));
     m_BloomMaterialHdl->SetOpacity(1.0f);
 
-    m_SonarMaterialHdl->SetCode(MATERIAL_CODE_UNK0 | MATERIAL_CODE_UNK1 | MATERIAL_CODE_UNK2 | MATERIAL_CODE_UNK3);
+    m_SonarMaterialHdl->SetCode(FL_MTL_CODE_SONAR);
     m_SonarMaterialHdl->SetBitmap(m_BloomBitmapHdl, 0);
     m_SonarMaterialHdl->SetDiffuse(Vec3f(0.5f, 0.5f, 0.5f));
     m_SonarMaterialHdl->SetEmissive(Vec3f(0.75f, 0.75f, 1.0f));

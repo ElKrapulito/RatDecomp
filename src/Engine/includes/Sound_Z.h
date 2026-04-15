@@ -44,12 +44,12 @@ public:
     }
 
 private:
-    S32 m_Frequency;  /* 0x14 */
-    S32 m_SoundSize;  /* 0x18 */
-    U8 m_Flag;        /* 0x1C */
-    U8 m_Unk0x1D;     /* 0x1D */
-    S32 m_XRamBlock;  /* 0x20 */
-    S32 m_SndDatas_Z; /* 0x24 */
+    S32 m_Frequency;
+    S32 m_SoundSize;
+    U8 m_Flag;
+    U8 m_Unk0x1D;
+    S32 m_XRamBlock;
+    S32 m_SndDatas_Z;
 };
 
 #endif

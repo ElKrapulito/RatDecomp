@@ -25,6 +25,7 @@ public:
     virtual void LoadDone();
     virtual Bool MarkHandles();
 
+    void Draw(DrawInfo_Z& i_DrawInfo);
     void EndDraw();
 
     Node_ZHdl GetNodeByName(const Name_Z& i_Name) const;
@@ -48,6 +49,22 @@ public:
 
     inline Occluder_ZHdl& GetOccluder(S32 i_Idx) {
         return m_OccluderHdls[i_Idx];
+    }
+
+    inline S32 GetNbVp() const {
+        return m_NbVp;
+    }
+
+    inline S32 GetFirstVp() const {
+        return m_FirstPlayerVpId;
+    }
+
+    inline S32 GetNbManipulatorSceneDraw() const {
+        return m_ManipulatorSceneDrawHdls.GetSize();
+    }
+
+    inline const ManipulatorSceneDraw_ZHdl& GetManipulatorSceneDraw(S32 i_Idx) const {
+        return m_ManipulatorSceneDrawHdls[i_Idx];
     }
 
     static BaseObject_Z* NewObject() { return NewL_Z(314) World_Z; }

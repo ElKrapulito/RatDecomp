@@ -27,7 +27,7 @@ Renderer_Z::Renderer_Z() {
     REGISTERCOMMAND("StartRenderBench", StartRenderBench);
     m_ActiveViewport = 0;
     m_EffectFlag = FL_EFFECT_BLOOM | FL_EFFECT_VSYNC;
-    m_DefaultScreenRatio = RATIO_SCREEN_STANDARD;
+    m_XScaleFactor = RATIO_SCREEN_STANDARD;
     EnableEffectFlag(FL_EFFECT_CLEAR_SCREEN);
     m_UnkRtcFXColor.Set(0.5f, 0.5f, 0.5f, 1.0f);
     m_UnkVec3f_001_0x76c = Vec3f(0.0f, 0.0f, 1.0f);

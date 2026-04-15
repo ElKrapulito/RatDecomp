@@ -125,9 +125,9 @@ class AnimationManager_Z : public ClassNameResManager_Z {
 public:
     AnimationManager_Z();
 
-    virtual Bool MarkHandles();    /* 0x08 */
-    virtual Bool Minimize();       /* 0x0C */
-    virtual ~AnimationManager_Z(); /* 0x10 */
+    virtual Bool MarkHandles();
+    virtual Bool Minimize();
+    virtual ~AnimationManager_Z();
 
     S32 GetNodeByName(const Name_Z& i_Name);
     void SetNodeId(const Name_Z& i_Name, S32 i_Id);

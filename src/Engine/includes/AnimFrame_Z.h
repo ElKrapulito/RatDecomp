@@ -254,11 +254,11 @@ public:
 
     // clang-format off
 
-    virtual ~AnimFrame_Z();                   /* 0x08 */
-    virtual void Load(void** i_Data);         /* 0x0C */
-    virtual void EndLoad();                   /* 0x10 */
-    virtual Bool MarkHandles();               /* 0x14 */
-    virtual void Update(Float i_DeltaTime) {} /* 0x18 */
+    virtual ~AnimFrame_Z();
+    virtual void Load(void** i_Data);
+    virtual void EndLoad();
+    virtual Bool MarkHandles();
+    virtual void Update(Float i_DeltaTime) {}
 
     // clang-format on
 

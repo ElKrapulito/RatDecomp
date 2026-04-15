@@ -9,18 +9,18 @@
 BEGIN_AGENT_CLASS(AnimatedAgent_Z, AnimatedMsgAgent_Z, 15)
 public:
     AnimatedAgent_Z();
-    virtual void Init();                             /* 0x08 */
-    virtual ~AnimatedAgent_Z() { }                   /* 0x0C */
-    virtual Bool MarkHandles();                      /* 0x10 */
-    virtual void Suspend();                          /* 0x24 */
-    virtual void Restore();                          /* 0x28 */
-    virtual void Reset();                            /* 0x2C */
-    virtual void UseNode(Node_ZHdl& a1);             /* 0x30 */
-    virtual void RegisterWithGame(Game_ZHdl& a1);    /* 0x34 */
-    virtual void UnRegisterFromGame(Game_ZHdl& a1);  /* 0x38 */
-    virtual void GetCollisionMessageAction(int& a1); /* 0x3C */
-    virtual void SetCollisionMessageAction(int a1);  /* 0x40 */
-    virtual void Drop();                             /* 0x44 */
+    virtual void Init();
+    virtual ~AnimatedAgent_Z() { }
+    virtual Bool MarkHandles();
+    virtual void Suspend();
+    virtual void Restore();
+    virtual void Reset();
+    virtual void UseNode(Node_ZHdl& a1);
+    virtual void RegisterWithGame(Game_ZHdl& a1);
+    virtual void UnRegisterFromGame(Game_ZHdl& a1);
+    virtual void GetCollisionMessageAction(int& a1);
+    virtual void SetCollisionMessageAction(int a1);
+    virtual void Drop();
 
     PlayAnim_Z* GetPlayAnim() { return m_PlayAnimHdl; }
 

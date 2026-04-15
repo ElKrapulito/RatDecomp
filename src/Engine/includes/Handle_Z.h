@@ -90,6 +90,10 @@ public:
         return l_Ptr != NULL;
     }
 
+    Bool operator==(const BaseObject_ZHdl& i_Other) const {
+        return m_RealID.GblID == i_Other.m_RealID.GblID;
+    }
+
     operator BaseObject_Z*() const;
 
 protected:

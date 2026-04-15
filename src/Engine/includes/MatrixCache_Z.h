@@ -23,6 +23,10 @@ public:
         return &m_MatArray[l_Id];
     }
 
+    inline S32 GetCurBuffer() const {
+        return m_CurBuffer;
+    }
+
 private:
     DynArray_Z<Mat4x4, 32, FALSE, FALSE> m_MatArray;
     DynArray_Z<MatDbId, 32, FALSE> m_MatIdArray;

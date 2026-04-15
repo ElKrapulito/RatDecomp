@@ -170,6 +170,7 @@ void Z_FreeContiguous(void* i_Ptr);
 
 // $SABE: Don't know where to put this
 Extern_Z "C" void* memcpy(void* dest, const void* src, int n);
+Extern_Z "C" void* memmove(void* dest, const void* src, int n);
 
 #ifdef __MWERKS__
 #define builtin_memcpy(dest, src, n) __memcpy(dest, src, n);

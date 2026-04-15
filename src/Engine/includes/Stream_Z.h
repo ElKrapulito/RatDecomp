@@ -19,10 +19,10 @@ public:
         , m_ErrorCode(0) {
     }
 
-    virtual void Open(const Char* i_Buffer);                        /* 0x18 */
-    virtual void Process(void* o_Buffer, S32 i_Offset, S32 i_Size); /* 0x1C */
-    virtual void Close();                                           /* 0x20 */
-    virtual void Update();                                          /* 0x24 */
+    virtual void Open(const Char* i_Buffer);
+    virtual void Process(void* o_Buffer, S32 i_Offset, S32 i_Size);
+    virtual void Close();
+    virtual void Update();
 
     S32 GetErrorCode() const { return m_ErrorCode; }
 

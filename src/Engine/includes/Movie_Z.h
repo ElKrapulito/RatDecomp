@@ -24,22 +24,22 @@ class Movie_Z {
     Color m_Color;
 
 public:
-    virtual ~Movie_Z();                                          /* 0x08 */
-    virtual Bool Init();                                         /* 0x0C */
-    virtual void Shut();                                         /* 0x10 */
-    virtual void Play(const Char* i_FilePath, U32 i_Flags);      /* 0x14 */
-    virtual void Pause(Bool i_Pause);                            /* 0x18 */
-    virtual void Skip(Float i_SkipTime);                         /* 0x1C */
-    virtual void GetExtension();                                 /* 0x20 */
-    virtual void PlayMovie(const Char* i_FilePath, U32 i_Flags); /* 0x24 */
-    virtual void StopMovie();                                    /* 0x28 */
-    virtual void SwitchFullScreen();                             /* 0x2C */
-    virtual void DisplayChanged();                               /* 0x30 */
-    virtual void PaintVideo();                                   /* 0x34 */
-    virtual void MarkHandles();                                  /* 0x38 */
-    virtual void Update(Float i_DeltaTime);                      /* 0x3C */
-    virtual void Draw(DrawInfo_Z& i_DrawInfo);                   /* 0x40 */
-    virtual void RemoveManip(const MovieManipHdl& i_ManipHdl);   /* 0x44 */
+    virtual ~Movie_Z();
+    virtual Bool Init();
+    virtual void Shut();
+    virtual void Play(const Char* i_FilePath, U32 i_Flags);
+    virtual void Pause(Bool i_Pause);
+    virtual void Skip(Float i_SkipTime);
+    virtual void GetExtension();
+    virtual void PlayMovie(const Char* i_FilePath, U32 i_Flags);
+    virtual void StopMovie();
+    virtual void SwitchFullScreen();
+    virtual void DisplayChanged();
+    virtual void PaintVideo();
+    virtual void MarkHandles();
+    virtual void Update(Float i_DeltaTime);
+    virtual void Draw(DrawInfo_Z& i_DrawInfo);
+    virtual void RemoveManip(const MovieManipHdl& i_ManipHdl);
 
     Bool IsPlaying();
     U32 GetLastError();

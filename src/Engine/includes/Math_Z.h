@@ -4,7 +4,8 @@
 #include "Types_Z.h"
 #include "Bitmap_Z.h"
 
-#define Float_Eps 1.e-6f
+const Float Float_Eps = 1.e-6f;
+const Float Float_Eps_2 = 1.e-12f;
 #define Pi 3.14159265358979323846f
 #define ROL_Z(val, shift) ((val << shift) | (val >> ((sizeof(val) * 8) - shift)))
 #define ROR_Z(val, shift) ((val >> shift) | (val << ((sizeof(val) * 8) - shift)))
@@ -16,6 +17,24 @@ struct Quat;
 struct QuatComp_Z;
 struct Mat3x3;
 struct Mat4x4;
+
+inline Float Sqrt(register Float x) {
+#if defined(__MWERKS__)
+    register Float Ret = 0.f;
+
+    if (x) {
+        asm
+        {
+            frsqrte	fp4,x
+            fres	Ret,fp4
+        }
+    }
+
+    return Ret;
+#else
+    return sqrtf(x);
+#endif
+}
 
 inline Float InvSqrt(register Float x, register Float y = 1.f) {
     register Float Ret = 0.0f;
@@ -242,7 +261,7 @@ struct Vec3f {
 
     Float GetNorm2() const { return (*this) * (*this); }
 
-    Float GetNorm() const { return sqrtf(GetNorm2()); }
+    Float GetNorm() const { return Sqrt(GetNorm2()); }
 
     inline Vec3f& Normalize() {
         return (*this) *= InvSqrt(GetNorm2());
@@ -255,6 +274,22 @@ struct Vec3f {
     Vec3f& HNormalize() {
         *this = (Vec3f(x, 0.f, z) / HGetNorm());
         return *this;
+    }
+
+    Bool CNormalize() {
+        const Float n((*this) * (*this));
+
+        // $SABE - From MixedRealityToolikt: Using Float_Eps generates precision problems
+#ifndef BUGFIXES_Z
+        if (n > Float_Eps)
+#else
+        if (n > Float_Eps_2)
+#endif
+        {
+            (*this) *= InvSqrt(n);
+            return TRUE;
+        }
+        return FALSE;
     }
 };
 
@@ -570,7 +605,16 @@ public:
     void Set(const Mat4x4& i_m);
     inline Vec2f operator*(const Vec2f& i_v) const;
 
-    inline Vec3f operator*(const Vec3f& i_v) const;
+    inline Vec3f operator*(const Vec3f& i_v) const {
+        Vec3f l_v;
+
+        l_v.x = m.m[0][0] * i_v.x + m.m[1][0] * i_v.y + m.m[2][0] * i_v.z;
+        l_v.y = m.m[0][1] * i_v.x + m.m[1][1] * i_v.y + m.m[2][1] * i_v.z;
+        l_v.z = m.m[0][2] * i_v.x + m.m[1][2] * i_v.y + m.m[2][2] * i_v.z;
+
+        return l_v;
+    }
+
     inline Vec4f operator*(const Vec4f& i_v) const;
     Bool operator==(const Mat3x3& i_m) const;
     Bool operator!=(const Mat3x3& i_m) const;
@@ -597,7 +641,10 @@ struct Mat4x4 {
     Mat4x4(const Mat3x3& _Mat);
     Mat4x4(const Mat4x4& _Mat);
 
-    const Mat3x3& m3() const;
+    const Mat3x3& m3() const {
+        return *(Mat3x3*)m;
+    }
+
     Mat3x3& m3();
 
     Mat4x4& SetNull();
@@ -618,14 +665,17 @@ struct Mat4x4 {
     Vec4f& GetRow(const int i_x);
 
     void MulWithoutTrans(const Vec3f& i_v, Vec4f& o_v) const;
-    void MulWithoutTrans(const Vec3f& i_v, Vec3f& o_v) const;
+
+    inline void MulWithoutTrans(const Vec3f& i_v, Vec3f& o_v) const {
+        o_v = m3() * i_v;
+    }
+
     void MulWithoutTrans(const Vec4f& i_v, Vec4f& o_v) const;
 
     void Transp(Mat4x4& _Out) const;
 
     Float GetUniformScale() const;
     void GetScale(Vec3f& o_Scale) const;
-    const Vec3f& GetMatrixTrans() const;
     const Vec4f& GetMatrixTrans4() const;
 
     void SetTRS(const Vec3f& i_Trans, const Quat& i_Rot, const Vec3f& i_Scale);
@@ -635,10 +685,9 @@ struct Mat4x4 {
     inline Vec3f operator*(const Vec3f& i_Vec) const;
     inline Vec4f operator*(const Vec4f& i_Vec) const;
 
-    inline Vec3f& GetTranslation() {
+    inline const Vec3f& GetMatrixTrans() const {
         return *(Vec3f*)(&m[3][0]);
     }
-
 } Aligned_Z(16);
 
 Vec3f Mat4x4::operator*(const Vec3f& i_Vec) const {

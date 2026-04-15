@@ -70,12 +70,12 @@ public:
     Bool Minimize();
 
 private:
-    virtual void Init();                             /* 0x08 */
-    virtual ~ActionHelper_G();                       /* 0x0C */
-    virtual void Reset();                            /* 0x10 */
-    virtual void Update(Float i_DeltaTime);          /* 0x14 */
-    virtual void Draw(const DrawInfo_Z& i_DrawInfo); /* 0x18 */
-    virtual void Activate();                         /* 0x1C */
+    virtual void Init();
+    virtual ~ActionHelper_G();
+    virtual void Reset();
+    virtual void Update(Float i_DeltaTime);
+    virtual void Draw(const DrawInfo_Z& i_DrawInfo);
+    virtual void Activate();
 
 private:
     Game_ZHdl m_GameHdl;

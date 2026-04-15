@@ -6,7 +6,6 @@
 #include "Perlin3D_Z.h"
 #include "Gaussian_Z.h"
 #include "PrimitiveBuffers_Z.h"
-#include "Assert_Z.h"
 #include "Viewport_Z.h"
 #include "StaticArray_Z.h"
 
@@ -30,6 +29,77 @@
 #define FL_EFFECT_UNK_0x4000 (U32)(1 << 14)         // 0x4000
 #define FL_EFFECT_RADIAL_MOTION_BLUR (U32)(1 << 15) // 0x8000
 #define FL_EFFECT_DEBUG_BUFFERS (U32)(1 << 29)      // 0x20000000
+
+// $SABE: From MonopolyX360SUB.xdb
+// enum __SceneOrder__
+// {
+//     so_none=0,
+//     so_compute=1,
+//     so_scene=2,
+//     so_2d=3,
+//     so_last=4,
+//     so_count=5
+// };
+
+// enum __SceneGroupOrder__
+// {
+//     so_group_shadow_first=0,
+//     so_group_omni_shadow_first=10,
+//     so_group_shadow_last=67,
+//     so_group_cube_first=67,
+//     so_group_cube_last=79,
+//     so_group_gbuffer_begin=80,
+//     so_group_gbuffer_draw=81,
+//     so_group_gbuffer_resolve=82,
+//     so_group_deferred_begin=90,
+//     so_group_deferred_dlight=92,
+//     so_group_deferred_omnis=93,
+//     so_group_deferred_shadows=94,
+//     so_group_deferred_ssao=98,
+//     so_group_deferred_resolve=99,
+//     so_group_scene_warp=100,
+//     so_group_scene_fbackground=101,
+//     so_group_scene_fbackground_last=102,
+//     so_group_scene=121,
+//     so_group_edition_selection_begin=130,
+//     so_group_edition_selection_end=131
+// };
+
+// enum __DrawingOrder__
+// {
+//     do_null=0,
+//     do_none=1,
+//     do_fur=2,
+//     do_opaque=3,
+//     do_treesclose=4,
+//     do_grass=5,
+//     do_ground=6,
+//     do_treesfar=7,
+//     do_ground_far=8,
+//     do_ground_fade=9,
+//     do_ground_veryfar=10,
+//     do_ground_farfade=11,
+//     do_sky=12,
+//     do_shadow_cast=13,
+//     do_scene_draw=14,
+//     do_downsample_eye_z=15,
+//     do_ssao_occlusion_pass=16,
+//     do_water=17,
+//     do_playspace_stencil=18,
+//     do_transp_first=19,
+//     do_transp=20,
+//     do_flare=21,
+//     do_postproc=22,
+//     do_postproc2=23,
+//     do_before_screen_fx=24,
+//     do_screen_fx=25,
+//     do_after_scene=26,
+//     do_after_scene_transp=27,
+//     do_deferred_shadows=28,
+//     do_global_screen_fx=29,
+//     do_last=30,
+//     do_count=31
+// };
 
 class Omni_Z;
 class Camera_Z;
@@ -79,8 +149,18 @@ struct OmniStruct_Z {
 typedef StaticArray_Z<OmniStruct_Z, 64, FALSE, FALSE> OmniStruct_ZSA;
 
 struct DrawInfo_Z {
-    Mat4x4 Local2Cam;
-    Mat4x4 World2Cam;
+
+    enum {
+        FL_DRAWINFO_NONE = 0,
+        FL_DRAWINFO_UNK_0x1 = 1,
+        FL_DRAWINFO_UNK_0x2 = 2,
+        FL_DRAWINFO_UNK_0x4 = 4,
+        FL_DRAWINFO_NO_HFOG = 8,
+        FL_DRAWINFO_NO_DLIGHT = 16,
+    };
+
+    Mat4x4 m_Local2Cam;
+    Mat4x4 m_World2Cam;
     Box_Z m_BBoxCamSpace;
     ClipSphere_Z m_ClipSph;
     Viewport_Z* m_Vp;
@@ -244,7 +324,7 @@ private:
     Float m_UnkParam_0; // $VIOLET: always 0
     Float m_HCenter;
     Float m_VCenter;
-    Float m_DefaultScreenRatio;
+    Float m_XScaleFactor;
     Float m_GpuTargetMsOrFps;
     Float m_UnkFloat_0_0x8bc;
     Float m_CpuTargetMsOrFps;
@@ -281,7 +361,9 @@ public:
 
     Viewport_Z& GetViewport(S32 i_ViewportID) { return m_Viewports[i_ViewportID]; }
 
-    Float GetScreenRatio();
+    inline Float GetScreenRatio() {
+        return ScreenRatio;
+    }
 
     virtual ~Renderer_Z();
     virtual Bool Init(S32 i_SizeX, S32 i_SizeY);
@@ -297,8 +379,8 @@ public:
     virtual void Minimize();
     virtual void Draw(S32 i_ViewportId, Float i_DeltaTime);
     virtual void SetViewMatrix(Bool a1);
-    virtual void DrawTransparent(DrawInfo_Z& a1);
-    virtual void DrawPostRenderEffects(DrawInfo_Z& a1);
+    virtual void DrawTransparent(DrawInfo_Z& i_DrawInfo);
+    virtual void DrawPostRenderEffects(DrawInfo_Z& i_DrawInfo);
     virtual void InitViewport(U32 a1);
     virtual void ClearZBuffer(S32 a1, S32 a2, S32 a3, S32 a4);
     virtual void ClearFrameBuffer(S32 a1, S32 a2, S32 a3, S32 a4);
@@ -435,10 +517,19 @@ public:
         return m_NbViewports;
     }
 
+    inline Float GetScreenRatio() const {
+        return ScreenRatio;
+    }
+
+    inline Float GetXScaleFactor() const {
+        return m_XScaleFactor;
+    }
+
 private:
     DynArray_Z<VertexBuffer_Z*> m_VertexBufferPtrDA;
     DynArray_Z<IndexBuffer_Z*> m_IndexBufferPtrDA;
     PerlinArray3D_Z<8, 8, 8> m_PerlinArray3D;
+    static Float ScreenRatio;
 };
 
 Bool SetSplitType();

@@ -10,20 +10,20 @@ public:
         EnableFlag(FL_AGENT_PAUSED);
     }
 
-    virtual ~StreamAgent_Z() { }                                          /* 0x08 */
-    virtual Bool MarkHandles();                                           /* 0x0C */
+    virtual ~StreamAgent_Z() { }
+    virtual Bool MarkHandles();
 
     DECL_BHV(StreamEnd);
     DECL_BHV(StreamAborted);
     DECL_BHV(StreamError);
     DECL_BHV(StreamResumed);
 
-    virtual void Start();                                                 /* 0x30 */
-    virtual void End();                                                   /* 0x34 */
-    virtual void Resume(S32 i_Cause);                                     /* 0x38 */
-    virtual void Resumed();                                               /* 0x3C */
-    virtual void Abort();                                                 /* 0x40 */
-    virtual void Aborted();                                               /* 0x44 */
+    virtual void Start();
+    virtual void End();
+    virtual void Resume(S32 i_Cause);
+    virtual void Resumed();
+    virtual void Abort();
+    virtual void Aborted();
 
 private:
     StreamFile_ZHdl m_StreamHdl;
