@@ -4,11 +4,9 @@
 #include "Parameters_Z.h"
 #include "DebugTools_Z.h"
 #include "Memory_Z.h"
-#include "ConsoleInterp_Z.h"
 #include "Program_Z.h"
 #include "Console_Z.h"
-#include "StreamManager_Z.h"
-#include "SetLanguage.h"
+#include "Language_Z.h"
 
 Extern_Z void RegisterGameMgrCommand() {
     RegisterGameCommand();
@@ -21,7 +19,7 @@ Extern_Z void RegisterGameMgrCommand() {
     REGISTERCOMMANDC("SwitchGameToMUlti", SwitchGameToMulti, " WorldName NbVp");
     REGISTERCOMMANDC("AddGamePlayer", AddGamePlayer, " WorldName PlayerId(1-MAX_NUMBER_OF_PLAYERS) PlayerName [TeamId=0]");
     REGISTERCOMMANDC("AddMenuPlayer", AddMenuPlayer, " WorldName PlayerId(1-MAX_NUMBER_OF_PLAYERS) PlayerName [TeamId=0]");
-    REGISTERCOMMANDC("RemoveGamePlayer", RemoveGamePlayer, " WorldName PlayerId(1-MAX_NUMBER_OF_PLAYERS)");
+    REGISTERCOMMANDC("ReMoveGamePlayer", RemoveGamePlayer, " WorldName PlayerId(1-MAX_NUMBER_OF_PLAYERS)");
     REGISTERCOMMANDC("REsetGame", ResetGame, " VpId(1-MAX_VIEWPORT)");
     REGISTERCOMMANDC("DeactivateGamePlayer", DeactivateGamePlayer, " WorldName PlayerId(1-MAX_NUMBER_OF_PLAYERS)");
     REGISTERCOMMANDC("ACtivateGamePlayer", ActivateGamePlayer, " WorldName PlayerId(1-MAX_NUMBER_OF_PLAYERS)");
@@ -42,11 +40,11 @@ Extern_Z void RegisterGameMgrCommand() {
 }
 
 Bool SetMultiGame() {
-    SetGame(false);
+    return SetGame(FALSE);
 }
 
 Bool SetMonoGame() {
-    SetGame(true);
+    return SetGame(TRUE);
 }
 
 Bool SetGame(Bool i_IsMono) {
@@ -54,7 +52,7 @@ Bool SetGame(Bool i_IsMono) {
 }
 
 Bool AddGamePlayer() {
-    return AddPlayer(false);
+    return AddPlayer(FALSE);
 }
 
 Bool AddMenuPlayer() {
@@ -66,11 +64,11 @@ Bool AddPlayer(Bool i_IsMenu) {
 }
 
 Bool RemoveGamePlayer() {
-  return TRUE;
+    return TRUE;
 }
 
 Bool ActivateGamePlayer() {
-  return TRUE;
+    return TRUE;
 }
 
 Bool DeactivateGamePlayer() {
@@ -140,11 +138,10 @@ Bool AddTransText() {
     return TRUE;
 }
 
-Bool SetLanguage() 
-{
+Bool SetLanguage() {
     if (gData.Cons->GetNbParam() < 2) {
-            return TRUE;
-        }
+        return TRUE;
+    }
     SetLanguage((int)gData.Cons->GetParamFloat(1), -1, 0);
     return TRUE;
 }

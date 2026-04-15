@@ -7,6 +7,8 @@
 U8 GetCharIdFromText(Char* i_Text);
 Bool TT(int i_Id);
 Bool FreeLanguage();
+// TODO: Make enum def.
+int SetLanguage(int i_TextLang, int i_SoundLang, int i_MovieLang);
 
 struct Language_Z {
     /* $VIOLET: These might be defined in the cpp and not in this struct.*/
