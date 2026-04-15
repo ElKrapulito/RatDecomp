@@ -922,7 +922,7 @@ config.libs = [
             Object(NonMatching, "Engine/GameRtc_Z.cpp"),
             Object(NonMatching, "Engine/EmiterDraw_Z.cpp"),
             Object(Matching,    "Engine/AnimationManagerSkel_Z.cpp"),
-            Object(NonMatching, "Engine/CameraEngineZoneColl_Z.cpp"),
+            Object(Matching, "Engine/CameraEngineZoneColl_Z.cpp"),
             Object(NonMatching, "Engine/Breakable_Z.cpp"),
             Object(NonMatching, "Engine/Material_Z.cpp"),
             Object(NonMatching, "Engine/ObjectsGameSkel_Z.cpp"),
