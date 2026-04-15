@@ -130,6 +130,14 @@ public:
     inline Frustrum_Z& GetFrustrum() {
         return m_Frustum;
     }
+
+    inline const Vec3f& GetTarget() const {
+        return m_Target;
+    }
+
+    inline const Vec3f& GetWorldPos() const {
+        return m_WorldPos;
+    }
 };
 
 #endif

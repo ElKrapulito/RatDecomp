@@ -8,6 +8,8 @@
 #include "Occluder_ZHdl.h"
 #include "StaticArray_Z.h"
 #include "Math_Z.h"
+#include "Camera_Z.h"
+#include "Node_Z.h"
 
 class Renderer_Z;
 
@@ -77,10 +79,18 @@ public:
         return m_CameraNodeHdl;
     }
 
+    inline const Vec3f& GetCameraPos() const {
+        return ((Camera_Z*)m_CameraNodeHdl->GetObjectA())->GetWorldPos();
+    }
+
     void SetWorld(const World_ZHdl& i_WorldHdl);
 
     const World_ZHdl& GetWorld() const {
         return m_WorldHdl;
+    }
+
+    const Occluder_ZHdl& GetOccluder() const {
+        return m_OccluderHdl;
     }
 
     void RegisterManip(const ManipulatorDraw_ZHdl& i_ManipDrawHdl);
@@ -106,7 +116,10 @@ private:
     Float m_VSize;            // Vertical projection scale or derived vertical projection size
     Float m_HCenter;          // Horizontal viewport center or projection center offset
     Float m_VCenter;          // Vertical viewport center or projection center offset
-    Vec3f m_PlanesDir[4];     // World space directions of the 4 main side frustum planes
+    Vec3f m_PlaneDirL;        // World space direction left frustum plane
+    Vec3f m_PlaneDirR;        // World space direction right frustum plane
+    Vec3f m_PlaneDirB;        // World space direction bottom frustum plane
+    Vec3f m_PlaneDirT;        // World space direction top frustum plane
     Vec3f m_FrustumBoundsMin; // Minimum corner of the viewport frustum AABB in world space
     Vec3f m_FrustumBoundsMax; // Maximum corner of the viewport frustum AABB in world space
     U16 m_CameraMatrixId;     // Index of camera matrix in Mat4x4Buffer_Z

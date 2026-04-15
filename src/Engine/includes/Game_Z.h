@@ -18,6 +18,8 @@ Bool Cmd_LoadSubData();
 Bool Cmd_RemoveSubData();
 
 class Game_Z : public BaseObject_Z {
+    friend class GameManager_Z;
+
 public:
     struct SubInterp_Z {
         U8 m_UnkBytes_0x0[20];

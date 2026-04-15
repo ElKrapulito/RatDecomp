@@ -6,7 +6,44 @@
 #include "ABC_AgentHdl.h"
 #include "Sound_ZHdl.h"
 
+#define SND_MGR_MAX_OCCLUDER_ZONE_IDS 7
+#define SND_MGR_MAX_TRACKS 32
+
 class BoneNode_Z;
+
+Bool Cmd_PlayMusic();
+Bool Cmd_StopMusic();
+Bool Cmd_OpenSBF();
+Bool Cmd_CloseSBF();
+Bool Cmd_PlayDialog();
+
+#define FL_TRACK_NONE (U32)(0 << 0)
+
+struct Track_Z {
+    Bool Release();
+
+    S32 m_FrameRequestedNb; // Frame in which the sound was requested to start playing
+    Vec4f m_RandValues;
+    Sound_ZHdl m_SoundHdl;
+    Node_ZHdl m_NodeHdl;
+    BoneNode_Z* m_BoneNode;
+    Float m_LifeTime;
+    Bool m_Used;
+    Float m_FadeDecrementStep; // Multiplied by dt to subtract from curfadeprogress
+    Float m_CurFadeProgress;   // Goes from 1.0f to 0.0f
+    S32 m_PitchRatio;
+    Float m_VolumeFactor;
+    ABC_AgentHdl m_AgentHdl;
+    abc_message m_MsgToSend;
+    U32 m_Flags;
+    Float m_AttenuationStartDistance;
+    Float m_AttenuationEndDistance;
+    Float m_DistanceCamToSound;
+    S32 m_UnkZoneId;
+    S32 m_CamOccluderZoneId;
+    S32 m_SoundOccluderZoneId;
+    Float m_OcclusionFactor;
+};
 
 class SoundManager_Z : public ClassNameResManager_Z {
 public:
@@ -15,7 +52,7 @@ public:
     virtual void Shut();
     virtual Bool Minimize();
     virtual ~SoundManager_Z();
-    virtual void Init();
+    virtual Bool Init();
     virtual void CloseFrame();
     virtual void Update(Float a1);
     virtual void Draw(DrawInfo_Z& i_DrawInfo);
@@ -42,11 +79,11 @@ public:
     virtual void IsStreamPlaying(const Char* a1);
     virtual void IsAnyStreamPlaying();
     virtual void LoadMusic(const Char* a1);
-    virtual void PlayMusic(const Char* a1, U32 a2, Float a3, Float a4);
-    virtual void SkipMusic(const Name_Z& a1, const Name_Z& a2, U32 a3, bool a4);
+    virtual void PlayMusic(const Char* i_FilePath, U32 i_Flag, Float i_StopTime, Float i_FadeInTime);
+    virtual void SkipMusic(const Name_Z& a1, const Name_Z& a2, U32 a3, Bool a4);
     virtual void SkipMusicQueueSize();
     virtual void GetMusicTime();
-    virtual void StopMusic(Float a1);
+    virtual void StopMusic(Float i_FadeOutTime);
     virtual void IsMusicPlaying();
     virtual void GetLipSyncFromStream(const Node_ZHdl& a1);
     virtual void PlaySound(Sound_ZHdl& i_SoundHdl, U32 i_Flag, const Node_ZHdl& i_NodeHdl, BoneNode_Z* i_BoneNode = NULL);
@@ -58,6 +95,35 @@ public:
     virtual void GetTrackTime(S32 a1);
     virtual void GetDlgDTime(S32 a1);
     virtual void GetUsedTrackString();
+
+    void FreeTrack(S32 i_TrackIdx);
+
+private:
+    Track_Z m_Tracks[SND_MGR_MAX_TRACKS];
+    S32 m_NbTracksFailedToPlay;
+    S32 m_VpOccluderZoneIds[SND_MGR_MAX_OCCLUDER_ZONE_IDS];
+    U32 m_NbFreeTracks;
+    S32 m_SRamSize; // Jimmy DWARF
+    S32 m_Flag;     // Jimmy DWARF
+    S32 m_SoundMode;
+    U32 m_MuteStateFlag;
+    Float m_MusicVolume;
+    Float m_MusicVolumeSecondary;
+    Float m_SfxVolume;
+    Float m_SfxVolumeSecondary;
+    Float m_DialogVolume;
+    Float m_DialogVolumeSecondary;
+    Float m_RandomFreqScaleLow;
+    Float m_RandomFreqScaleHigh;
+    Float m_MusicFadeOutMaxTime;
+    Float m_MusicFadeOutCountdownTimer;
+    Float m_MusicFadeInMaxTime;
+    Float m_MusicFadeInCountdownTimer;
+    Float m_UnkFloat_0xc98;
+    Float m_MusicVolumeFactor;
+    String_Z<ARRAY_CHAR_MAX> m_MusicFilePath;
+    U32 m_MusicFlag;
+    U32 m_UnkU32_0xda4;
 };
 
 #endif // _SOUNDMANAGER_Z_H_

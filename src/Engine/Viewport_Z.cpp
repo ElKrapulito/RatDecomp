@@ -107,10 +107,10 @@ void Viewport_Z::UpdateFrustrum() {
 
     l_Camera->SetOccludedFarClip(l_Camera->GetFrustrum().m_FarClip);
 
-    m_PlanesDir[0] = l_Camera->GetFrustrum().m_ViewPlanes.m_PlaneNormals[0].xyz();
-    m_PlanesDir[1] = l_Camera->GetFrustrum().m_ViewPlanes.m_PlaneNormals[1].xyz();
-    m_PlanesDir[2] = l_Camera->GetFrustrum().m_ViewPlanes.m_PlaneNormals[2].xyz();
-    m_PlanesDir[3] = l_Camera->GetFrustrum().m_ViewPlanes.m_PlaneNormals[3].xyz();
+    m_PlaneDirL = l_Camera->GetFrustrum().m_ViewPlanes.m_PlaneNormals[0].xyz();
+    m_PlaneDirR = l_Camera->GetFrustrum().m_ViewPlanes.m_PlaneNormals[1].xyz();
+    m_PlaneDirB = l_Camera->GetFrustrum().m_ViewPlanes.m_PlaneNormals[2].xyz();
+    m_PlaneDirT = l_Camera->GetFrustrum().m_ViewPlanes.m_PlaneNormals[3].xyz();
 
     Vec3f l_Corner0(-m_HRatio, m_VRatio, 1.0f);
     Vec3f l_Corner1(-m_HRatio, -m_VRatio, 1.0f);

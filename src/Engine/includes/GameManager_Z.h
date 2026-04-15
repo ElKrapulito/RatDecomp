@@ -5,6 +5,12 @@
 #include "CameraStream_ZHdl.h"
 #include "Game_ZHdl.h"
 #include "Game_Z.h"
+#include "CameraUser_Z.h"
+#include "CameraStream_Z.h"
+#include "CameraOccluder_Z.h"
+
+#define MAX_NUMBER_OF_PLAYERS 4
+#define MAX_VIEWPORT 4
 
 class Viewport_Z;
 
@@ -40,18 +46,26 @@ Bool ShowUnmarkedMemory();
 
 class GameManager_Z {
 public:
+    GameManager_Z();
+
+    void Update(Float i_DeltaTime);
+    S32 GetGameIdByWorld(const World_ZHdl& i_WorldHdl);
     void DebugDisplay(Viewport_Z* i_Vp);
 
     inline Bool IsCameraUser(const S32 i_VpId) const {
         return m_CameraUserBools[i_VpId];
     }
 
+    inline S32 GetNbGame() const {
+        return m_GameHdls.GetSize();
+    }
+
 private:
-    CameraUser_ZHdl m_CameraUserHdls[4];
-    Bool m_CameraUserBools[4];
+    CameraUser_ZHdl m_CameraUserHdls[MAX_VIEWPORT];
+    Bool m_CameraUserBools[MAX_VIEWPORT];
     Game_ZHdlDA m_GameHdls;
-    CameraOccluder_ZHdl m_CameraOccluderHdls[4];
-    CameraStream_ZHdl m_CameraStreamHdls[4];
+    CameraOccluder_ZHdl m_CameraOccluderHdls[MAX_VIEWPORT];
+    CameraStream_ZHdl m_CameraStreamHdls[MAX_VIEWPORT];
     Bool m_IsPaused;
 };
 

@@ -11,6 +11,12 @@ public:
     static BaseObject_Z* NewObject() {
         return NewL_Z(22) CameraStream_Z;
     }
+
+    void SetViewportId(const S32 i_ViewportId) {
+        m_ViewportId = i_ViewportId;
+    }
+
+    S32 m_ViewportId;
 };
 
 #endif // _CAMERASTREAM_Z_H_

@@ -44,7 +44,12 @@ enum MaterialCode_Z {
     FL_MTL_CODE_LAST = 29
 };
 
-#define FL_MTL_CODE_ALL (FL_MTL_CODE_DIFFUSE | FL_MTL_CODE_TRANSFORM | FL_MTL_CODE_UNK2 | FL_MTL_CODE_UNK3 | FL_MTL_CODE_UNK4)
+#define FL_MTL_CODE_ALL (FL_MTL_CODE_TRANSFORM | FL_MTL_CODE_UNK2 | FL_MTL_CODE_UNK4 | FL_MTL_CODE_WATER_OCEAN | FL_MTL_CODE_STENCIL)
+
+struct MaterialUserDesc_Z {
+    S32 m_Code;                // Material code that applies to this user
+    NewObjectProc m_NewObject; // Function to create the material user object
+};
 
 class Material_Z : public ResourceObject_Z {
 public:

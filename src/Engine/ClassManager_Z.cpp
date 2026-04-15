@@ -15,6 +15,8 @@
 
 #define BIGFILE_STREAM_EXTENSION ".STR"
 
+String_Z<ARRAY_CHAR_MAX> DefaultStringClassName;
+
 ClassManager_Z::ClassManager_Z() {
     m_UnkS32_0x16c = -1;
     REGISTERCOMMANDC("OpenBF", OpenBF, " [BigFileName] [StreamAgentInherit=Default StreamAgent_Z]");

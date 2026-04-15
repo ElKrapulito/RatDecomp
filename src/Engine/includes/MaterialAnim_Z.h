@@ -3,6 +3,7 @@
 #include "ResourceObject_Z.h"
 #include "Keyframer_Z.h"
 #include "Material_ZHdl.h"
+#include "Material_Z.h"
 
 class MaterialAnim_ZHdl;
 

@@ -11,6 +11,8 @@ public:
     virtual void Reset();
     virtual void DrawBitmap(Bitmap_Z* i_Bitmap, const Sphere_Z& i_ClipSphere, const Vec2f& i_Pos);
 
+    void GetZone(const Vec3f& i_CamPos, S32& o_ZoneId);
+
     static BaseObject_Z* NewObject() { return NewL_Z(101) SplineZone_Z; }
 };
 
