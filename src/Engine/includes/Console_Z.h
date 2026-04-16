@@ -136,7 +136,7 @@ public:
     Bool NewCommand(const Char* i_CommandStr, U32 i_Depth);
     void PushCommand(const Char* i_CommandLine, Bool i_Unk);
     S32 NbPushedCommand();
-    Bool InterpCommand(const Char* i_CommandStr, U32 i_Depth);
+    Bool InterpCommand(const Char* i_CommandStr, U32 i_Depth = 0);
     Bool InterpFloat(const Char* i_CommandStr, Float& o_Value);
 
     ConsoleInterp_Z* GetInterp() const {
@@ -188,6 +188,8 @@ public:
     virtual void SaveMessage(const Char* a1);
     virtual void SaveWarningMessage(const Char* a1);
     virtual void MessageError(Bool a1, U64 a2, const Char* a3, va_list& i_Args);
+
+    static void PrintBoxString(const Char*, const Char*, ...);
 };
 
 #endif

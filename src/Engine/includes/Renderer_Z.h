@@ -381,7 +381,7 @@ public:
     virtual void SetViewMatrix(Bool a1);
     virtual void DrawTransparent(DrawInfo_Z& i_DrawInfo);
     virtual void DrawPostRenderEffects(DrawInfo_Z& i_DrawInfo);
-    virtual void InitViewport(U32 a1);
+    virtual void InitViewport(U32 i_NbViewports);
     virtual void ClearZBuffer(S32 a1, S32 a2, S32 a3, S32 a4);
     virtual void ClearFrameBuffer(S32 a1, S32 a2, S32 a3, S32 a4);
     virtual void GetRendererParams(Float& a1, Float& a2, Float& a3, Float& a4, Float& a5);

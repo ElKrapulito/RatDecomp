@@ -8,7 +8,7 @@
 #include "Console_Z.h"
 #include "Language_Z.h"
 
-Extern_Z void RegisterGameMgrCommand() {
+void RegisterGameMgrCommand() {
     RegisterGameCommand();
     REGISTERCOMMANDC("SetGame", SetMultiGame, " WorldName NbPlayers [AgentCameraClassName=CameraGame]");
     REGISTERCOMMANDC("ActivateGame", ActivateGame, " WorldName");

@@ -31,6 +31,9 @@ typedef volatile double VDouble;
 #undef S32_MIN
 #define S32_MIN -2147483648
 
+#undef U32_MINUS_ONE
+#define U32_MINUS_ONE ((U32) - 1)
+
 #undef FALSE
 #define FALSE (Bool)(0 == 1)
 

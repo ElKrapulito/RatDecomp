@@ -14,8 +14,11 @@ enum EngineFlags {
     FL_DISABLE_MUSIC = 1 << 8,
     FL_DISABLE_MOVIE = 1 << 9,
     FL_INGAME_CONSOLE = 1 << 11,
+    FL_UNK_0x1000 = 1 << 12,
     FL_OCCLUDER_ON = 1 << 14,
+    FL_MEMORY_VERIFY = 1 << 16,
     FL_STREAMZONE = 1 << 17,
+    FL_UNK_0x40000 = 1 << 18,
     FL_POPUP_MENU = 1 << 20,
     FL_STACK_TRACE = 1 << 21,
     FL_MEMORY_INFOS = 1 << 22,
@@ -24,7 +27,8 @@ enum EngineFlags {
     FL_1X1_TEXTURE = 1 << 25,
     FL_1_TRIANGLE = 1 << 26,
     FL_LOCK_VIEW = 1 << 27,
-    FL_DEBUG_SOUND = 1 << 29
+    FL_DEBUG_SOUND = 1 << 29,
+    FL_ENGINE_DEFAULT = FL_UNK_0x1000 | FL_OCCLUDER_ON | FL_UNK_0x40000
 };
 
 enum DebugFlags {
@@ -72,7 +76,8 @@ enum MaterialFlags {
     FL_MATERIAL_DIFFUSE = 1 << 0,
     FL_MATERIAL_ENVMAP = 1 << 1,
     FL_MATERIAL_NORMAL_MAP = 1 << 2,
-    FL_MATERIAL_SPECULAR_MAP = 1 << 3
+    FL_MATERIAL_SPECULAR_MAP = 1 << 3,
+    FL_MATERIAL_ALL = FL_MATERIAL_DIFFUSE | FL_MATERIAL_ENVMAP | FL_MATERIAL_NORMAL_MAP | FL_MATERIAL_SPECULAR_MAP
 };
 
 enum GameFlags {

@@ -5,10 +5,11 @@
 
 class XRamManager_Z {
 public:
-    XRamManager_Z();
+    XRamManager_Z() { }
+
     ~XRamManager_Z();
 
-    virtual void Init();
+    virtual Bool Init();
     virtual void Shut();
     virtual void Update(Float i_DeltaTime);
     virtual void Flush();

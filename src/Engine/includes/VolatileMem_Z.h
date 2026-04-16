@@ -15,6 +15,7 @@ struct VolatileBlock {
 };
 
 class VolatileMgr_Z {
+public:
     void Minimize();
 
     void AddIndex(S32& i_Block, int i_ArrayOffset) {
@@ -45,7 +46,7 @@ class VolatileMgr_Z {
 
     void SetState(int i_ArrayOffset, S32 i_State);
     VolatileMgr_Z();
-    void UpdateVolatileBlocks(Float);
+    void UpdateVolatileBlocks(Float i_DeltaTime);
     void FreeVolatileBlock_Z(U32 i_BlockIdx);
 
 private:

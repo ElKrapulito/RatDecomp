@@ -19,6 +19,9 @@ private:
 
 class ManipulatorManager_Z {
 public:
+    ManipulatorManager_Z() {
+    }
+
     void MarkHandles();
     Bool Minimize();
     void Update(Float i_DeltaTime);
@@ -38,6 +41,10 @@ public:
             }
         }
         return FALSE;
+    }
+
+    inline void EndPause() {
+        m_IsPaused = FALSE;
     }
 
 private:

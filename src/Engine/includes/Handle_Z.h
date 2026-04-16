@@ -134,7 +134,11 @@ protected:
     S32 m_NbFree;
     Name_Z m_NullName;
     BaseObject_ZHdl m_NullHandle;
+
+public:
     Bool m_UnkBool_SetsDeltaTimeTo30fps_0x34;
+
+protected:
     Bool m_DoAsynchCheckHandles;
     Bool m_ForbidCheckHandles;
     Bool m_CheckHandlesQueued;
@@ -188,6 +192,14 @@ public:
 
     inline Bool CheckKey(int i_ID, int i_Key) const {
         return (i_ID < m_HandleRecDA.GetSize() && m_HandleRecDA[i_ID].m_Key == i_Key);
+    }
+
+    inline Bool GetSetDeltaTimeTo30fps() {
+        return m_UnkBool_SetsDeltaTimeTo30fps_0x34;
+    }
+
+    inline void SetSetDeltaTimeTo30fps(Bool i_Value) {
+        m_UnkBool_SetsDeltaTimeTo30fps_0x34 = i_Value;
     }
 };
 

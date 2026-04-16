@@ -16,10 +16,15 @@ private:
     Bool m_IsPaused;
 
 public:
+    MaterialManager_Z();
+    ~MaterialManager_Z();
+
     void AddMaterialAnim(const MaterialAnim_ZHdl& i_MaterialAnimHdl);
     void Update(Float i_DeltaTime);
 
-    ~MaterialManager_Z();
+    inline void EndPause() {
+        m_IsPaused = FALSE;
+    }
 };
 
 #endif // _MATERIALMANAGER_Z_H_

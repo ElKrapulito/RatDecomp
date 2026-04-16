@@ -11,7 +11,7 @@ void* s_findalloc(void* i_RangeStart, void* i_RangeEnd);
 U32 s_getnbfindalloc(void* i_RangeStart, void* i_RangeEnd);
 void* s_getfindalloc(S32 i_AllocId, Char* l_ResultDescription, void* i_RangeStart, void* i_RangeEnd);
 Extern_Z "C" S32 sprintf(const Char* i_Buf, const Char* i_Format, ...);
-Extern_Z void s_VerifyMem();
+Extern_Z Bool s_VerifyMem();
 Extern_Z void* s_malloc_end(U32 i_Size, U32 i_Align);
 
 void Hi_MemoryManager_Z::Init() {
@@ -137,8 +137,8 @@ U32 MemoryGraphColor() {
     return FALSE;
 }
 
-void Z_Verify() {
-    s_VerifyMem();
+Bool Z_Verify() {
+    return s_VerifyMem();
 }
 
 void* operator new(U32 i_Size, void* i_Ptr) {

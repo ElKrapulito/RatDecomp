@@ -14,7 +14,7 @@
 
 class Viewport_Z;
 
-Extern_Z void RegisterGameMgrCommand();
+void RegisterGameMgrCommand();
 Bool SetMultiGame();
 Bool SetMonoGame();
 Bool SetGame(Bool i_IsMono);
@@ -58,6 +58,10 @@ public:
 
     inline S32 GetNbGame() const {
         return m_GameHdls.GetSize();
+    }
+
+    inline void EndPause() {
+        m_IsPaused = FALSE;
     }
 
 private:

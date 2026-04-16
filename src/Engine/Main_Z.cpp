@@ -56,13 +56,260 @@
 #include "ObjectsMove_Z.h"
 #include "ObjectsBounce_Z.h"
 #include "ObjectsBreak_Z.h"
+#include "VolatileMem_Z.h"
+#include "StreamManager_Z.h"
+#include "Renderer_Z.h"
+#include "SoundManager_Z.h"
+#include "InputEngine_Z.h"
+#include "SaveGame_Z.h"
+#include "ABC_ScriptManager.h"
+#include "GameManager_Z.h"
+#include "ManipulatorManager_Z.h"
+#include "EffectManager_Z.h"
+#include "ParticlesManager_Z.h"
+#include "MaterialManager_Z.h"
+#include "XRamManager_Z.h"
+#include "DebugTools_Z.h"
+#include "ErrorLanguage_Z.h"
+#include "NetManager_Virtual_Z.h"
+#include "Movie_Z.h"
+#include "World_Z.h"
+#include "AnimationManager_Z.h"
+#include "SystemDatas_Z.h"
+#include "ObjectBankManager_Z.h"
+#include "SurfaceCache_Z.h"
+
+Extern_Z "C" void exit(int);
 
 Char WhereAmI[128];
-Bool InMainLoop;
+VBool InMainLoop;
 
 void _CoreMainLoop() {
     static Float dTime;
-    static Bool init;
+    static Char init;
+    Bool l_Do30Fps;
+
+    WhereAmI_Z("Beginning");
+
+    if (!init) {
+        init = TRUE;
+        dTime = 1.0f / 60.0f;
+    }
+
+    if (gData.m_BlockFrame) {
+        gData.m_FrameBlockCountDownTime -= dTime;
+        if (gData.m_FrameBlockCountDownTime > 0.0f) {
+            dTime = gData.GetDeltaTime();
+            return;
+        }
+        Float l_TargetSecondsPerFrame = gData.m_TargetSecondsPerFrame;
+        if (l_TargetSecondsPerFrame) {
+            dTime = gData.GetOneFrameTime() * l_TargetSecondsPerFrame;
+        }
+        else {
+            dTime = 1.0f / 60.0f;
+        }
+    }
+
+    WhereAmI_Z("Before UpdateVolatileBlocks()");
+    gData.VolatileMgr->UpdateVolatileBlocks(dTime);
+
+    WhereAmI_Z("Before StreamMgr->Update()");
+    gData.StreamMgr->Update(dTime);
+
+    WhereAmI_Z("Before BeginRender()");
+    gData.MainRdr->BeginRender();
+
+    WhereAmI_Z("Before InitFrame()");
+    gData.SoundMgr->InitFrame();
+
+    WhereAmI_Z("Before SavingMgr->Update()");
+    gData.SavingMgr->Update(dTime);
+
+    WhereAmI_Z("Before InputMgr->UpdateInput()");
+    gData.InputMgr->UpdateInput(dTime);
+
+    WhereAmI_Z("Before ScriptInputMgr->Update()");
+    gData.ScriptInputMgr->Update(dTime);
+
+    WhereAmI_Z("Before ScriptMgr->Update()");
+    gData.ScriptMgr->Update(dTime);
+
+    WhereAmI_Z("Before GameMgr->Update()");
+    gData.GameMgr->Update(dTime);
+
+    WhereAmI_Z("Before ManipulatorMgr->Update()");
+    gData.ManipMgr->Update(dTime);
+
+    WhereAmI_Z("Before EffectMgr->Update()");
+    gData.EffectMgr->Update(dTime);
+
+    WhereAmI_Z("Before SoundMgr->Update()");
+    gData.SoundMgr->Update(dTime);
+
+    WhereAmI_Z("Before MainRdr->Draw()");
+    gData.MainRdr->Draw(dTime);
+
+    WhereAmI_Z("Before ParticlesMgr->Update()");
+    gData.ParticlesMgr->Update(dTime);
+
+    WhereAmI_Z("Before LowLevelUpdateProgram()");
+    LowLevelUpdateProgram(dTime);
+
+    WhereAmI_Z("Before  gData.GetDeltaTime()");
+    dTime = gData.GetDeltaTime();
+
+    ClassManager_Z* l_ClassMgr = gData.ClassMgr;
+    l_Do30Fps = l_ClassMgr->GetSetDeltaTimeTo30fps();
+    l_ClassMgr->SetSetDeltaTimeTo30fps(FALSE);
+
+    if (l_Do30Fps || gData.m_UnPauseRequested) {
+        if (gData.m_UnPauseRequested) {
+            WhereAmI_Z("Before UnpauseAppRequested()");
+            gData.m_UnPauseRequested = FALSE;
+            WhereAmI_Z("Before ScriptMgr->EndPause()");
+            gData.ScriptMgr->EndPause();
+            WhereAmI_Z("Before ManipulatorMgr->EndPause()");
+            gData.ManipMgr->EndPause();
+            WhereAmI_Z("Before MaterialMgr->EndPause()");
+            gData.MaterialMgr->EndPause();
+            WhereAmI_Z("Before GameMgr->EndPause()");
+            gData.GameMgr->EndPause();
+            WhereAmI_Z("Before InputMgr->EndPause()");
+            gData.InputMgr->EndPause();
+        }
+        dTime = 1.0f / 30.0f;
+    }
+
+    gData.m_Timer += dTime;
+    gData.m_FrameCount++;
+
+    WhereAmI_Z("Before Cons->Update()");
+    gData.Cons->Update(dTime);
+
+    WhereAmI_Z("Before ClassMgr->Update()");
+    gData.ClassMgr->Update(dTime);
+
+    WhereAmI_Z("Before ClassMgr->Update()");
+    gData.XRamMgr->Update(dTime);
+
+    WhereAmI_Z("Before Z_Verify()");
+    if (gData.m_EngineFlag & FL_MEMORY_VERIFY) {
+        ASSERTL_Z(Z_Verify(), "memory intergrity error", 277);
+    }
+
+    WhereAmI_Z("Before MainRdr->EndRender()");
+    gData.MainRdr->EndRender(dTime);
+
+    WhereAmI_Z("Before MainRdr->WaitForRetrace()");
+    gData.MainRdr->WaitForRetrace(dTime);
+
+    if (gData.m_BlockFrame) {
+        gData.m_FrameBlockCountDownTime = gData.m_FrameBlockTime;
+    }
+
+    WhereAmI_Z("End");
+}
+
+Bool ProgramMain() {
+    ProgramInit();
+
+    gData.InitTime();
+
+    gData.Cons->InterpCommand("BSource User.tsc");
+
+    gData.m_FrameCount++;
+
+    for (;;) {
+        if (!InMainLoop) {
+            _CoreMainLoop();
+            if (EndFrame()) {
+                break;
+            }
+        }
+    }
+
+    CloseProgram();
+
+    return TRUE;
+}
+
+void ProgramDefaultFlag() {
+    gData.m_MaterialFlag = FL_MATERIAL_ALL;
+    gData.m_EngineFlag |= FL_ENGINE_DEFAULT;
+}
+
+void ProgramInit() {
+    PrintMemoryStatus("Target Init");
+    ComputeMathPrecision();
+    ProgramDefaultFlag();
+
+    gData.ScriptMgr = NULL;
+    gData.UnkMgr_0x78 = NULL;
+    gData.NetMgr = NULL;
+
+    NewMgr_Z(gData.ClassMgr, ClassManager_Z, 387);
+
+    RegisterClasses();
+    InitTabError();
+
+    NewMgrInit_Z(gData.StreamMgr, StreamManager_Z, 396);
+
+    if (!gData.m_IsPlatformAgnostic) {
+        LowLevelInitProgram();
+    }
+
+    if (!gData.MainRdr) {
+        NewMgr_Z(gData.MainRdr, Renderer_Z, 404);
+    }
+
+    if (!gData.NetMgr) {
+        NewMgr_Z(gData.NetMgr, NetManager_Virtual_Z, 405);
+    }
+
+    if (!gData.SoundMgr) {
+        NewMgrInit_Z(gData.SoundMgr, SoundManager_Z, 406);
+    }
+
+    if (!gData.InputMgr) {
+        NewMgrInit_Z(gData.InputMgr, InputPlatForm_Z, 407);
+    }
+
+    if (!gData.SavingMgr) {
+        NewMgrInit_Z(gData.SavingMgr, SaveGame_Z, 408);
+    }
+
+    if (!gData.MovieMgr) {
+        NewMgrInit_Z(gData.MovieMgr, Movie_Z, 409);
+    }
+
+    NewMgr_Z(gData.VolatileMgr, VolatileMgr_Z, 411);
+    NewMgr_Z(gData.MaterialMgr, MaterialManager_Z, 412);
+    NewMgr_Z(gData.WorldMgr, WorldManager_Z, 413);
+    NewMgr_Z(gData.ColSurfaceCache, ColSurfaceCache_Z, 414);
+    // TODO: DEFINE ColTriangleCache_Z
+    //NewMgr_Z(gData.ColTriangleCache, ColTriangleCache_Z, 416);
+    NewMgr_Z(gData.MatrixBuffer, Mat4x4Buffer_Z, 417);
+    NewMgr_Z(gData.ManipMgr, ManipulatorManager_Z, 418);
+    NewMgr_Z(gData.GameMgr, GameManager_Z, 419);
+    NewMgr_Z(gData.AnimMgr, AnimationManager_Z, 420);
+    NewMgr_Z(gData.EffectMgr, EffectManager_Z, 421);
+    NewMgrInit_Z(gData.XRamMgr, XRamManager_Z, 422);
+
+    PrintMemoryStatus("Zouna Init");
+    GameProgramInit();
+    PrintMemoryStatus("Game Init");
+
+    NewMgr_Z(gData.SystemDatas, SystemDatas_Z, 430);
+    NewMgr_Z(gData.ObjectBankMgr, ObjectBankManager_Z, 431);
+    NewMgr_Z(gData.ParticlesMgr, ParticlesManager_Z, 432);
+
+    gData.ScriptMgr->Init();
+    gData.MainRdr->InitViewport(1);
+    RegisterGlobalCommands();
+}
+
+void CloseProgram() {
 }
 
 void RegisterClasses() {

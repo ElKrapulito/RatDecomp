@@ -806,4 +806,6 @@ T Max(T i_V1, T i_V2) {
 }
 
 void Inverse2(const Mat4x4& i_Mat, Mat4x4& o_Mat);
+void ComputeMathPrecision();
+
 #endif

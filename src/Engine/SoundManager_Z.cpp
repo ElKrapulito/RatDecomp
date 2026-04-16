@@ -9,10 +9,6 @@ static Char SndMgrStatusString[ARRAY_CHAR_MAX];
 Extern_Z "C" int rand();
 
 SoundManager_Z::SoundManager_Z() {
-    m_MusicFadeOutCountdownTimer = 0.0f;
-    m_MusicFadeInCountdownTimer = 0.0f;
-    m_MusicFilePath.Empty();
-
     REGISTERCOMMANDC("PlayMUsic", Cmd_PlayMusic, " MusicName");
     REGISTERCOMMANDC("PlayDIalog", Cmd_PlayDialog, " Id");
     REGISTERCOMMANDC("StopMUsic", Cmd_StopMusic, " MusicName");
@@ -75,39 +71,10 @@ Bool Track_Z::Release() {
 }
 
 void SoundManager_Z::Update(Float i_DeltaTime) {
-    Bool l_Loop;
-    m_MusicVolumeFactor = 1.0f;
-    if (m_MusicFadeOutCountdownTimer) {
-        m_MusicFadeOutCountdownTimer = m_MusicFadeOutCountdownTimer - i_DeltaTime;
-        if (m_MusicFadeOutCountdownTimer < 0.0f) {
-            m_MusicFadeOutCountdownTimer = 0.0f;
-            l_Loop = TRUE;
-            m_MusicVolumeFactor = 0.0f;
-        }
-        else {
-            m_MusicVolumeFactor = 1.0f - (m_MusicFadeOutMaxTime - m_MusicFadeOutCountdownTimer) / m_MusicFadeOutMaxTime;
-            goto dont_loop; // $SABE: Forgive me
-        }
-    }
-    else {
-        if (m_MusicFadeInCountdownTimer) {
-            m_MusicFadeInCountdownTimer = m_MusicFadeInCountdownTimer - i_DeltaTime;
-            if (m_MusicFadeInCountdownTimer < 0.0f) {
-                m_MusicFadeInCountdownTimer = 0.0f;
-                m_MusicVolumeFactor = 0.0f;
-            }
-            else {
-                m_MusicVolumeFactor = (m_MusicFadeInMaxTime - m_MusicFadeInCountdownTimer) / m_MusicFadeInMaxTime;
-            }
-        }
-    dont_loop:
-        l_Loop = FALSE;
-    }
-
-    if (l_Loop) {
+    if (m_Music.UpdateFade(i_DeltaTime)) {
         StopMusic(0.0f);
-        if (m_MusicFilePath.StrLen()) {
-            PlayMusic(m_MusicFilePath, m_MusicFlag, 0.0f, 0.0f);
+        if (m_Music.m_FilePath.StrLen()) {
+            PlayMusic(m_Music.m_FilePath, m_Music.m_Flag, 0.0f, 0.0f);
         }
     }
 

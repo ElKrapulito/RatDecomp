@@ -102,7 +102,7 @@ public:
     virtual void SetCallStackPtrs(U32* a1, S32 a2);
 };
 
-void Z_Verify();
+Bool Z_Verify();
 U32 MemoryGraphColor();
 
 void operator delete(void* i_Ptr);

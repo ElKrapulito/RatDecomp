@@ -104,6 +104,10 @@ public:
 
     Float GetTime() { return m_ScriptTime; }
 
+    inline void EndPause() {
+        m_IsPaused = FALSE;
+    }
+
 private:
     S32 m_AgentId;
     ABC_AgentList_Z m_PausedAgentState[agent_last];

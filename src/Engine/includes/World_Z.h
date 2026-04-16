@@ -9,6 +9,8 @@
 #include "CameraZone_ZHdl.h"
 #include "Occluder_ZHdl.h"
 #include "StaticArray_Z.h"
+#include "HoleArray_Z.h"
+#include "World_ZHdl.h"
 
 struct SubWorldData_Z {
     U8 m_Pad_0x0[0x168];
@@ -91,6 +93,15 @@ private:
     StaticArray_Z<CameraZone_ZHdl, 8> m_CameraZoneHdls;
     StaticArray_Z<Occluder_ZHdl, 8> m_OccluderHdls;
     // TODO: More members
+};
+
+class WorldManager_Z {
+protected:
+    HoleArray_Z<World_ZHdl, 8> m_WorldHdls;
+
+public:
+    WorldManager_Z();
+    virtual ~WorldManager_Z();
 };
 
 #endif // _WORLD_Z_H_

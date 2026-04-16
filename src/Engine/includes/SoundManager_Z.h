@@ -45,6 +45,53 @@ struct Track_Z {
     Float m_OcclusionFactor;
 };
 
+// $SABE: Fake name
+struct Music_Z {
+    Float m_FadeOutMaxTime;
+    Float m_FadeOutCountdownTimer;
+    Float m_FadeInMaxTime;
+    Float m_FadeInCountdownTimer;
+    Float m_UnkFloat_0xc98;
+    Float m_VolumeFactor;
+    String_Z<ARRAY_CHAR_MAX> m_FilePath;
+    U32 m_Flag;
+    U32 m_UnkU32_0xda4;
+
+    Music_Z() {
+        m_FadeOutCountdownTimer = 0.0f;
+        m_FadeInCountdownTimer = 0.0f;
+        m_FilePath.Empty();
+    }
+
+    inline Bool UpdateFade(Float i_DeltaTime) {
+        m_VolumeFactor = 1.0f;
+        if (m_FadeOutCountdownTimer) {
+            m_FadeOutCountdownTimer = m_FadeOutCountdownTimer - i_DeltaTime;
+            if (m_FadeOutCountdownTimer < 0.0f) {
+                m_FadeOutCountdownTimer = 0.0f;
+                m_VolumeFactor = 0.0f;
+                return TRUE;
+            }
+            else {
+                m_VolumeFactor = 1.0f - (m_FadeOutMaxTime - m_FadeOutCountdownTimer) / m_FadeOutMaxTime;
+            }
+        }
+        else {
+            if (m_FadeInCountdownTimer) {
+                m_FadeInCountdownTimer = m_FadeInCountdownTimer - i_DeltaTime;
+                if (m_FadeInCountdownTimer < 0.0f) {
+                    m_FadeInCountdownTimer = 0.0f;
+                    m_VolumeFactor = 0.0f;
+                }
+                else {
+                    m_VolumeFactor = (m_FadeInMaxTime - m_FadeInCountdownTimer) / m_FadeInMaxTime;
+                }
+            }
+        }
+        return FALSE;
+    }
+};
+
 class SoundManager_Z : public ClassNameResManager_Z {
 public:
     SoundManager_Z();
@@ -98,6 +145,10 @@ public:
 
     void FreeTrack(S32 i_TrackIdx);
 
+    inline void InitFrame() {
+        CloseFrame();
+    }
+
 private:
     Track_Z m_Tracks[SND_MGR_MAX_TRACKS];
     S32 m_NbTracksFailedToPlay;
@@ -115,15 +166,7 @@ private:
     Float m_DialogVolumeSecondary;
     Float m_RandomFreqScaleLow;
     Float m_RandomFreqScaleHigh;
-    Float m_MusicFadeOutMaxTime;
-    Float m_MusicFadeOutCountdownTimer;
-    Float m_MusicFadeInMaxTime;
-    Float m_MusicFadeInCountdownTimer;
-    Float m_UnkFloat_0xc98;
-    Float m_MusicVolumeFactor;
-    String_Z<ARRAY_CHAR_MAX> m_MusicFilePath;
-    U32 m_MusicFlag;
-    U32 m_UnkU32_0xda4;
+    Music_Z m_Music;
 };
 
 #endif // _SOUNDMANAGER_Z_H_
