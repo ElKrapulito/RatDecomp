@@ -22,6 +22,10 @@ protected:
     S32 m_Type;
 
 public:
+    SaveGame_Z() {
+        m_Type = 2;
+    }
+
     virtual ~SaveGame_Z();
     virtual Bool Init();
     virtual void Shut();

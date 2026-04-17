@@ -6,6 +6,11 @@ class ManipulatorList_Z {
     friend class ManipulatorManager_Z;
 
 public:
+    ManipulatorList_Z() {
+        m_ListTailPtr = NULL;
+        m_ListHeadPtr = NULL;
+    }
+
     void Update(Float i_DeltaTime);
     void Add(Manipulator_Z* i_Manip);
     void Remove(Manipulator_Z* i_Manip);
@@ -20,6 +25,8 @@ private:
 class ManipulatorManager_Z {
 public:
     ManipulatorManager_Z() {
+        m_IsPaused = FALSE;
+        m_IsBeingUpdated = FALSE;
     }
 
     void MarkHandles();

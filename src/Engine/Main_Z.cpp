@@ -78,6 +78,7 @@
 #include "SystemDatas_Z.h"
 #include "ObjectBankManager_Z.h"
 #include "SurfaceCache_Z.h"
+#include "TriangleCache_Z.h"
 
 Extern_Z "C" void exit(int);
 
@@ -235,13 +236,17 @@ Bool ProgramMain() {
 }
 
 void ProgramDefaultFlag() {
-    gData.m_MaterialFlag = FL_MATERIAL_ALL;
-    gData.m_EngineFlag |= FL_ENGINE_DEFAULT;
+    U32 l_EngineFlag = gData.m_EngineFlag | FL_ENGINE_DEFAULT;
+    U32 l_MaterialFlag = FL_MATERIAL_ALL;
+    gData.m_MaterialFlag = l_MaterialFlag;
+    gData.m_EngineFlag = l_EngineFlag;
 }
 
 void ProgramInit() {
     PrintMemoryStatus("Target Init");
+
     ComputeMathPrecision();
+
     ProgramDefaultFlag();
 
     gData.ScriptMgr = NULL;
@@ -251,6 +256,7 @@ void ProgramInit() {
     NewMgr_Z(gData.ClassMgr, ClassManager_Z, 387);
 
     RegisterClasses();
+
     InitTabError();
 
     NewMgrInit_Z(gData.StreamMgr, StreamManager_Z, 396);
@@ -287,8 +293,7 @@ void ProgramInit() {
     NewMgr_Z(gData.MaterialMgr, MaterialManager_Z, 412);
     NewMgr_Z(gData.WorldMgr, WorldManager_Z, 413);
     NewMgr_Z(gData.ColSurfaceCache, ColSurfaceCache_Z, 414);
-    // TODO: DEFINE ColTriangleCache_Z
-    //NewMgr_Z(gData.ColTriangleCache, ColTriangleCache_Z, 416);
+    NewMgr_Z(gData.ColTriangleCache, ColTriangleCache_Z, 416);
     NewMgr_Z(gData.MatrixBuffer, Mat4x4Buffer_Z, 417);
     NewMgr_Z(gData.ManipMgr, ManipulatorManager_Z, 418);
     NewMgr_Z(gData.GameMgr, GameManager_Z, 419);
@@ -297,15 +302,18 @@ void ProgramInit() {
     NewMgrInit_Z(gData.XRamMgr, XRamManager_Z, 422);
 
     PrintMemoryStatus("Zouna Init");
+
     GameProgramInit();
+
     PrintMemoryStatus("Game Init");
 
     NewMgr_Z(gData.SystemDatas, SystemDatas_Z, 430);
     NewMgr_Z(gData.ObjectBankMgr, ObjectBankManager_Z, 431);
-    NewMgr_Z(gData.ParticlesMgr, ParticlesManager_Z, 432);
+    NewMgr_Z(gData.ParticlesMgr, ParticlesManager_Z("ParticlesManager"), 432);
 
     gData.ScriptMgr->Init();
     gData.MainRdr->InitViewport(1);
+
     RegisterGlobalCommands();
 }
 
@@ -382,4 +390,14 @@ void RegisterClasses() {
     REGISTER_CLASS("ObjectsBounce_Z", "ObjectsMove_Z", ObjectsBounce_Z::NewObject);
     REGISTER_CLASS("ObjectsBreak_Z", "ObjectsBounce_Z", ObjectsBreak_Z::NewObject);
     RegisterGameClasses();
+}
+
+Date_Z Globals::GetDate() {
+    return Date_Z();
+}
+
+U32 Globals::GetMgrSize(const Name_Z& i_Name, S32& i_Size1, S32& i_Size2) {
+    i_Size1 = 0;
+    i_Size2 = 0;
+    return 0;
 }

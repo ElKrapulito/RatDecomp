@@ -61,9 +61,8 @@ struct ButtonRemap_Z {
     Bool m_ControlMode;
 };
 
-class InputPlatForm_Z {
-public:
-    DynArray_Z<InputDevice_Z, 8> m_Devices;
+// $SABE: Fake name
+struct InputData_Z {
     Vec2f m_WiiMotePointerRelated1;
     Vec2f m_WiiMotePointerRelated2;
     Bool m_UnkBool_0x18;
@@ -74,6 +73,25 @@ public:
     Bool m_UnkBool_0x1d;
     Bool m_UnkBool_0x1e;
     Bool m_UnkBool_0x1f;
+
+    InputData_Z()
+        : m_UnkBool_0x18(FALSE)
+        , m_UnkBool_0x19(FALSE)
+        , m_UnkBool_0x1a(FALSE)
+        , m_UnkBool_0x1b(FALSE)
+        , m_UnkBool_0x1c(FALSE)
+        , m_UnkBool_0x1d(FALSE)
+        , m_UnkBool_0x1e(FALSE)
+        , m_UnkBool_0x1f(FALSE) {
+        m_WiiMotePointerRelated1 = VEC2F_NULL;
+        m_WiiMotePointerRelated2 = VEC2F_NULL;
+    }
+};
+
+class InputPlatForm_Z {
+public:
+    DynArray_Z<InputDevice_Z, 8> m_Devices;
+    InputData_Z m_InputData;
     S32 m_UnkBytes_0x20;
     Bool m_UnkBool_0x24;
     Bool m_UnkBool_0x25;
@@ -83,6 +101,13 @@ public:
     DynArray_Z<ButtonRemap_Z, 32> m_ActionButtonMappings; // for each action
 
 public:
+    InputPlatForm_Z()
+        : m_UnkBytes_0x20(0) {
+        m_UnkBool_0x24 = FALSE;
+        m_UnkBool_0x25 = TRUE;
+        m_IsPaused = FALSE;
+    }
+
     inline S32 GetDeviceCount() const {
         return m_Devices.GetSize();
     }
@@ -98,7 +123,9 @@ public:
     virtual ~InputPlatForm_Z();
     virtual Bool Init();
     virtual void Minimize();
-    virtual void Shut();
+
+    virtual void Shut() { }
+
     virtual void AddDevice();
     virtual void ResetPads();
     virtual void RemoveDevice(S32 a1);

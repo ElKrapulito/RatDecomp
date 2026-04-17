@@ -6,7 +6,8 @@
 class GenWorld_Z : public Object_Z {
 public:
     virtual ~GenWorld_Z();
-    virtual void Draw(DrawInfo_Z& i_DrawInfo, ObjectDatas_Z* i_Data);
+
+    virtual void Draw(DrawInfo_Z& i_DrawInfo, ObjectDatas_Z* i_Data) { }
 
     static BaseObject_Z* NewObject() { return NewL_Z(16) GenWorld_Z; }
 };

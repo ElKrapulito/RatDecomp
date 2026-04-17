@@ -17,18 +17,6 @@ public:
             SURFACECACHED_COLLISION_CACHE_ENTRY_COUNT,
             ((l_Lod + 1) * (l_Lod + 1) * 4) + (l_Lod * l_Lod * 3) + ((l_Lod + 1) * 2)
         );
-        FIXDEBUGINLINING_Z();
-        FIXDEBUGINLINING_Z();
-        FIXDEBUGINLINING_Z();
-        FIXDEBUGINLINING_Z();
-        FIXDEBUGINLINING_Z();
-        FIXDEBUGINLINING_Z();
-        FIXDEBUGINLINING_Z();
-        FIXDEBUGINLINING_Z();
-        FIXDEBUGINLINING_Z();
-        FIXDEBUGINLINING_Z();
-        FIXDEBUGINLINING_Z();
-        FIXDEBUGINLINING_Z();
     }
 
 private:

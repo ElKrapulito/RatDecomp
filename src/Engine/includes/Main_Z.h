@@ -2,6 +2,7 @@
 #define _MAIN_Z_H_
 #include "Name_Z.h"
 #include "String_Z.h"
+#include "DebugTools_Z.h"
 
 #define WhereAmI_Z(wai) strcpy(WhereAmI, "_CoreMainLoop(): " wai)
 
@@ -14,17 +15,17 @@
         }                                                \
     } while (0)
 
-#define NewMgrInit_Z(mgr, class, line)                                                                                      \
-    do {                                                                                                                    \
-        MemManager.m_FreeMemCached = s_GetFreeMem();                                                                        \
-        if (!mgr) {                                                                                                         \
-            mgr = NewL_Z(line) class;                                                                                       \
-            if (!mgr->Init()) {                                                                                             \
-                Console_Z::PrintBoxString("Fatal error", GetStringTabError(GetLanguage(), error_eight), "StreamManager_Z"); \
-                exit(0);                                                                                                    \
-            }                                                                                                               \
-            MemManager.m_FreeMemCached = s_GetFreeMem();                                                                    \
-        }                                                                                                                   \
+#define NewMgrInit_Z(mgr, class, line)                                                                           \
+    do {                                                                                                         \
+        MemManager.m_FreeMemCached = s_GetFreeMem();                                                             \
+        if (!mgr) {                                                                                              \
+            mgr = NewL_Z(line) class;                                                                            \
+            if (!mgr->Init()) {                                                                                  \
+                Console_Z::PrintBoxString("Fatal error", GetStringTabError(GetLanguage(), error_eight), #class); \
+                exit(0);                                                                                         \
+            }                                                                                                    \
+            MemManager.m_FreeMemCached = s_GetFreeMem();                                                         \
+        }                                                                                                        \
     } while (0)
 
 Extern_Z Char* strcpy(Char* __dest, Char* __src);
@@ -54,8 +55,6 @@ void RegisterClasses();
 void RegisterGlobalCommands();
 
 // Global commands
-
-#define FL_GAME_NONE (U32)(0 << 0)
 
 class ManipulatorManager_Z;
 class AnimationManager_Z;
@@ -91,13 +90,24 @@ struct Date_Z {
     Char m_Unk_0x3;
     Char m_Unk_0x4;
     U16 m_Unk_0x6;
+
+    Date_Z() {
+        m_Unk_0x0 = 0;
+        m_Unk_0x1 = 0;
+        m_Unk_0x2 = 0;
+        m_Unk_0x3 = 0;
+        m_Unk_0x4 = 0;
+        m_Unk_0x6 = 0;
+    }
 };
 
 class Globals {
 public:
     virtual ~Globals() { };
-    virtual U32 GetMgrSize(Name_Z* l_Name, S32& a1, S32& a2);
-    virtual void Minimize();
+    virtual U32 GetMgrSize(const Name_Z& i_Name, S32& i_Size1, S32& i_Size2);
+
+    virtual void Minimize() { }
+
     virtual Date_Z GetDate();
 
     void InitTime();
@@ -165,13 +175,13 @@ public:
     Bool m_IsTimerCalibrated;
     Float m_TargetSecondsPerFrame;
     Float m_AbsoluteTime;
-    U16 m_Unk_0x7d0;
-    U16 m_Unk_0x7d2;
-    U16 m_Unk_0x7d4;
-    U16 m_Unk_0x7d6;
-    U16 m_Unk_0x7d8;
-    U16 m_Unk_0x7da;
-    U32 m_Unk_0x7dc;
+    S16 m_Unk_0x7d0;
+    S16 m_Unk_0x7d2;
+    S16 m_Unk_0x7d4;
+    S16 m_Unk_0x7d6;
+    S16 m_Unk_0x7d8;
+    S16 m_Unk_0x7da;
+    S32 m_Unk_0x7dc;
 
     void SetEngineFlag(U32 i_Flag) { m_EngineFlag = i_Flag; }
 
@@ -187,42 +197,36 @@ public:
 
     // TODO: Properly define members for all this so we don't gotta move stuff around
     inline Globals() {
-        // m_Pad_0x14[137] = 0;
-        // m_Pad_0x14[393] = 0;
-        // m_Pad_0x14[649] = 0;
-        // m_Pad_0x14[905] = 0;
-        // m_Pad_0x14[1161] = 0;
-        // m_Pad_0x14[1417] = 0;
-        // m_Pad_0x14[1673] = 0;
-        // *(S16*)(&m_Pad_0x14[1980]) = -1;
-        // *(S16*)(&m_Pad_0x14[1982]) = 0;
-        // *(S16*)(&m_Pad_0x14[1984]) = 1;
-        // *(S16*)(&m_Pad_0x14[1990]) = 8;
-        // *(S16*)(&m_Pad_0x14[1986]) = 60;
-        // *(S16*)(&m_Pad_0x14[1988]) = 480;
-        // memset(&m_Pad_0x0, 0, 132);
-        // m_Pad_0x14[1968] = 1;
-        // *(Float*)(&m_Pad_0x14[1976]) = 0.0f;
-        // *(Float*)(&m_Pad_0x14[1972]) = 0.0f;
-        // strcpy((Char*)&m_Pad_0x14[1161], ".\\");
-        // strcpy((Char*)&m_Pad_0x14[1673], "Ace");
-        // *(S32*)(&m_Pad_0x14[1956]) = 0;
-        // *(S32*)(&m_Pad_0x14[1944]) = 0;
-        // *(S32*)(&m_Pad_0x14[1952]) = 0;
-        // *(S32*)(&m_Pad_0x14[1948]) = 0;
-        // m_Pad_0x14[120] = 0;
-        // m_Pad_0x14[121] = 0;
-        // m_Pad_0x14[136] = 0;
-        // m_Pad_0x14[123] = 0;
-        // m_Pad_0x14[122] = 0;
-        // *(S32*)(&m_Pad_0x14[84]) = 0;
-        // *(S32*)(&m_Pad_0x14[80]) = 0;
-        // *(S32*)(&m_Pad_0x14[108]) = 0;
-        // *(Float*)(&m_Pad_0x14[1960]) = 0.0;
-        // m_Pad_0x14[1932] = 0;
-        // *(S32*)(&m_Pad_0x14[1940]) = 0;
-        // *(Float*)(&m_Pad_0x14[132]) = 1.0f;
-        // *(S32*)(&m_Pad_0x14[1964]) = 0;
+        m_Unk_0x7d0 = -1;
+        m_Unk_0x7d2 = 0;
+        m_Unk_0x7d4 = 1;
+        m_Unk_0x7da = 8;
+        m_Unk_0x7d6 = 60;
+        m_Unk_0x7d8 = 480;
+        // $SABE: Probably a macro
+        memset(&UnkMgr_0x4, 0, sizeof(XRamManager_Z*) + (U32)&XRamMgr - (U32)&UnkMgr_0x4);
+        m_IsTimerCalibrated = TRUE;
+        m_AbsoluteTime = 0.0f;
+        m_TargetSecondsPerFrame = 0.0f;
+        m_AppPath.StrCpy(".\\");
+        m_LocalSavePath.StrCpy("Ace");
+        m_FrameCount = 0;
+        m_Unk_0x7ac = 0;
+        m_UnkError_0x7b4 = 0;
+        m_UnkError_0x7b0 = 0;
+        m_Running = FALSE;
+        m_BlockFrame = FALSE;
+        m_UnPauseRequested = FALSE;
+        m_UpdatingResource = FALSE;
+        m_IsPlatformAgnostic = FALSE;
+        SurfaceCacheMgr = NULL;
+        UnkMgr_0x64 = NULL;
+        UnkMgr_0x80 = NULL;
+        m_Timer = 0.0f;
+        m_EngineFlag = FL_ENGINE_NONE;
+        m_GameFlag = FL_GAME_NONE;
+        m_TimeFactor = 1.0f;
+        m_Unk_0x7c0 = 0;
     }
 };
 

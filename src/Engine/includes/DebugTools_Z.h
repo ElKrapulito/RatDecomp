@@ -81,6 +81,7 @@ enum MaterialFlags {
 };
 
 enum GameFlags {
+    FL_GAME_NONE = 0 << 0,
     FL_GAME_2_FRAMES = 1 << 15
 };
 

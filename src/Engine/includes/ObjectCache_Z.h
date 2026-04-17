@@ -3,21 +3,37 @@
 
 #include "DynArray_Z.h"
 #include "BaseObject_Z.h"
+#include "Math_Z.h"
 
 struct CacheStateLRU_Z {
     BaseObject_Z* m_OwnerPtr;
     U16 m_OwnerId;
+
+    CacheStateLRU_Z() {
+        m_OwnerPtr = NULL;
+        m_OwnerId = -1;
+    }
 };
 
 template <class T, class V>
 class LRU_Z {
 public:
-    struct List_Ele : public T {
+    struct List_Ele {
+        T m_Val;
         V m_PrevEntry;
         V m_NextEntry;
     };
 
-    void Init(S32 i_Unk);
+    void Init(S32 i_Size) {
+        m_LRUList.SetSize(i_Size + 2);
+
+        S32 l_PlusOne = i_Size + 1;
+        for (S32 i = 0; i < i_Size + 2; i++) {
+            m_LRUList[i].m_PrevEntry = Max(i - 1, (S32)0);
+            m_LRUList[i].m_NextEntry = Min(i + 1, l_PlusOne);
+        }
+        FIXDEBUGINLINING_Z();
+    }
 
 private:
     DynArray_Z<List_Ele, 32, 0, 1, 4> m_LRUList;
@@ -34,7 +50,7 @@ public:
                 Delete_Z[] m_CacheData;
             }
         }
-        m_CacheData = NewL_Z(34) T[(i_LRUCount * m_CacheEntryCount) + 1];
+        m_CacheData = NewL_Z(34) T[(i_LRUCount * m_CacheEntryCount)];
         return;
     }
 

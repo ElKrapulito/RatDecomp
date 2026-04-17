@@ -28,9 +28,6 @@ struct _ParticleElement_Z {
 
 class ParticlesManager_Z : public DataManager_Z<_ParticleElement_Z> {
 public:
-    ParticlesManager_Z()
-        : DataManager_Z<_ParticleElement_Z>("ParticlesManager") { }
-
     ParticlesManager_Z(Char* i_Name)
         : DataManager_Z<_ParticleElement_Z>(i_Name) { }
 };
