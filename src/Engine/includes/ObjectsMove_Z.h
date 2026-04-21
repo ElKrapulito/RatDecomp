@@ -1,13 +1,76 @@
 #ifndef _OBJECTSMOVE_Z_H_
 #define _OBJECTSMOVE_Z_H_
 #include "ObjectMove_Z.h"
+#include "HoleArray_Z.h"
 
 class ObjectMoveSphereColl_Z;
+class BoneNode_Z;
+
+struct ObjectMove {
+    Vec3f m_TotalSpeed;
+    Vec3f m_Accel;
+    Float m_TimeToLive;
+    Float m_TimeToFade;
+    Float m_TimeToScale;
+    Float m_BounceRatio;
+    Float m_ShadowOldRayLen;
+    Float m_BounceRatioWall;
+    Float m_EndSpeedBounce;
+    U64 m_CollisionBools;
+    Node_ZHdl m_NodeHdl;
+    BoneNode_Z* m_BoneNode;
+    ObjectMove_ZHdl m_SenderHdl;
+    ObjectMove_ZHdl m_OwnerHdl;
+    ObjectMove_ZHdl m_TargetHdl;
+    StaticArray_Z<Node_ZHdl, 8> m_CollisionVolNodeHdls;
+    ObjectMoveCollNode_Z m_CollideNode;
+
+    ObjectMove() {
+        m_NodeHdl = Node_ZHdl();
+        m_BoneNode = NULL;
+        m_SenderHdl = ObjectMove_ZHdl();
+        m_TargetHdl = ObjectMove_ZHdl();
+        m_TotalSpeed = VEC3F_NULL;
+    }
+
+    ~ObjectMove() {
+        m_NodeHdl = Node_ZHdl();
+        m_OwnerHdl = ObjectMove_ZHdl();
+        m_SenderHdl = ObjectMove_ZHdl();
+        m_TargetHdl = ObjectMove_ZHdl();
+        m_TotalSpeed = VEC3F_NULL;
+        m_Accel = VEC3F_NULL;
+        m_TimeToLive = -1.0f;
+        m_BounceRatio = 0.0f;
+        m_ShadowOldRayLen = -1.0f;
+        m_CollideNode.m_NodeHdl = Node_ZHdl();
+        FIXDEBUGINLINING_Z();
+    }
+};
 
 class ObjectsMove_Z : public ObjectMove_Z {
 public:
+    ObjectsMove_Z() {
+        m_BankDataId = -1;
+        // TODO: See if this can be removed
+        FIXDEBUGINLINING_Z();
+        FIXDEBUGINLINING_Z();
+        FIXDEBUGINLINING_Z();
+        FIXDEBUGINLINING_Z();
+        FIXDEBUGINLINING_Z();
+        FIXDEBUGINLINING_Z();
+        FIXDEBUGINLINING_Z();
+        FIXDEBUGINLINING_Z();
+        FIXDEBUGINLINING_Z();
+        FIXDEBUGINLINING_Z();
+        FIXDEBUGINLINING_Z();
+        FIXDEBUGINLINING_Z();
+    }
+
     virtual void Init();
-    virtual ~ObjectsMove_Z();
+
+    virtual ~ObjectsMove_Z() { }
+
     virtual void Reset();
     virtual void Update(Float a1);
     virtual void Update(const Vec3f& a1, const Vec3f& a2, const Vec3f& a3, Float a4, S32 a5);
@@ -49,7 +112,13 @@ public:
     static BaseObject_Z* NewObject() { return NewL_Z(230) ObjectsMove_Z; }
 
 private:
-    U8 m_Pad_0x1c0[0x40];
+    Game_ZHdl m_GameHdl;
+    Name_Z m_TitleName;
+    S32 m_BankDataId;
+    Object_ZHdl m_BankObjectHdl;
+    abc_message m_MsgEnd;
+    abc_message m_MsgHit;
+    HoleArray_Z<ObjectMove, 1> m_Objects;
 };
 
 #endif // _OBJECTSMOVE_Z_H_

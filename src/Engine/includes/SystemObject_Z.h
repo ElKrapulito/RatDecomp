@@ -78,8 +78,32 @@ struct BoxFlag_Z {
     BaseObject_Z* Object; // $SABE: Not sure if it's really here
 };
 
+// $SABE: Reversed by chatgpt, could be totally wrong
 struct CollisionFastTriangle_Z {
-    U8 Unk_0x0[0x110];
+    Vec4f m_PlaneNormal;     // 0x00
+    Float m_PlaneD;          // 0x10
+    Float m_CentroidRadius;  // 0x14
+    Float m_GramDetAbs;      // 0x18
+    S32 m_IsDegenerate;      // 0x1C
+    U8 m_Unk_0x20[0x10];     // 0x20
+    Vec4f m_Centroid;        // 0x30
+    Vec4f m_V0;              // 0x40
+    Vec4f m_V1;              // 0x50
+    Vec4f m_V2;              // 0x60
+    Vec4f m_Edge01;          // 0x70
+    Vec4f m_Edge02;          // 0x80
+    Vec4f m_Edge12;          // 0x90
+    Vec4f m_RawNormal;       // 0xA0
+    Vec4f m_ScaledPlane;     // 0xB0
+    Vec4f m_EdgePlane01;     // 0xC0
+    Vec4f m_EdgePlane12;     // 0xD0
+    Vec4f m_EdgePlane20;     // 0xE0
+    Float m_Edge01LenSq;     // 0xF0
+    Float m_Edge01DotEdge02; // 0xF4
+    Float m_Edge02LenSq;     // 0xF8
+    Float m_NormalLength;    // 0xFC
+    Float m_InvNormalLength; // 0x100
+    U8 m_Unk_0x104[0x0C];    // 0x104
 } Aligned_Z(16);
 
 struct TriangleFlag_Z {

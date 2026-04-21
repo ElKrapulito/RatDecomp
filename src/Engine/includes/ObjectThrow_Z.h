@@ -2,6 +2,8 @@
 #define _OBJECTTHROW_Z_H_
 #include "ObjectMove_Z.h"
 #include "ObjectThrow_ZHdl.h"
+#include "Lod_ZHdl.h"
+#include "Skel_ZHdl.h"
 
 class ObjectMoveData_Z;
 class ObjectMoveSphereColl_Z;
@@ -35,6 +37,28 @@ public:
     virtual void SetNodeDepl(const Vec3f& a1, Float a2);
 
     static BaseObject_Z* NewObject() { return NewL_Z(140) ObjectThrow_Z; }
+
+private:
+    Lod_ZHdl m_LodHdl;
+    Skel_ZHdl m_SkelHdl;
+    Float m_BounceRatio;
+    Float m_TimeToLive;
+    Float m_BounceRatioWall;
+    Float m_EndSpeedBounce;
+    S32 m_BounceCount;
+    ObjectMove_ZHdl m_TargetHdl;
+    ObjectThrow_ZHdl m_SenderHdl;
+    Quat m_CurRot;
+    Quat m_LastRot;
+    Float m_SlerpTime;
+    ObjectThrow_ZHdl m_CarryingHdl;
+    ObjectThrow_ZHdl m_CarrierHdl;
+    Float m_CarryingTime;
+    Vec3f m_GroundNormalWorld;
+    Vec3f m_ConstrainedNormal;
+    Vec3f m_HorizontalColDir;
+    Vec3f m_ForceMappingWorldDir;
+    Vec3f m_ForceAnimMappingWorldDir;
 };
 
 #endif // _OBJECTTHROW_Z_H_

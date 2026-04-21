@@ -36,6 +36,36 @@ public:
     virtual void ClingEdgeLandDist();
 
     static BaseObject_Z* NewObject() { return NewL_Z(138) LodMove_Z; }
+
+private:
+    ObjectMove_ZHdl m_VehicleHdl;
+    Vec3f m_PivotPoint; // offset from node to objectmove?
+    Vec3f m_CameraFocus;
+    Vec3f m_VehicleDelta;
+    Vec3f m_CameraDistance;
+    Vec3f m_CameraDelta;
+    Vec3f m_DownVector;
+    Bool m_IsFocusCamera;
+    Bool m_IsFixedCamera;
+    Node_ZHdl m_DisableCameraFromNodeHdl;
+    Float m_StuckToGroundVectorLength;
+    S32 m_LinkBoneId;
+    S32 m_RightLinkBoneId; // shoulder or forearm, or arm
+    S32 m_LeftLinkBoneId;  // shoulder or forearm, or arm
+    Bool m_UseOldMethod;
+    Bool m_IsPlayer;
+    Bool m_EnableYSync;
+    Float m_LastCorrectY;
+    Bool m_LastYSet;
+    Quat m_CarryingObjectLocalRot;
+    Quat m_CarryingObjectLocalOrientedRot;
+    Vec3f m_CarryingObjectLocalLinkTrans;
+    Vec3f m_CarryingObjectLocalTrans;
+    Vec3f m_CarryingPosA; // interpolation coefficients
+    Vec3f m_CarryingPosB; // interpolation coefficients
+    Vec3f m_CarryingPosC; // interpolation coefficients
+    Vec3f m_CarryingPosD; // interpolation coefficients
+    ColLineResult_Z m_CarryingColResult;
 };
 
 #endif // _LODMOVE_Z_H_

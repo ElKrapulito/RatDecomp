@@ -26,7 +26,7 @@
 #define FL_NODE_VP1_HIDE (1 << 21)        // 0x200000 - Hide in Viewport Id 1
 #define FL_NODE_VP2_HIDE (1 << 22)        // 0x400000 - Hide in Viewport Id 2
 #define FL_NODE_VP3_HIDE (1 << 23)        // 0x800000 - Hide in Viewport Id 3
-#define FL_NODE_NO_SHARED (1 << 24)       // 0x1000000 - No shared data, doesn't use ObjectData_Z if set
+#define FL_NODE_NO_UNSHARED (1 << 24)     // 0x1000000 - No unshared data, doesn't use ObjectDatas_Z if set
 #define FL_NODE_UNK_0x2000000 (1 << 25)   // 0x2000000 - Used in World_Z::DrawObjects. If it isn't set in that func, some items/collectibles stop their logic/physics
 #define FL_NODE_COLLIDE (1 << 26)         // 0x4000000 - Do collision
 #define FL_NODE_SHADOW (1 << 27)          // 0x8000000 - Does shadow update if set. Only used by nodes with Lod_Z as object

@@ -1,9 +1,16 @@
 #ifndef _OBJECTSBREAK_Z_H_
 #define _OBJECTSBREAK_Z_H_
 #include "ObjectsBounce_Z.h"
+#include "ObjectThrow_ZHdl.h"
+#include "DynPtrArray_Z.h"
+
+typedef DynArray_Z<Vec3f, 32, FALSE, FALSE, 32> Vec3fDA;
 
 class ObjectsBreak_Z : public ObjectsBounce_Z {
 public:
+    ObjectsBreak_Z() {
+    }
+
     virtual void Init();
     virtual ~ObjectsBreak_Z();
     virtual void Reset();
@@ -38,6 +45,14 @@ public:
     static BaseObject_Z* NewObject() { return NewL_Z(96) ObjectsBreak_Z; }
 
 private:
+    ObjectThrow_ZHdl m_ObjectThrowHdl;
+    Vec3fDA m_StartingBoneNodeLocalScaleDA;                   // for BoneNode_Z
+    DynPtrArray_Z<BoneNode_Z*, 4> m_StartingBoneNodeParentDA; // for BoneNode_Z
+    FloatDA m_StartingObjectScaleDA;
+    S32DA m_ObjectDatasIdDA; // Map from object id -> MeshData_Z id in the skel
+    DynArray_Z<Quat, 8> m_CurrentObjectRotationDA;
+    FloatDA m_CurrentObjectScaleDA;
+    Float m_CurrentTime;
 };
 
 #endif // _OBJECTSBREAK_Z_H_

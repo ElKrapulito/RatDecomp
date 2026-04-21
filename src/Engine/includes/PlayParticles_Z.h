@@ -2,6 +2,7 @@
 #define _PLAYPARTICLES_Z_H_
 #include "Manipulator_Z.h"
 #include "Node_ZHdl.h"
+#include "Math_Z.h"
 
 class ParticlesData_Z;
 
@@ -23,6 +24,7 @@ public:
 private:
     Node_ZHdl m_NodeHdl;
     Node_ZHdl m_EmiterNodeHdl;
+    Bool m_IsPlaying;
     ParticlesData_Z* m_Data;
 };
 

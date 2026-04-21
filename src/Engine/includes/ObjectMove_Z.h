@@ -5,6 +5,8 @@
 #include "ObjectMove_ZHdl.h"
 #include "Node_ZHdl.h"
 #include "Agent_ZHdl.h"
+#include "ObjectMoveCollData_Z.h"
+#include "ObjectMoveCollNode_Z.h"
 
 class SeadZone_Z;
 class World_Z;
@@ -12,7 +14,10 @@ class ObjectMoveCollData_Z;
 
 class ObjectMove_Z : public Manipulator_Z {
 public:
-    virtual ~ObjectMove_Z();
+    ObjectMove_Z();
+
+    virtual ~ObjectMove_Z() { }
+
     virtual void Init();
     virtual void Reset();
     virtual void Update(Float a1);
@@ -93,7 +98,34 @@ private:
     Node_ZHdl m_NodeHdl;
     Agent_ZHdl m_AgentHdl;
     ObjectMove_ZHdl m_OwnerHdl;
-    U8 m_Pad_0x2c[0x194];
+    StaticArray_Z<Node_ZHdl, 8> m_CollisionVolNodeHdls;
+    U64 m_CollisionBools;
+    Quat m_CurrentAlignRot;
+    DynArray_Z<Vec3f, 1> m_StartingLocalPosDA;          // for Node_Z or BoneNode_Z
+    DynArray_Z<Quat, 1> m_StartingLocalRotDA;           // for Node_Z or BoneNode_Z
+    DynArray_Z<Float, 1> m_StartingLocalScaleDA;        // for Node_Z
+    DynArray_Z<Node_ZHdl, 1> m_StartingNodeParentHdlDA; // for Node_Z
+    DynArray_Z<ObjectMoveCollData_Z, 1> m_CollideDataDA;
+    U64 m_Flag;
+    Node_ZHdl m_LinkedNodeHdl;
+    ObjectMoveCollNode_Z m_CollideNode;
+    Float m_ShadowOldRayLen;
+    Vec3f m_PosA; // Interpolation coefficients
+    Vec3f m_PosB; // Interpolation coefficients
+    Vec3f m_PosC; // Interpolation coefficients
+    Vec3f m_PosD; // Interpolation coefficients
+    Float m_Sinh;
+    Float m_Omega;
+    Quat m_RotStart;
+    Quat m_RotEnd;
+    Node_ZHdl m_SplineNodeHdl;
+    Vec3f m_SplineWorldDelta;
+    Node_ZHdl m_UnkNodeHdl_0x190;
+    Float m_AnimTime;
+    Float m_GotoPosTime;
+    Vec3f m_TotalSpeed;
+    Vec3f m_Accel;
+    Vec3f m_PrevTotalSpeed;
 };
 
 #endif // _OBJECTMOVE_Z_H_
